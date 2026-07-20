@@ -1,0 +1,27 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block title %}Materiais | Granimármores Pitondo{% endblock %}
+
+{% block content %}
+<main>
+    <section class="section-dark text-light">
+        <div class="container">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-8">
+                    <div class="subtitle">Granimármores Pitondo</div>
+                    <h1>Materiais</h1>
+                    <p class="lead">Mármores, granitos, quartzitos e superfícies para diferentes aplicações.</p>
+
+                    <a
+                        href="{% url 'institutional:quotation' %}"
+                        class="btn-main fx-slide"
+                    >
+                        <span>Solicite um orçamento</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

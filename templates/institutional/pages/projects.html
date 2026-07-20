@@ -1,0 +1,27 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block title %}Projetos | Granimármores Pitondo{% endblock %}
+
+{% block content %}
+<main>
+    <section class="section-dark text-light">
+        <div class="container">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-8">
+                    <div class="subtitle">Granimármores Pitondo</div>
+                    <h1>Projetos</h1>
+                    <p class="lead">Conheça alguns dos ambientes produzidos pela Granimármores Pitondo.</p>
+
+                    <a
+                        href="{% url 'institutional:quotation' %}"
+                        class="btn-main fx-slide"
+                    >
+                        <span>Solicite um orçamento</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

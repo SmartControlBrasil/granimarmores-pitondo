@@ -1,0 +1,27 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block title %}Contato | Granimármores Pitondo{% endblock %}
+
+{% block content %}
+<main>
+    <section class="section-dark text-light">
+        <div class="container">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-8">
+                    <div class="subtitle">Granimármores Pitondo</div>
+                    <h1>Contato</h1>
+                    <p class="lead">Fale com a equipe da Granimármores Pitondo.</p>
+
+                    <a
+                        href="{% url 'institutional:quotation' %}"
+                        class="btn-main fx-slide"
+                    >
+                        <span>Solicite um orçamento</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
