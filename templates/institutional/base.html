@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        Granimármores Pitondo
+        {% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="{% block meta_description %}Mármores, granitos, quartzitos e superfícies sob medida para cozinhas, banheiros, áreas gourmet e projetos comerciais.{% endblock %}"
+    >
+
+    <meta
+        name="keywords"
+        content="{% block meta_keywords %}marmoraria, mármore, granito, quartzito, bancadas sob medida{% endblock %}"
+    >
+
+    <meta name="author" content="Granimármores Pitondo">
+
+    <link
+        rel="icon"
+        href="{% static 'institutional/intrio/images/icon.webp' %}"
+        type="image/webp"
+    >
+
+    <link
+        href="{% static 'institutional/intrio/css/bootstrap.min.css' %}"
+        rel="stylesheet"
+        type="text/css"
+        id="bootstrap"
+    >
+
+    <link
+        href="{% static 'institutional/intrio/css/plugins.css' %}"
+        rel="stylesheet"
+        type="text/css"
+    >
+
+    <link
+        href="{% static 'institutional/intrio/css/swiper.css' %}"
+        rel="stylesheet"
+        type="text/css"
+    >
+
+    <link
+        href="{% static 'institutional/intrio/css/style.css' %}"
+        rel="stylesheet"
+        type="text/css"
+    >
+
+    <link
+        href="{% static 'institutional/intrio/css/coloring.css' %}"
+        rel="stylesheet"
+        type="text/css"
+    >
+
+    <link
+        id="colors"
+        href="{% static 'institutional/intrio/css/colors/scheme-01.css' %}"
+        rel="stylesheet"
+        type="text/css"
+    >
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    {% include 'institutional/partials/header.html' %}
+
+    {% block content %}{% endblock %}
+
+    {% include 'institutional/partials/footer.html' %}
+
+    {% block scripts %}
+<!-- footer close -->
+    
+    <!-- Javascript Files
+    ================================================== -->
+    <script src="{% static 'institutional/intrio/js/vendors.js' %}"></script>
+    <script src="{% static 'institutional/intrio/js/designesia.js' %}"></script>
+    <script src="{% static 'institutional/intrio/js/swiper.js' %}"></script>
+    <script src="{% static 'institutional/intrio/js/custom-swiper-1.js' %}"></script>
+    <script src="contact.js"></script>
+    {% endblock %}
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
