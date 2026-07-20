@@ -9,9 +9,9 @@
                                 <!-- logo begin -->
                                 <div id="logo">
                                     <a href="{% url 'institutional:home' %}">
-                                        <img class="logo-main" src="{% static 'institutional/intrio/images/logo-white.webp' %}" alt="" >
-                                        <img class="logo-scroll" src="{% static 'institutional/intrio/images/logo-white.webp' %}" alt="" >
-                                        <img class="logo-mobile" src="{% static 'institutional/intrio/images/logo-white.webp' %}" alt="" >
+                                        <img class="logo-main" src="{% static 'institutional/images/logo-white.webp' %}" alt="Granimármores Pitondo" >
+                                        <img class="logo-scroll" src="{% static 'institutional/images/logo-white.webp' %}" alt="Granimármores Pitondo" >
+                                        <img class="logo-mobile" src="{% static 'institutional/images/logo-white.webp' %}" alt="Granimármores Pitondo" >
                                     </a>
                                 </div>
                                 <!-- logo end -->
@@ -19,149 +19,29 @@
                             <div class="de-flex-col header-col-mid">
                                 <!-- mainemenu begin -->
                                 <ul id="mainmenu">
+                                    <li><a class="menu-item" href="{% url 'institutional:home' %}">Início</a></li>
+                                    <li><a class="menu-item" href="{% url 'institutional:sobre' %}">Sobre</a></li>
                                     <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:home' %}"
-                                        >
-                                            Início
-                                        </a>
-                                    </li>
-                                
-                                    <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:about' %}"
-                                        >
-                                            Sobre
-                                        </a>
-                                    </li>
-                                
-                                    <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:services' %}"
-                                        >
-                                            Soluções
-                                        </a>
-                                
+                                        <a class="menu-item" href="#">Soluções</a>
                                         <ul>
-                                            <li>
-                                                <a href="{% url 'institutional:services' %}">
-                                                    Cozinhas e bancadas
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:services' %}">
-                                                    Banheiros e lavatórios
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:services' %}">
-                                                    Áreas gourmet
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:services' %}">
-                                                    Escadas e revestimentos
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:services' %}">
-                                                    Projetos comerciais
-                                                </a>
-                                            </li>
+                                            <li><a href="{% url 'institutional:cozinhas' %}">Cozinhas</a></li>
+                                            <li><a href="{% url 'institutional:escadas' %}">Escadas</a></li>
+                                            <li><a href="{% url 'institutional:areas_gourmet' %}">Áreas Gourmet</a></li>
+                                            <li><a href="{% url 'institutional:banheiros' %}">Banheiros</a></li>
+                                            <li><a href="{% url 'institutional:projetos_comerciais' %}">Projetos Comerciais</a></li>
                                         </ul>
                                     </li>
-                                
-                                    <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:projects' %}"
-                                        >
-                                            Projetos
-                                        </a>
-                                    </li>
-                                
-                                    <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:materials' %}"
-                                        >
-                                            Materiais
-                                        </a>
-                                
-                                        <ul>
-                                            <li>
-                                                <a href="{% url 'institutional:materials' %}">
-                                                    Mármores
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:materials' %}">
-                                                    Granitos
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:materials' %}">
-                                                    Quartzitos
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:materials' %}">
-                                                    Quartzo
-                                                </a>
-                                            </li>
-                                
-                                            <li>
-                                                <a href="{% url 'institutional:materials' %}">
-                                                    Superfícies especiais
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                
-                                    <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:blog' %}"
-                                        >
-                                            Blog
-                                        </a>
-                                    </li>
-                                
-                                    <li>
-                                        <a
-                                            class="menu-item"
-                                            href="{% url 'institutional:contact' %}"
-                                        >
-                                            Contato
-                                        </a>
-                                    </li>
+                                    <li><a class="menu-item" href="{% url 'institutional:blog' %}">Blog</a></li>
+                                    <li><a class="menu-item" href="{% url 'institutional:contato' %}">Contato</a></li>
                                 </ul>
                                 <!-- mainmenu end -->
                             </div>
                             <div class="de-flex-col">
                                 <div class="menu_side_area">
-                                    <a
-                                        href="{% url 'institutional:quotation' %}"
-                                        class="btn-main fx-slide">
-                                        <span>Solicite um orçamento</span>
-                                    </a>
+                                    <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide"><span>Solicite um orçamento</span></a>
                                     <span id="menu-btn"></span>
                                 </div>
-
-                                <div id="btn-extra">
-                                    <span></span>
-                                    <span></span>
-                                </div>
+                                <div id="btn-extra"><span></span><span></span></div>
                             </div>
                         </div>
                     </div>

@@ -1,27 +1,13 @@
 {% extends "institutional/base.html" %}
 {% load static %}
 
-{% block title %}Contato | Granimármores Pitondo{% endblock %}
+{% block title %}Contato e Orçamento | Granimármores Pitondo{% endblock %}
+{% block meta_description %}Entre em contato com a Granimármores Pitondo e solicite uma avaliação para cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais.{% endblock %}
 
 {% block content %}
 <main>
-    <section class="section-dark text-light">
-        <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8">
-                    <div class="subtitle">Granimármores Pitondo</div>
-                    <h1>Contato</h1>
-                    <p class="lead">Fale com a equipe da Granimármores Pitondo.</p>
-
-                    <a
-                        href="{% url 'institutional:quotation' %}"
-                        class="btn-main fx-slide"
-                    >
-                        <span>Solicite um orçamento</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a><div id="de-loader"></div>
+    <section class="section-dark text-light"><div class="container"><div class="row align-items-center min-vh-75"><div class="col-lg-8"><div class="subtitle">Contato e orçamento</div><h1>Solicite uma avaliação para seu projeto</h1><p class="lead">Informe o ambiente, cidade, medidas aproximadas e detalhes do que precisa. Fotos, planta ou referências ajudam na avaliação inicial.</p></div></div></div></section>
+    <section><div class="container"><div class="row g-4"><div class="col-lg-5"><div class="subtitle">Como enviar</div><h2>O que ajuda no orçamento</h2><p>Descreva se o projeto é para cozinha, banheiro, escada, área gourmet ou ambiente comercial. Quando possível, informe medidas, tipo de cuba, cooktop, churrasqueira, recortes e local de instalação.</p><p>Telefone, e-mail e endereço reais devem ser configurados somente quando confirmados no projeto.</p></div><div class="col-lg-7">{% if messages %}<div class="mb-4">{% for message in messages %}<div class="p-3 rounded-1 bg-color text-light mb-2">{{ message }}</div>{% endfor %}</div>{% endif %}<form method="post" class="row g-3" novalidate>{% csrf_token %}<div class="d-none"><label for="website">Site</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div><div class="col-md-6"><input type="text" name="nome" class="form-control" placeholder="Nome*" required></div><div class="col-md-6"><input type="text" name="telefone" class="form-control" placeholder="Telefone ou WhatsApp*" required></div><div class="col-md-6"><input type="email" name="email" class="form-control" placeholder="E-mail"></div><div class="col-md-6"><input type="text" name="cidade" class="form-control" placeholder="Cidade*" required></div><div class="col-md-12"><select name="ambiente" class="form-control" required><option value="">Tipo de ambiente*</option><option>Cozinha</option><option>Banheiro</option><option>Escada</option><option>Área Gourmet</option><option>Projeto Comercial</option><option>Outro ambiente</option></select></div><div class="col-md-12"><textarea name="mensagem" class="form-control" rows="6" placeholder="Descreva o projeto, medidas aproximadas, fotos disponíveis ou planta*" required></textarea></div><div class="col-md-12"><label><input type="checkbox" name="privacidade" value="1" required> Autorizo o uso dos dados informados para retorno de contato sobre este orçamento.</label></div><div class="col-md-12"><button type="submit" class="btn-main fx-slide"><span>Enviar solicitação</span></button></div></form></div></div></div></section>
 </main>
 {% endblock %}

@@ -1,27 +1,672 @@
 {% extends "institutional/base.html" %}
 {% load static %}
 
-{% block title %}Sobre a Granimármores Pitondo | Granimármores Pitondo{% endblock %}
+{% block title %}
+    Sobre a Granimármores Pitondo | Qualidade e Acabamento Sob Medida
+{% endblock %}
+
+{% block meta_description %}
+    Conheça a Granimármores Pitondo e nosso trabalho com medição, fabricação e instalação de mármores, granitos e superfícies sob medida.
+{% endblock %}
 
 {% block content %}
-<main>
-    <section class="section-dark text-light">
-        <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8">
-                    <div class="subtitle">Granimármores Pitondo</div>
-                    <h1>Sobre a Granimármores Pitondo</h1>
-                    <p class="lead">Conheça nossa história, estrutura e compromisso com projetos sob medida.</p>
 
-                    <a
-                        href="{% url 'institutional:quotation' %}"
-                        class="btn-main fx-slide"
+<main>
+
+    <!-- Banner interno -->
+    <section class="bg-dark text-light relative jarallax">
+
+        <img
+            src="{% static 'institutional/images/background/area-gourmet-enventos.webp' %}"
+            class="jarallax-img"
+            alt="Ambiente com aplicação de pedras e superfícies sob medida"
+        >
+
+        <div class="container relative z-2">
+
+            <div class="row gy-4 gx-5 align-items-center">
+
+                <div class="col-md-8">
+
+                    <div class="spacer-double sm-hide"></div>
+
+                    <h1
+                        class="mb-3 wow fadeInUp"
+                        data-wow-delay=".2s"
                     >
-                        <span>Solicite um orçamento</span>
-                    </a>
+                        Sobre nós
+                    </h1>
+
+                    <ul class="crumb wow fadeInUp">
+
+                        <li>
+                            <a href="{% url 'institutional:home' %}">
+                                Início
+                            </a>
+                        </li>
+
+                        <li class="active">
+                            Sobre nós
+                        </li>
+
+                    </ul>
+
                 </div>
+
+                <div class="col-md-4">
+
+                    <p
+                        class="mb-0 wow fadeInRight"
+                        data-wow-delay=".2s"
+                    >
+                        Transformamos mármores, granitos e superfícies em
+                        soluções sob medida para ambientes residenciais e
+                        comerciais.
+                    </p>
+
+                </div>
+
             </div>
+
+        </div>
+
+        <div class="gradient-edge-bottom h-50 op-6"></div>
+        <div class="sw-overlay op-5"></div>
+
+    </section>
+
+    <!-- Apresentação institucional -->
+    <section>
+        <div class="container">
+
+            <div class="row g-4 gx-5 justify-content-end align-items-center">
+
+                <div class="col-md-6">
+
+                    <div
+                        class="relative wow zoomIn overflow-hidden rounded-1"
+                    >
+                        <img
+                            src="{% static 'institutional/images/misc/sala-de-jantar-marmore.webp' %}"
+                            class="w-100 rounded-1 wow scaleIn"
+                            alt="Trabalho com mármore e granito sob medida"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="subtitle">
+                        Granimármores Pitondo
+                    </div>
+
+                    <h2
+                        class="wow fadeInRight"
+                        data-wow-delay=".2s"
+                    >
+                        Precisão e acabamento em cada etapa do projeto
+                    </h2>
+
+                    <p
+                        class="wow fadeInRight"
+                        data-wow-delay=".4s"
+                    >
+                        Cada trabalho começa pelo entendimento do ambiente,
+                        da aplicação desejada e da rotina de uso. A partir
+                        dessas informações, orientamos a escolha da superfície
+                        e planejamos as peças de acordo com as medidas e
+                        características do local.
+                    </p>
+
+                    <p
+                        class="wow fadeInRight"
+                        data-wow-delay=".5s"
+                    >
+                        A medição técnica orienta cortes, recortes, bordas,
+                        emendas, encaixes e pontos de instalação. Esse cuidado
+                        ajuda a reduzir improvisos e permite que cada elemento
+                        seja produzido de forma compatível com o projeto.
+                    </p>
+
+                    <p
+                        class="wow fadeInRight"
+                        data-wow-delay=".6s"
+                    >
+                        Atendemos clientes finais e profissionais que procuram
+                        soluções personalizadas para cozinhas, banheiros,
+                        escadas, áreas gourmet e ambientes comerciais.
+                    </p>
+
+                    <div
+                        class="wow fadeInRight"
+                        data-wow-delay=".7s"
+                    >
+                        <a
+                            href="{% url 'institutional:contato' %}"
+                            class="btn-main fx-slide"
+                        >
+                            <span>Solicitar orçamento</span>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="spacer-double"></div>
+
+            <!-- Pilares -->
+            <div class="row g-4">
+
+                <div class="col-md-3 col-sm-6">
+                    <div
+                        class="de_count wow fadeInRight"
+                        data-wow-delay=".0s"
+                    >
+                        <h3 class="fs-40 mb-0">
+                            <span
+                                class="timer"
+                                data-to="65250"
+                                data-speed="3000"
+                            >
+                                0
+                            </span>+
+                        </h3>
+            
+                        Horas de design completadas
+                    </div>
+                </div>
+            
+                <div class="col-md-3 col-sm-6">
+                    <div
+                        class="de_count wow fadeInRight"
+                        data-wow-delay=".2s"
+                    >
+                        <h3 class="fs-40 mb-0">
+                            <span
+                                class="timer"
+                                data-to="23160"
+                                data-speed="3000"
+                            >
+                                0
+                            </span>
+                        </h3>
+            
+                        Projetos realizados
+                    </div>
+                </div>
+            
+                <div class="col-md-3 col-sm-6">
+                    <div
+                        class="de_count wow fadeInRight"
+                        data-wow-delay=".4s"
+                    >
+                        <h3 class="fs-40 mb-0">
+                            <span
+                                class="timer"
+                                data-to="150"
+                                data-speed="3000"
+                            >
+                                0
+                            </span>+
+                        </h3>
+            
+                        Categorias de superfícies
+                    </div>
+                </div>
+            
+                <div class="col-md-3 col-sm-6">
+                    <div
+                        class="de_count wow fadeInRight"
+                        data-wow-delay=".6s"
+                    >
+                        <h3 class="fs-40 mb-0">
+                            <span
+                                class="timer"
+                                data-to="30"
+                                data-speed="3000"
+                            >
+                                0
+                            </span>
+                        </h3>
+            
+                        Anos de experiência
+                    </div>
+                </div>
+            
+            </div>
+
         </div>
     </section>
+
+    <!-- Compromissos -->
+    <section class="text-light jarallax">
+
+        <img
+            src="{% static 'institutional/images/background/1.webp' %}"
+            class="jarallax-img"
+            alt="Superfície em pedra aplicada em ambiente planejado"
+        >
+
+        <div class="sw-overlay op-6"></div>
+
+        <div class="container relative z-2">
+
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-md-4">
+
+                    <div class="subtitle">
+                        Nossos compromissos
+                    </div>
+
+                    <h2 class="wow fadeInUp">
+                        Decisões orientadas pelas necessidades de cada ambiente
+                    </h2>
+
+                </div>
+
+                <div class="col-md-7">
+
+                    <div class="owl-single-dots owl-carousel owl-theme">
+
+                        <div class="item">
+
+                            <span class="d-stars d-block mb-3">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                            </span>
+
+                            <h2 class="mb-4 wow fadeInUp">
+                                Medir com atenção antes de fabricar
+                            </h2>
+
+                            <p class="wow fadeInUp">
+                                Conferimos medidas, pontos hidráulicos,
+                                equipamentos, paredes, móveis e interferências
+                                que possam afetar a produção ou a instalação.
+                            </p>
+
+                        </div>
+
+                        <div class="item">
+
+                            <span class="d-stars d-block mb-3">
+                                <i class="fa-solid fa-gem"></i>
+                            </span>
+
+                            <h2 class="mb-4 wow fadeInUp">
+                                Orientar a escolha do material
+                            </h2>
+
+                            <p class="wow fadeInUp">
+                                A indicação considera o local de aplicação,
+                                exposição, manutenção, resistência necessária
+                                e resultado estético esperado.
+                            </p>
+
+                        </div>
+
+                        <div class="item">
+
+                            <span class="d-stars d-block mb-3">
+                                <i class="fa-solid fa-pen-ruler"></i>
+                            </span>
+
+                            <h2 class="mb-4 wow fadeInUp">
+                                Produzir cada peça conforme o projeto
+                            </h2>
+
+                            <p class="wow fadeInUp">
+                                Cortes, recortes, bordas, frontões, rodabancas
+                                e demais detalhes são definidos conforme as
+                                características do ambiente.
+                            </p>
+
+                        </div>
+
+                        <div class="item">
+
+                            <span class="d-stars d-block mb-3">
+                                <i class="fa-solid fa-screwdriver-wrench"></i>
+                            </span>
+
+                            <h2 class="mb-4 wow fadeInUp">
+                                Cuidar do acabamento e da instalação
+                            </h2>
+
+                            <p class="wow fadeInUp">
+                                A montagem é realizada de acordo com o escopo
+                                aprovado, incluindo os encaixes e ajustes
+                                necessários no local.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Para quem trabalhamos -->
+    <section>
+        <div class="container">
+
+            <div class="row mb-3 g-4 gx-5 align-items-center justify-content-between">
+
+                <div
+                    class="col-lg-4 wow fadeIn"
+                    data-wow-delay=".2s"
+                >
+
+                    <div class="subtitle">
+                        Atendimento
+                    </div>
+
+                    <h2 class="wow fadeInRight">
+                        Soluções desenvolvidas em conjunto
+                    </h2>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <p>
+                        Trabalhamos em diálogo com clientes e profissionais
+                        para compreender medidas, acabamentos, equipamentos,
+                        marcenaria e demais elementos envolvidos no ambiente.
+                    </p>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <div class="relative">
+
+                        <div
+                            class="de-custom-nav d-flex flex-end"
+                            data-target="#team-carousel"
+                        >
+                            <div class="d-prev circle"></div>
+                            <div class="d-next circle"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-lg-12">
+
+                    <div
+                        id="team-carousel"
+                        class="owl-2-cols owl-carousel owl-theme wow fadeIn"
+                        data-wow-delay=".2s"
+                    >
+
+                        <!-- Clientes finais -->
+                        <div class="item">
+
+                            <div class="bg-light rounded-1 overflow-hidden">
+
+                                <div class="row g-0 align-items-center">
+
+                                    <div class="col-sm-6">
+
+                                        <img
+                                            src="{% static 'institutional/images/projects-wide/balcao-marmore-branco.webp' %}"
+                                            class="w-100"
+                                            alt="Solução sob medida para ambiente residencial"
+                                        >
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+
+                                        <div class="p-4">
+
+                                            <h3 class="mb-2">
+                                                Clientes residenciais
+                                            </h3>
+
+                                            <p class="mb-3">
+                                                Soluções para cozinhas,
+                                                banheiros, escadas, áreas
+                                                gourmet e outros ambientes
+                                                da residência.
+                                            </p>
+
+                                            <a
+                                                href="{% url 'institutional:cozinhas' %}"
+                                                class="btn-line"
+                                            >
+                                                Conhecer as soluções
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Profissionais -->
+                        <div class="item">
+
+                            <div class="bg-light rounded-1 overflow-hidden">
+
+                                <div class="row g-0 align-items-center">
+
+                                    <div class="col-sm-6">
+
+                                        <img
+                                            src="{% static 'institutional/images/projects-wide/balcao-marmore.webp' %}"
+                                            class="w-100"
+                                            alt="Superfícies para projetos de arquitetura e construção"
+                                        >
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+
+                                        <div class="p-4">
+
+                                            <h3 class="mb-2">
+                                                Arquitetos e profissionais
+                                            </h3>
+
+                                            <p class="mb-3">
+                                                Apoio na definição de peças,
+                                                medidas, recortes e acabamentos
+                                                para integração com o projeto.
+                                            </p>
+
+                                            <a
+                                                href="{% url 'institutional:contato' %}"
+                                                class="btn-line"
+                                            >
+                                                Falar com nossa equipe
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Empresas -->
+                        <div class="item">
+
+                            <div class="bg-light rounded-1 overflow-hidden">
+
+                                <div class="row g-0 align-items-center">
+
+                                    <div class="col-sm-6">
+
+                                        <img
+                                            src="{% static 'institutional/images/services/balcao-recepcao-marmore.webp' %}"
+                                            class="w-100"
+                                            alt="Possibilidade de aplicação em ambiente comercial"
+                                        >
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+
+                                        <div class="p-4">
+
+                                            <h3 class="mb-2">
+                                                Empresas e comércios
+                                            </h3>
+
+                                            <p class="mb-3">
+                                                Bancadas, balcões, recepções,
+                                                lavabos e revestimentos para
+                                                diferentes ambientes comerciais.
+                                            </p>
+
+                                            <a
+                                                href="{% url 'institutional:projetos_comerciais' %}"
+                                                class="btn-line"
+                                            >
+                                                Ver projetos comerciais
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Construtoras -->
+                        <div class="item">
+
+                            <div class="bg-light rounded-1 overflow-hidden">
+
+                                <div class="row g-0 align-items-center">
+
+                                    <div class="col-sm-6">
+
+                                        <img
+                                            src="{% static 'institutional/images/projects-wide/4.webp' %}"
+                                            class="w-100"
+                                            alt="Aplicação de superfícies em projeto de construção"
+                                        >
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+
+                                        <div class="p-4">
+
+                                            <h3 class="mb-2">
+                                                Construtoras e parceiros
+                                            </h3>
+
+                                            <p class="mb-3">
+                                                Planejamento de peças e
+                                                acabamentos conforme as
+                                                especificações e etapas
+                                                definidas para o projeto.
+                                            </p>
+
+                                            <a
+                                                href="{% url 'institutional:contato' %}"
+                                                class="btn-line"
+                                            >
+                                                Apresentar um projeto
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="section-dark text-light relative jarallax">
+
+        <img
+            src="{% static 'institutional/images/background/studio-picture.webp' %}"
+            class="jarallax-img"
+            alt=""
+        >
+    
+        <div class="sw-overlay op-6"></div>
+    
+        <div class="container relative z-2">
+    
+            <div class="row g-4 align-items-center">
+    
+                <div class="col-lg-8">
+    
+                    <div class="subtitle">
+                        Seu projeto
+                    </div>
+    
+                    <h2 class="mb-2">
+                        Converse com a Granimármores Pitondo
+                    </h2>
+    
+                    <p class="mb-0">
+                        Envie referências, medidas aproximadas, fotos ou a planta
+                        do ambiente para iniciarmos uma avaliação.
+                    </p>
+    
+                </div>
+    
+                <div class="col-lg-4 text-lg-end">
+    
+                    <a
+                        href="{% url 'institutional:contato' %}"
+                        class="btn-main fx-slide"
+                    >
+                        <span>Solicitar orçamento</span>
+                    </a>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </section>
+
 </main>
+
 {% endblock %}

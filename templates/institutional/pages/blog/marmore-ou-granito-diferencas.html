@@ -1,0 +1,13 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block title %}Mármore ou granito: diferenças e aplicações | Granimármores Pitondo{% endblock %}
+{% block meta_description %}Entenda diferenças entre mármore e granito e saiba por que a escolha depende da aplicação, manutenção e estética do projeto.{% endblock %}
+
+{% block content %}
+<main>
+    <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a><div id="de-loader"></div>
+    <section class="section-dark text-light"><div class="container"><div class="row align-items-center min-vh-75"><div class="col-lg-8"><div class="subtitle">Blog Granimármores Pitondo</div><h1>Mármore ou granito: entenda as principais diferenças</h1><p class="lead">Conteúdo técnico para ajudar no planejamento de ambientes com pedras e superfícies sob medida.</p></div></div></div></section>
+    <section><div class="container"><div class="row g-4"><div class="col-lg-8"><article><h2>Critérios principais</h2><p>Mármore e granito são pedras naturais, mas possuem características diferentes. A aparência, a composição, a resistência, a absorção e a manutenção influenciam diretamente a indicação para cada ambiente.</p><h2>Materiais e aplicações</h2><p>O mármore costuma apresentar veios marcantes e visual sofisticado. Pode ser usado em diversas aplicações, mas precisa ser avaliado conforme contato com umidade, produtos químicos, manchas e desgaste.</p><h2>Planejamento técnico</h2><p>O granito apresenta boa resistência para muitas bancadas, soleiras, escadas e áreas de uso intenso. Ainda assim, cor, acabamento e manutenção devem ser definidos conforme o local de instalação.</p><h2>Conclusão</h2><p>Não existe uma resposta única. A escolha correta considera estética, uso, exposição, limpeza, recortes, espessura, acabamento de bordas e integração com os demais materiais do ambiente.</p><div class="spacer-single"></div><p><strong>Próximo passo:</strong> envie medidas, fotos ou planta para avaliar a solução mais adequada ao seu ambiente.</p><a href="{% url 'institutional:contato' %}" class="btn-main fx-slide mt-3"><span>Solicitar orientação</span></a></article></div><div class="col-lg-4"><div class="p-4 bg-color-op-1 rounded-1"><h3>Soluções relacionadas</h3><ul class="ul-check"><li><a href="{% url 'institutional:cozinhas' %}">Cozinhas</a></li><li><a href="{% url 'institutional:banheiros' %}">Banheiros</a></li><li><a href="{% url 'institutional:areas_gourmet' %}">Áreas Gourmet</a></li><li><a href="{% url 'institutional:projetos_comerciais' %}">Projetos Comerciais</a></li></ul></div></div></div></div></section>
+</main>
+{% endblock %}

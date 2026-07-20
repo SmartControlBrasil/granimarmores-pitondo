@@ -1,0 +1,1018 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block title %}
+Cozinhas Planejadas em Mármore e Granito | Granimármores Pitondo
+{% endblock %}
+
+{% block meta_description %}
+Projetos de cozinhas planejadas com bancadas, ilhas, pias e revestimentos em mármore, granito, quartzo e superfícies especiais. Solicite seu orçamento.
+{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a>
+
+    <!-- Preloader -->
+    <div id="de-loader"></div>
+
+    <!-- Hero -->
+    <section
+        id="section-intro"
+        class="section-dark text-light no-top no-bottom position-relative overflow-hidden z-1000"
+    >
+        <div class="mh-800 relative">
+
+            <div class="spacer-double"></div>
+            <div class="spacer-double"></div>
+            <div class="spacer-single sm-hide"></div>
+
+            <div class="container relative z-2">
+                <div class="row g-4">
+                    <div class="col-md-5">
+                        <p>
+                            Transformamos cozinhas em ambientes sofisticados,
+                            funcionais e preparados para o dia a dia, com pedras
+                            selecionadas, acabamento preciso e soluções feitas
+                            sob medida para cada projeto.
+                        </p>
+
+                        <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide mt-3">
+                            <span>Solicitar orçamento</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="abs w-80 abs-center bottom-10 z-2 w-100">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="fs-sm-10vw mb-0 wow fadeInLeft">
+                                Cozinhas que unem beleza e funcionalidade
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="swiper">
+                <div class="swiper-wrapper">
+
+                    <div class="swiper-slide">
+                        <div
+                            class="swiper-inner"
+                            data-bgimage="url({% static 'institutional/images/slider/1.webp' %})"
+                        >
+                            <div class="sw-overlay op-5"></div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div
+                            class="swiper-inner"
+                            data-bgimage="url({% static 'institutional/images/slider/2.webp' %})"
+                        >
+                            <div class="sw-overlay op-5"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Apresentação -->
+    <section class="bg-dark-1 text-light">
+        <div class="container">
+
+            <div class="row g-4 gx-5 align-items-center">
+
+                <div class="col-md-7">
+                    <div class="subtitle">Cozinhas planejadas</div>
+
+                    <h2 class="wow fadeInRight" data-wow-delay=".2s">
+                        Pedras naturais e superfícies especiais transformadas
+                        em ambientes únicos
+                    </h2>
+                </div>
+
+                <div class="col-md-6 offset-lg-6">
+                    <p class="wow fadeInRight" data-wow-delay=".4s">
+                        Desenvolvemos bancadas, ilhas, pias, frontões,
+                        rodabancas e revestimentos personalizados para cozinhas.
+                        Cada peça é produzida de acordo com as medidas do
+                        ambiente, considerando estética, resistência,
+                        ergonomia e facilidade de manutenção.
+                    </p>
+
+                    <p class="wow fadeInRight" data-wow-delay=".5s">
+                        Nossa equipe acompanha o projeto desde a escolha do
+                        material até a instalação final, buscando um acabamento
+                        preciso e uma composição harmoniosa com móveis,
+                        eletrodomésticos e revestimentos.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="spacer-double"></div>
+
+            <div class="row g-4">
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="de_count wow fadeInRight" data-wow-delay=".0s">
+                        <h3 class="fs-40 mb-0">
+                            <i class="fa-solid fa-ruler-combined"></i>
+                        </h3>
+                        Medição técnica do ambiente
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="de_count wow fadeInRight" data-wow-delay=".2s">
+                        <h3 class="fs-40 mb-0">
+                            <i class="fa-solid fa-gem"></i>
+                        </h3>
+                        Materiais selecionados
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="de_count wow fadeInRight" data-wow-delay=".4s">
+                        <h3 class="fs-40 mb-0">
+                            <i class="fa-solid fa-hammer"></i>
+                        </h3>
+                        Fabricação sob medida
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="de_count wow fadeInRight" data-wow-delay=".6s">
+                        <h3 class="fs-40 mb-0">
+                            <i class="fa-solid fa-house-circle-check"></i>
+                        </h3>
+                        Instalação especializada
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Projetos de cozinhas -->
+    <section>
+        <div class="container">
+
+            <div class="row mb-3 g-4 align-items-center justify-content-between">
+
+                <div class="col-lg-4 wow fadeIn" data-wow-delay=".2s">
+                    <div class="subtitle">Inspirações</div>
+
+                    <h2 class="mb-2 wow fadeInRight">
+                        Soluções para diferentes estilos de cozinha
+                    </h2>
+                </div>
+
+                <div class="col-lg-4">
+                    <p>
+                        Explore possibilidades de composição para cozinhas
+                        modernas, clássicas, compactas ou integradas. Cada
+                        projeto pode ser personalizado conforme o espaço e as
+                        necessidades da família.
+                    </p>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="relative">
+                        <div
+                            class="de-custom-nav d-flex flex-end"
+                            data-target="#projects-carousel"
+                        >
+                            <div class="d-prev circle"></div>
+                            <div class="d-next circle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+
+                    <div
+                        id="projects-carousel"
+                        class="owl-carousel owl-theme owl-2-cols"
+                    >
+
+                        <!-- Projeto 1 -->
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs w-50 z-4 p-4 mb-0">
+                                            <h2 class="fs-36">
+                                                Cozinha moderna com ilha central
+                                            </h2>
+                                        </div>
+
+                                        <div
+                                            class="relative overflow-hidden rounded-1 wow scaleIn"
+                                            data-wow-duration="1.5s"
+                                        >
+                                            <img
+                                                src="{% static 'institutional/images/projects-wide/1.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Cozinha moderna com ilha central em pedra"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-top op-5 h-70"></div>
+
+                                        <div class="extra-text abs lh-1 m-4 bottom-0 z-4 d-flex">
+                                            <div class="bg-blur p-2 me-2">
+                                                Ilha central
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Cozinha integrada
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Estilo moderno
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Projeto 2 -->
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs w-50 z-4 p-4 mb-0">
+                                            <h2 class="fs-36">
+                                                Bancada sofisticada em mármore
+                                            </h2>
+                                        </div>
+
+                                        <div
+                                            class="relative overflow-hidden rounded-1 wow scaleIn"
+                                            data-wow-duration="1.5s"
+                                        >
+                                            <img
+                                                src="{% static 'institutional/images/projects-wide/2.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Bancada de cozinha revestida em mármore"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-top op-5 h-70"></div>
+
+                                        <div class="extra-text abs lh-1 m-4 bottom-0 z-4 d-flex">
+                                            <div class="bg-blur p-2 me-2">
+                                                Mármore
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Alto padrão
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Sob medida
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Projeto 3 -->
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs w-50 z-4 p-4 mb-0">
+                                            <h2 class="fs-36">
+                                                Cozinha clara e minimalista
+                                            </h2>
+                                        </div>
+
+                                        <div
+                                            class="relative overflow-hidden rounded-1 wow scaleIn"
+                                            data-wow-duration="1.5s"
+                                        >
+                                            <img
+                                                src="{% static 'institutional/images/projects-wide/3.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Cozinha clara com bancada minimalista"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-top op-5 h-70"></div>
+
+                                        <div class="extra-text abs lh-1 m-4 bottom-0 z-4 d-flex">
+                                            <div class="bg-blur p-2 me-2">
+                                                Tons claros
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Minimalista
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Funcional
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Projeto 4 -->
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs w-50 z-4 p-4 mb-0">
+                                            <h2 class="fs-36">
+                                                Bancada com espaço gourmet
+                                            </h2>
+                                        </div>
+
+                                        <div
+                                            class="relative overflow-hidden rounded-1 wow scaleIn"
+                                            data-wow-duration="1.5s"
+                                        >
+                                            <img
+                                                src="{% static 'institutional/images/projects-wide/4.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Cozinha com bancada e espaço gourmet"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-top op-5 h-70"></div>
+
+                                        <div class="extra-text abs lh-1 m-4 bottom-0 z-4 d-flex">
+                                            <div class="bg-blur p-2 me-2">
+                                                Espaço gourmet
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Bancada
+                                            </div>
+
+                                            <div class="bg-blur p-2 me-2">
+                                                Integração
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimento e processo -->
+    <section class="text-light jarallax">
+
+        <img
+            src="{% static 'institutional/images/background/1.webp' %}"
+            class="jarallax-img"
+            alt="Cozinha planejada com bancada em pedra"
+        >
+
+        <div class="sw-overlay op-6"></div>
+
+        <div class="container relative z-2">
+
+            <div class="row g-4 justify-content">
+                <div class="col-md-8">
+
+                    <div class="subtitle">Do projeto à instalação</div>
+
+                    <h2 class="mb-4">
+                        Cada detalhe é planejado para entregar uma cozinha
+                        bonita, resistente e confortável para usar todos os dias.
+                    </h2>
+
+                    <p>
+                        Trabalhamos com atenção às medidas, aos recortes, às
+                        emendas e ao posicionamento de cubas, torneiras,
+                        cooktops e demais equipamentos.
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-5">
+
+                <div class="col-6 col-md-3 de-step de-step-arrow">
+                    <div class="de-step-icon">
+                        <i class="fas fa-comments fa-2x"></i>
+                    </div>
+
+                    <h2 class="hs-4">Atendimento</h2>
+
+                    <p>
+                        Entendemos seu projeto, preferências, necessidades,
+                        medidas iniciais e expectativa de investimento.
+                    </p>
+                </div>
+
+                <div class="col-6 col-md-3 de-step de-step-arrow">
+                    <div class="de-step-icon">
+                        <i class="fas fa-ruler-combined fa-2x"></i>
+                    </div>
+
+                    <h2 class="hs-4">Medição</h2>
+
+                    <p>
+                        Conferimos o ambiente e os pontos necessários para
+                        fabricar cada peça com precisão.
+                    </p>
+                </div>
+
+                <div class="col-6 col-md-3 de-step de-step-arrow">
+                    <div class="de-step-icon">
+                        <i class="fas fa-tools fa-2x"></i>
+                    </div>
+
+                    <h2 class="hs-4">Produção</h2>
+
+                    <p>
+                        As pedras são cortadas, usinadas e acabadas conforme as
+                        especificações aprovadas.
+                    </p>
+                </div>
+
+                <div class="col-6 col-md-3 de-step">
+                    <div class="de-step-icon">
+                        <i class="fas fa-house-circle-check fa-2x"></i>
+                    </div>
+
+                    <h2 class="hs-4">Instalação</h2>
+
+                    <p>
+                        Nossa equipe realiza a montagem e os ajustes finais no
+                        ambiente do cliente.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Soluções -->
+    <section>
+        <div class="container">
+
+            <div class="row mb-3 g-4 align-items-center justify-content-between">
+
+                <div class="col-lg-5 wow fadeIn" data-wow-delay=".2s">
+                    <div class="subtitle">Soluções para sua cozinha</div>
+
+                    <h2 class="wow fadeInRight">
+                        Tudo o que seu projeto precisa em pedras e superfícies
+                    </h2>
+                </div>
+
+                <div class="col-lg-4">
+                    <p>
+                        Produzimos diferentes elementos para compor cozinhas
+                        residenciais, áreas gourmet, apartamentos e ambientes
+                        comerciais.
+                    </p>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="relative">
+                        <div
+                            class="de-custom-nav d-flex flex-end"
+                            data-target="#services-carousel"
+                        >
+                            <div class="d-prev circle"></div>
+                            <div class="d-next circle"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row g-4">
+                <div class="col-lg-12">
+
+                    <div
+                        id="services-carousel"
+                        class="owl-4-cols-center owl-carousel owl-theme wow fadeIn"
+                        data-wow-delay=".2s"
+                    >
+
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+                                            <h2 class="fs-40">
+                                                Bancadas para cozinha
+                                            </h2>
+                                        </div>
+
+                                        <div class="relative overflow-hidden rounded-1">
+                                            <img
+                                                src="{% static 'institutional/images/services/1.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Bancada planejada para cozinha"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-bottom h-70"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+                                            <h2 class="fs-40">
+                                                Ilhas e penínsulas
+                                            </h2>
+                                        </div>
+
+                                        <div class="relative overflow-hidden rounded-1">
+                                            <img
+                                                src="{% static 'institutional/images/services/2.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Ilha de cozinha revestida em pedra"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-bottom h-70"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+                                            <h2 class="fs-40">
+                                                Pias e cubas
+                                            </h2>
+                                        </div>
+
+                                        <div class="relative overflow-hidden rounded-1">
+                                            <img
+                                                src="{% static 'institutional/images/services/3.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Pia de cozinha produzida sob medida"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-bottom h-70"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+                                            <h2 class="fs-40">
+                                                Rodabancas e frontões
+                                            </h2>
+                                        </div>
+
+                                        <div class="relative overflow-hidden rounded-1">
+                                            <img
+                                                src="{% static 'institutional/images/services/4.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Rodabanca de cozinha em pedra"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-bottom h-70"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+                                            <h2 class="fs-40">
+                                                Espaços gourmet
+                                            </h2>
+                                        </div>
+
+                                        <div class="relative overflow-hidden rounded-1">
+                                            <img
+                                                src="{% static 'institutional/images/services/5.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Bancada para espaço gourmet"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-bottom h-70"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="hover">
+                                <div class="relative overflow-hidden">
+                                    <a
+                                        href="{% url 'institutional:contato' %}"
+                                        class="d-block hover relative text-light"
+                                    >
+                                        <img
+                                            src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                            class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                            alt=""
+                                        >
+
+                                        <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+                                            <h2 class="fs-40">
+                                                Revestimentos
+                                            </h2>
+                                        </div>
+
+                                        <div class="relative overflow-hidden rounded-1">
+                                            <img
+                                                src="{% static 'institutional/images/services/6.webp' %}"
+                                                class="w-100 hover-scale-1-2"
+                                                alt="Revestimento de cozinha em pedra natural"
+                                            >
+                                        </div>
+
+                                        <div class="gradient-edge-bottom h-70"></div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Materiais -->
+    <section class="bg-dark-1 text-light">
+        <div class="container">
+
+            <div class="row g-4 align-items-center">
+
+                <div class="col-lg-5">
+                    <div class="subtitle">Escolha do material</div>
+
+                    <h2>
+                        A pedra certa para o estilo e o uso da sua cozinha
+                    </h2>
+
+                    <p>
+                        A escolha deve considerar aparência, resistência,
+                        absorção, manutenção, temperatura e contato com
+                        alimentos. Nossa equipe orienta você de acordo com as
+                        necessidades reais do ambiente.
+                    </p>
+
+                    <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide mt-3">
+                        <span>Falar com um especialista</span>
+                    </a>
+                </div>
+
+                <div class="col-lg-6 offset-lg-1">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+                            <div class="p-4 bg-dark rounded-1 h-100">
+                                <h3>Granito</h3>
+                                <p class="mb-0">
+                                    Material natural resistente, versátil e
+                                    disponível em diferentes cores e padrões.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-4 bg-dark rounded-1 h-100">
+                                <h3>Mármore</h3>
+                                <p class="mb-0">
+                                    Pedra natural de aparência sofisticada,
+                                    indicada conforme as características e o
+                                    uso previsto no projeto.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-4 bg-dark rounded-1 h-100">
+                                <h3>Quartzo</h3>
+                                <p class="mb-0">
+                                    Superfície uniforme, elegante e disponível
+                                    em ampla variedade de cores.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-4 bg-dark rounded-1 h-100">
+                                <h3>Superfícies especiais</h3>
+                                <p class="mb-0">
+                                    Alternativas contemporâneas para projetos
+                                    que exigem desempenho e acabamento
+                                    diferenciado.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="pt-0">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="border-top-2-black mb-5 pb-5"></div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <div class="subtitle">Dúvidas frequentes</div>
+
+                    <h2 class="wow fadeInRight">
+                        Perguntas sobre cozinhas em pedra
+                    </h2>
+                </div>
+
+                <div class="col-lg-8">
+
+                    <div
+                        class="accordion wow fadeInRight"
+                        data-wow-delay=".2s"
+                    >
+                        <div class="accordion-section">
+
+                            <div
+                                class="accordion-section-title"
+                                data-tab="#accordion-a1"
+                            >
+                                Qual é a melhor pedra para bancada de cozinha?
+                            </div>
+
+                            <div
+                                class="accordion-section-content"
+                                id="accordion-a1"
+                            >
+                                A melhor opção depende do estilo, orçamento e
+                                intensidade de uso da cozinha. Granitos,
+                                quartzos e outras superfícies possuem
+                                características diferentes. Nossa equipe avalia
+                                o projeto e orienta a escolha mais adequada.
+                            </div>
+
+                            <div
+                                class="accordion-section-title"
+                                data-tab="#accordion-a2"
+                            >
+                                Vocês fazem a medição no local?
+                            </div>
+
+                            <div
+                                class="accordion-section-content"
+                                id="accordion-a2"
+                            >
+                                Sim. A medição técnica permite conferir paredes,
+                                móveis, pontos hidráulicos, cooktop, cuba e
+                                demais elementos antes da fabricação.
+                            </div>
+
+                            <div
+                                class="accordion-section-title"
+                                data-tab="#accordion-a3"
+                            >
+                                É possível instalar cuba e cooktop na bancada?
+                            </div>
+
+                            <div
+                                class="accordion-section-content"
+                                id="accordion-a3"
+                            >
+                                Sim. Os recortes são preparados conforme os
+                                modelos e as medidas dos equipamentos definidos
+                                no projeto.
+                            </div>
+
+                            <div
+                                class="accordion-section-title"
+                                data-tab="#accordion-a4"
+                            >
+                                Vocês fabricam ilhas e penínsulas?
+                            </div>
+
+                            <div
+                                class="accordion-section-content"
+                                id="accordion-a4"
+                            >
+                                Sim. Produzimos ilhas, penínsulas, bancadas,
+                                frontões, rodabancas e outras peças sob medida.
+                            </div>
+
+                            <div
+                                class="accordion-section-title"
+                                data-tab="#accordion-a5"
+                            >
+                                Como solicitar um orçamento?
+                            </div>
+
+                            <div
+                                class="accordion-section-content"
+                                id="accordion-a5"
+                            >
+                                Envie as medidas aproximadas, fotos do ambiente,
+                                cidade de instalação e, se disponível, a planta
+                                ou o projeto da cozinha. Depois, nossa equipe
+                                entrará em contato para orientar os próximos
+                                passos.
+                            </div>
+
+                            <div
+                                class="accordion-section-title"
+                                data-tab="#accordion-a6"
+                            >
+                                A Granimármores Pitondo realiza a instalação?
+                            </div>
+
+                            <div
+                                class="accordion-section-content"
+                                id="accordion-a6"
+                            >
+                                Sim. O serviço pode incluir medição, fabricação,
+                                transporte, montagem e ajustes finais, conforme
+                                o escopo definido no orçamento.
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="section-dark text-light">
+        <div class="container">
+
+            <div class="row g-4 align-items-center">
+
+                <div class="col-lg-8">
+                    <div class="subtitle">Seu projeto começa aqui</div>
+
+                    <h2 class="mb-2">
+                        Vamos transformar sua cozinha?
+                    </h2>
+
+                    <p class="mb-0">
+                        Envie as medidas, fotos ou a planta do ambiente e
+                        solicite uma avaliação para seu projeto.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide">
+                        <span>Solicitar orçamento</span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="bg-color-op-1"><div class="container"><div class="row g-4 align-items-center"><div class="col-lg-5"><div class="subtitle">Soluções relacionadas</div><h2>Ambientes que combinam com cozinhas sob medida</h2><p>Projetos de cozinha frequentemente se conectam a áreas gourmet, bancadas de apoio e ambientes comerciais de preparo ou atendimento.</p></div><div class="col-lg-7"><div class="row g-4"><div class="col-md-6"><a class="d-block p-4 bg-light rounded-1 h-100" href="{% url 'institutional:areas_gourmet' %}"><h3>Áreas Gourmet</h3><p class="mb-0">Bancadas, ilhas, churrasqueiras e espaços de convivência.</p></a></div><div class="col-md-6"><a class="d-block p-4 bg-light rounded-1 h-100" href="{% url 'institutional:projetos_comerciais' %}"><h3>Projetos Comerciais</h3><p class="mb-0">Balcões, bancadas de trabalho e superfícies de atendimento.</p></a></div></div></div></div></div></section>
+
+</main>
+
+{% endblock %}

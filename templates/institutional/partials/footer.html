@@ -3,81 +3,35 @@
             <div class="container">
                 <div class="row g-4 justify-content-between">
                     <div class="col-md-6">
-                        <img src="{% static 'institutional/intrio/images/logo-white.webp' %}" class="w-170px mb-2" alt="">
-                        <div class="spacer-single"></div>
+                        <img src="{% static 'institutional/images/logo-white.webp' %}" class="w-170px mb-2" alt="Granimármores Pitondo">
+                        <p class="mb-4">Mármores, granitos e superfícies especiais transformados em soluções sob medida para cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais.</p>
                         <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="widget">
-                                    <h2 class="hs-5">Quick Links</h2>
-                                    <ul>                                        
-                                        <li><a href="index.html">Home</a></li>
-                                        <li><a href="services.html">Our Services</a></li>
-                                        <li><a href="projects.html">Projects</a></li>
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="widget">
-                                    <h2 class="hs-5">Company</h2>
-                                    <ul>                                        
-                                        <li><a href="index.html">Home</a></li>
-                                        <li><a href="services.html">Our Services</a></li>
-                                        <li><a href="projects.html">Projects</a></li>
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="social-icons mb-sm-30 text-center">
-                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                            <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                            <div class="col-md-6"><div class="widget"><h2 class="hs-5">Links rápidos</h2><ul>
+                                <li><a href="{% url 'institutional:home' %}">Início</a></li>
+                                <li><a href="{% url 'institutional:sobre' %}">Sobre</a></li>
+                                <li><a href="{% url 'institutional:blog' %}">Blog</a></li>
+                                <li><a href="{% url 'institutional:contato' %}">Contato</a></li>
+                            </ul></div></div>
+                            <div class="col-md-6"><div class="widget"><h2 class="hs-5">Soluções</h2><ul>
+                                <li><a href="{% url 'institutional:cozinhas' %}">Cozinhas</a></li>
+                                <li><a href="{% url 'institutional:escadas' %}">Escadas</a></li>
+                                <li><a href="{% url 'institutional:areas_gourmet' %}">Áreas Gourmet</a></li>
+                                <li><a href="{% url 'institutional:banheiros' %}">Banheiros</a></li>
+                                <li><a href="{% url 'institutional:projetos_comerciais' %}">Projetos Comerciais</a></li>
+                            </ul></div></div>
                         </div>
                     </div>
-
                     <div class="col-md-6">
                         <div class="d-flex align-items-center justify-content-between">
-                            <h2>Get in Touch</h2>
-                            <img src="{% static 'institutional/intrio/images/ui/up-right-arrow.webp' %}" class="w-60px op-5" alt="">
+                            <h2>Entre em contato</h2>
+                            <img src="{% static 'institutional/images/ui/up-right-arrow.webp' %}" class="w-60px op-5" alt="Seta decorativa">
                         </div>
-
                         <div class="widget">
-                            <div class="op-5 fs-15">Email</div>
-                            <h3>contact@intrio.com</h3>
-
-                            <div class="spacer-20"></div>      
-
-                            <div class="op-5 fs-15">Phone</div>
-                            <h3>+929 333 9296</h3>
-
-                            <div class="spacer-20"></div>
-
-                            <div class="op-5 fs-15">Office Location</div>
-                            <h3>100 S Main St, New York, NY</h3>
-
-                            <div class="spacer-20"></div>
-                      
+                            <p>Envie medidas, fotos ou planta para uma avaliação inicial. Os canais reais de atendimento podem ser configurados no conteúdo do projeto quando confirmados.</p>
+                            <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide mt-3"><span>Solicitar orçamento</span></a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="subfooter">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            Copyright 2026 Intrio by Designesia
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="subfooter"><div class="container"><div class="row"><div class="col-md-12 text-center">Copyright 2026 Granimármores Pitondo</div></div></div></div>
         </footer>
