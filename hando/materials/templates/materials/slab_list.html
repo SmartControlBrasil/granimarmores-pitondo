@@ -1,0 +1,36 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <a href="{% url 'materials:slab_create' %}"
+     class="btn btn-sm btn-success ms-auto">Nova chapa</a>
+{% endblock card_actions %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Material</th>
+          <th>Lote</th>
+          <th>Área</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for slab in page_obj %}
+          <tr>
+            <td>{{ slab.slab_code }}</td>
+            <td>{{ slab.material }}</td>
+            <td>{{ slab.lot_number|default:"-" }}</td>
+            <td>{{ slab.area_m2 }} m²</td>
+            <td>{{ slab.get_status_display }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-muted">Nenhuma chapa.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

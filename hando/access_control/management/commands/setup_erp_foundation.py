@@ -50,6 +50,43 @@ INITIAL_ROLES = [
     },
 ]
 
+MATERIAL_CATEGORIES = [
+    "Granito",
+    "Mármore",
+    "Quartzito",
+    "Quartzo industrializado",
+    "Porcelanato",
+    "Ultracompacto",
+    "Revestimento",
+    "Insumo",
+    "Outros",
+]
+
+FINISH_TYPES = [
+    "Polido",
+    "Escovado",
+    "Levigado",
+    "Boleado",
+    "Meia esquadria",
+    "Saia",
+    "Frontão",
+    "Rodabanca",
+    "Canal úmido",
+    "Furo de cuba",
+    "Furo de torneira",
+    "Recorte de cooktop",
+]
+ADDITIONAL_SERVICES = [
+    "Medição técnica",
+    "Transporte",
+    "Instalação",
+    "Remoção de bancada",
+    "Descarte",
+    "Içamento",
+    "Visita adicional",
+    "Impermeabilização",
+]
+
 ASSET_CATEGORIES = [
     "Máquinas",
     "Equipamentos",

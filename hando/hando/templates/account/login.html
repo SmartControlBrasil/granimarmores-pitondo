@@ -59,7 +59,7 @@
                                         <div class="saprator my-4"><span>or continue with email</span></div>
 
                                         <div class="pt-0">
-                                            <form action="post" action="{% url 'account_login' %}" class="my-4">
+                                            <form method="post" action="{% url 'account_login' %}" class="my-4">
 
                                                 {% csrf_token %}
                                                 {{ form|crispy }}
@@ -137,10 +137,3 @@
     </div>
 </div>
 {% endblock content %}
-
-{% block extra_javascript %}
-    <script>
-        document.getElementById('id_login').value = "example@mail.com"
-        document.getElementById('id_password').value = "password"
-    </script>
-{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "erp/list_base.html" %}
+
+{% block table_content %}
+  {% include "audit/event_table.html" with events=events %}
+{% endblock table_content %}

@@ -1,0 +1,98 @@
+{% extends "vertical.html" %}
+
+{% block title %}
+  {{ page_title }}
+{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3 d-flex align-items-center">
+      <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ material.name }}</h4>
+      <a href="{% url 'materials:update' material.pk %}"
+         class="btn btn-sm btn-primary">Editar</a>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Dados comerciais</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Código</dt>
+              <dd class="col-sm-8">
+                {{ material.code }}
+              </dd>
+              <dt class="col-sm-4">Categoria</dt>
+              <dd class="col-sm-8">
+                {{ material.category }}
+              </dd>
+              <dt class="col-sm-4">Unidade</dt>
+              <dd class="col-sm-8">
+                {{ material.get_unit_display }}
+              </dd>
+              <dt class="col-sm-4">Custo</dt>
+              <dd class="col-sm-8">
+                R$ {{ material.cost_price }}
+              </dd>
+              <dt class="col-sm-4">Venda</dt>
+              <dd class="col-sm-8">
+                R$ {{ material.sale_price }}
+              </dd>
+              <dt class="col-sm-4">Mínimo</dt>
+              <dd class="col-sm-8">
+                R$ {{ material.minimum_sale_price }}
+              </dd>
+              <dt class="col-sm-4">Status</dt>
+              <dd class="col-sm-8">
+                {{ material.is_active|yesno:"Ativo,Inativo" }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Ações</h5>
+            <div class="d-flex flex-wrap gap-2">
+              {% if material.is_active %}
+                <a href="{% url 'materials:deactivate' material.pk %}"
+                   class="btn btn-danger">Desativar</a>
+              {% else %}
+                <a href="{% url 'materials:activate' material.pk %}"
+                   class="btn btn-success">Ativar</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Histórico de preços</h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <tbody>
+              {% for event in history %}
+                <tr>
+                  <td>{{ event.changed_at }}</td>
+                  <td>{{ event.get_price_type_display }}</td>
+                  <td>R$ {{ event.old_value }}</td>
+                  <td>R$ {{ event.new_value }}</td>
+                  <td>{{ event.reason|default:"-" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td class="text-muted">Sem histórico.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock page_content %}

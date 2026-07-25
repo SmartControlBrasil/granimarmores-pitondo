@@ -1,0 +1,81 @@
+{% extends "vertical.html" %}
+
+{% block title %}
+  {{ page_title }}
+{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3 d-flex align-items-center">
+      <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ quote.number }}</h4>
+      <a href="{% url 'quotes:update' quote.pk %}"
+         class="btn btn-sm btn-primary">Editar</a>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="row g-3">
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Resumo</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Cliente</dt>
+              <dd class="col-sm-8">
+                {{ quote.customer }}
+              </dd>
+              <dt class="col-sm-4">Vendedor</dt>
+              <dd class="col-sm-8">
+                {{ quote.salesperson }}
+              </dd>
+              <dt class="col-sm-4">Status</dt>
+              <dd class="col-sm-8">
+                {{ quote.get_status_display }}
+              </dd>
+              <dt class="col-sm-4">Subtotal</dt>
+              <dd class="col-sm-8">
+                R$ {{ quote.subtotal }}
+              </dd>
+              <dt class="col-sm-4">Desconto</dt>
+              <dd class="col-sm-8">
+                R$ {{ quote.discount_total }}
+              </dd>
+              <dt class="col-sm-4">Impostos</dt>
+              <dd class="col-sm-8">
+                R$ {{ quote.tax_total }}
+              </dd>
+              <dt class="col-sm-4">Total</dt>
+              <dd class="col-sm-8">
+                R$ {{ quote.grand_total }}
+              </dd>
+              <dt class="col-sm-4">Margem</dt>
+              <dd class="col-sm-8">
+                {{ quote.gross_margin_percentage }}%
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Ações</h5>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="{% url 'quotes:items' quote.pk %}" class="btn btn-light">Itens</a>
+              <a href="{% url 'quotes:review' quote.pk %}" class="btn btn-light">Revisar</a>
+              <a href="{% url 'quotes:versions' quote.pk %}" class="btn btn-light">Versões</a>
+              <a href="{% url 'quotes:send' quote.pk %}" class="btn btn-light">Enviar</a>
+              <a href="{% url 'quotes:approve' quote.pk %}" class="btn btn-success">Aprovar</a>
+              <a href="{% url 'quotes:reject' quote.pk %}" class="btn btn-warning">Rejeitar</a>
+              <a href="{% url 'quotes:cancel' quote.pk %}" class="btn btn-danger">Cancelar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if quote.approval_reasons %}
+      <div class="alert alert-warning mt-3">Necessita aprovação: {{ quote.approval_reasons|join:", " }}</div>
+    {% endif %}
+  </div>
+{% endblock page_content %}

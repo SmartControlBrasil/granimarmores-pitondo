@@ -1,0 +1,37 @@
+{% extends "erp/list_base.html" %}
+
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Versão</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Hash PDF</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for version in versions %}
+          <tr>
+            <td>{{ version.version_number }}</td>
+            <td>{{ version.get_status_display }}</td>
+            <td>R$ {{ version.grand_total }}</td>
+            <td>
+              <code>{{ version.pdf_hash|default:"-" }}</code>
+            </td>
+            <td class="text-end">
+              <a href="{% url 'quotes:pdf' quote.pk version.version_number %}"
+                 class="btn btn-sm btn-light">PDF</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-muted">Nenhuma versão.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

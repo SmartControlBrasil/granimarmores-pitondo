@@ -1,0 +1,68 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <div class="ms-auto d-flex gap-2">
+    <form method="get" class="d-flex gap-2">
+      <input type="search"
+             name="q"
+             value="{{ search }}"
+             class="form-control form-control-sm"
+             placeholder="Buscar número" />
+      <select name="status" class="form-select form-select-sm">
+        <option value="">Todos</option>
+        {% for value, label in statuses %}
+          <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+    </form>
+    <a href="{% url 'quotes:create' %}" class="btn btn-sm btn-success">Novo orçamento</a>
+  </div>
+{% endblock card_actions %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Cliente</th>
+          <th>Vendedor</th>
+          <th>Versão</th>
+          <th>Status</th>
+          <th>Valor</th>
+          <th>Margem</th>
+          <th>Validade</th>
+          <th>Atualização</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for quote in page_obj %}
+          <tr>
+            <td>
+              <a href="{% url 'quotes:detail' quote.pk %}">{{ quote.number }}</a>
+            </td>
+            <td>{{ quote.customer }}</td>
+            <td>{{ quote.salesperson }}</td>
+            <td>{{ quote.current_version }}</td>
+            <td>
+              <span class="badge bg-secondary">{{ quote.get_status_display }}</span>
+            </td>
+            <td>R$ {{ quote.grand_total }}</td>
+            <td>{{ quote.gross_margin_percentage }}%</td>
+            <td>{{ quote.valid_until }}</td>
+            <td>{{ quote.updated_at }}</td>
+            <td class="text-end">
+              <a href="{% url 'quotes:update' quote.pk %}"
+                 class="btn btn-sm btn-light">Editar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="10" class="text-muted">Nenhum orçamento encontrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

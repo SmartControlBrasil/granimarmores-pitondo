@@ -1,0 +1,54 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <div class="ms-auto d-flex gap-2">
+    <form method="get" class="d-flex gap-2">
+      <input type="search"
+             name="q"
+             value="{{ search }}"
+             class="form-control form-control-sm"
+             placeholder="Filtrar materiais" />
+      <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+    </form>
+    <a href="{% url 'materials:create' %}" class="btn btn-sm btn-success">Novo material</a>
+  </div>
+{% endblock card_actions %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Material</th>
+          <th>Categoria</th>
+          <th>Unidade</th>
+          <th>Venda</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for material in page_obj %}
+          <tr>
+            <td>{{ material.code }}</td>
+            <td>
+              <a href="{% url 'materials:detail' material.pk %}">{{ material.name }}</a>
+            </td>
+            <td>{{ material.category }}</td>
+            <td>{{ material.get_unit_display }}</td>
+            <td>R$ {{ material.sale_price }}</td>
+            <td>{{ material.is_active|yesno:"Ativo,Inativo" }}</td>
+            <td class="text-end">
+              <a href="{% url 'materials:update' material.pk %}"
+                 class="btn btn-sm btn-light">Editar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-muted">Nenhum material encontrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

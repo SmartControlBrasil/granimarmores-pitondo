@@ -95,6 +95,8 @@ LOCAL_APPS = [
     "audit",
     "customers",
     "salespeople",
+    "materials",
+    "quotes",
     "assets",
     "fleet",
     "maintenance",

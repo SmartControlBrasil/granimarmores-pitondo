@@ -11,6 +11,7 @@ from customers.models import Customer
 from fleet.models import Vehicle
 from maintenance.models import MaintenanceOrder
 from maintenance.models import MaintenancePlan
+from quotes.models import Quote
 from salespeople.models import Salesperson
 
 
@@ -40,6 +41,34 @@ def root_page_view(request):
             user_model.objects.filter(is_active=True).count(),
             "user",
             "success",
+        ),
+        (
+            "Orçamentos em rascunho",
+            "quotes.view",
+            Quote.objects.filter(status="draft").count(),
+            "file-text",
+            "primary",
+        ),
+        (
+            "Aguardando aprovação",
+            "quotes.approve",
+            Quote.objects.filter(status="pending_approval").count(),
+            "clock",
+            "warning",
+        ),
+        (
+            "Aprovados",
+            "quotes.view",
+            Quote.objects.filter(status="approved").count(),
+            "check-circle",
+            "success",
+        ),
+        (
+            "Enviados",
+            "quotes.view",
+            Quote.objects.filter(status="sent").count(),
+            "send",
+            "info",
         ),
         (
             "Ativos cadastrados",

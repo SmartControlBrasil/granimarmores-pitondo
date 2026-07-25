@@ -1,0 +1,39 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <a href="{% url 'materials:service_create' %}"
+     class="btn btn-sm btn-success ms-auto">Novo serviço</a>
+{% endblock card_actions %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Unidade</th>
+          <th>Venda</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in page_obj %}
+          <tr>
+            <td>{{ item.code }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.get_unit_display }}</td>
+            <td>R$ {{ item.sale_price }}</td>
+            <td class="text-end">
+              <a href="{% url 'materials:service_update' item.pk %}"
+                 class="btn btn-sm btn-light">Editar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" class="text-muted">Nenhum serviço.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}
