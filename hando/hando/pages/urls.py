@@ -1,5 +1,6 @@
 from django.urls import path
-from pages.views import (root_page_view, dynamic_pages_view)
+from hando.pages.views import dynamic_pages_view
+from hando.pages.views import root_page_view
 
 app_name = "pages" 
 

@@ -89,7 +89,15 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "hando.users",
     "hando.pages",
-    # Your stuff: custom apps go here
+    "core",
+    "accounts",
+    "access_control",
+    "audit",
+    "customers",
+    "salespeople",
+    "assets",
+    "fleet",
+    "maintenance",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -147,6 +155,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "audit.middleware.AuditMiddleware",
 ]
 
 # STATIC
@@ -193,6 +202,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "hando.users.context_processors.allauth_settings",
+                "access_control.context_processors.erp_permissions",
             ],
         },
     },
@@ -270,7 +280,7 @@ REDIS_SSL = REDIS_URL.startswith("rediss://")
 
 # django-allauth
 # ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 # https://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://docs.allauth.org/en/latest/account/configuration.html

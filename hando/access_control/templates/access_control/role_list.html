@@ -1,0 +1,4 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Cargo</th><th>Nível</th><th>Acesso total</th><th>Sistema</th><th>Status</th></tr></thead><tbody>{% for role in page_obj %}<tr><td>{{ role.name }}</td><td>{{ role.hierarchy_level }}</td><td>{{ role.has_full_access|yesno:"Sim,Não" }}</td><td>{{ role.is_system|yesno:"Sim,Não" }}</td><td>{{ role.is_active|yesno:"Ativo,Inativo" }}</td></tr>{% empty %}<tr><td colspan="5" class="text-muted">Nenhum cargo encontrado.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock table_content %}

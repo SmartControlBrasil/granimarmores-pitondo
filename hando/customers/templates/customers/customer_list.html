@@ -1,0 +1,19 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <form method="get" class="ms-auto d-flex gap-2">
+    <input type="search" name="q" value="{{ search }}" class="form-control form-control-sm" placeholder="Filtrar clientes">
+    <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+  </form>
+{% endblock card_actions %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>Nome</th><th>Tipo</th><th>Documento</th><th>Vendedor</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for customer in page_obj %}
+          <tr><td>{{ customer.name }}</td><td>{{ customer.get_customer_type_display }}</td><td>{{ customer.document|default:"-" }}</td><td>{{ customer.assigned_salesperson|default:"-" }}</td><td>{% if customer.is_active %}<span class="badge bg-success">Ativo</span>{% else %}<span class="badge bg-secondary">Inativo</span>{% endif %}</td></tr>
+        {% empty %}<tr><td colspan="5" class="text-muted">Nenhum cliente encontrado.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

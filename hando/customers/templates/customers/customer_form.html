@@ -1,0 +1,15 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3"><h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4></div>
+  <div class="card"><div class="card-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a href="{% url 'customers:list' %}" class="btn btn-light">Cancelar</a>
+    </form>
+  </div></div>
+</div>
+{% endblock page_content %}

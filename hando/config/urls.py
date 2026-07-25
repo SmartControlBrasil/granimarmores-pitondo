@@ -14,6 +14,14 @@ urlpatterns = [
     # User management
     path("users/", include("hando.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    path("erp/usuarios/", include("accounts.urls", namespace="accounts")),
+    path("erp/acessos/", include("access_control.urls", namespace="access_control")),
+    path("erp/auditoria/", include("audit.urls", namespace="audit")),
+    path("erp/clientes/", include("customers.urls", namespace="customers")),
+    path("erp/vendedores/", include("salespeople.urls", namespace="salespeople")),
+    path("erp/ativos/", include("assets.urls", namespace="assets")),
+    path("erp/veiculos/", include("fleet.urls", namespace="fleet")),
+    path("erp/manutencao/", include("maintenance.urls", namespace="maintenance")),
     path("", include("hando.pages.urls", namespace="pages")),
     # Your stuff: custom urls includes go here
     # ...

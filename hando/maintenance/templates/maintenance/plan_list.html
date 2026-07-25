@@ -1,0 +1,4 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Name</th><th>Maintenance Type</th><th>Asset</th><th>Vehicle</th><th>Next Due Date</th><th>Is Active</th></tr></thead><tbody>{% for item in page_obj %}<tr><td>{{ item.name }}</td><td>{{ item.maintenance_type }}</td><td>{{ item.asset }}</td><td>{{ item.vehicle }}</td><td>{{ item.next_due_date }}</td><td>{{ item.is_active }}</td></tr>{% empty %}<tr><td colspan="6" class="text-muted">Nenhum registro encontrado.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock table_content %}

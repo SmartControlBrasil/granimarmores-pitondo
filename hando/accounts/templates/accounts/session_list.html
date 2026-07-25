@@ -1,0 +1,7 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="table-responsive"><table class="table table-hover align-middle mb-0">
+  <thead><tr><th>Usuário</th><th>Login</th><th>Última atividade</th><th>Logout</th><th>Status</th></tr></thead>
+  <tbody>{% for session in page_obj %}<tr><td>{{ session.user }}</td><td>{{ session.login_at }}</td><td>{{ session.last_activity_at }}</td><td>{{ session.logout_at|default:"-" }}</td><td>{% if session.is_active %}<span class="badge bg-success">Ativa</span>{% else %}<span class="badge bg-secondary">Encerrada</span>{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="text-muted">Nenhuma sessão registrada.</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock table_content %}
