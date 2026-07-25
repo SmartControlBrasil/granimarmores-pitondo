@@ -46,3 +46,29 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+
+# Pacotes compactados locais
+hando.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Variáveis e segredos
+.env
+.env.*
+!.env.example
+
+# Frontend
+node_modules/
+
+# Sistema
+.DS_Store
+Thumbs.db

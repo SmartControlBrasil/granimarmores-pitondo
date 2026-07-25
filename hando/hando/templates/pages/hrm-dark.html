@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Hando - Responsive Admin Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc."/>
+        <meta name="author" content="Zoyothemes"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
+
+        <!-- Icons -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    @@include('./partials/body.html')
+
+        <!-- Begin page -->
+        <div id="app-layout">
+
+
+            @@include('./partials/topbar.html', {"pagetitle": "Dashboard"})
+
+            @@include('./partials/sidebar.html')
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+                            <div class="flex-grow-1">
+                                <h4 class="fs-18 fw-semibold m-0">HRM</h4>
+                            </div>
+                        </div>
+
+                        <!-- Start Row -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-xl-5">
+                                                <div class="row">
+
+                                                    <div class="col-md-6 col-xl-6 hrm-widget border-end border-bottom">
+                                                        <div class="card shadow-none mb-0">
+                                                            <div class="card-body">
+                                                                <div class="">
+                                                                    <div class="mb-3">
+                                                                        <span class="bg-gray d-flex rounded-circle justify-content-center align-items-center me-2 shadow-sm" style="height: 40px; width: 40px;">
+                                                                            <i class="mdi mdi-shield-account fs-22 text-dark"></i>
+                                                                        </span>
+                                                                    </div>
+                        
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <div>
+                                                                            <h3 class="mb-0 fs-26 text-dark me-3">2,500</h3>
+                                                                        </div>
+                                                                        <div class="me-auto">
+                                                                            <span class="text-success bg-success-subtle rounded-2 px-2 py-1 me-2 fw-semibold fs-12"><i class="mdi mdi-trending-up fs-14"></i> 5.41%</span> 
+                                                                        </div>
+                                                                    </div>
+                        
+                                                                    <p class="text-muted mb-0">Total Employees</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="col-md-6 col-xl-6 hrm-widget border-bottom">
+                                                        <div class="card shadow-none mb-0">
+                                                            <div class="card-body">
+                                                                <div class="ms-2">
+                                                                    <div class="mb-3">
+                                                                        <span class="bg-gray d-flex rounded-circle justify-content-center align-items-center me-2 shadow-sm" style="height: 40px; width: 40px;">
+                                                                            <i class="mdi mdi-bag-checked fs-22 text-dark"></i>
+                                                                        </span>
+                                                                    </div>
+                        
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <div>
+                                                                            <h3 class="mb-0 fs-26 text-dark me-3">1,200</h3>
+                                                                        </div>
+                                                                        <div class="me-auto">
+                                                                            <span class="text-success bg-success-subtle rounded-2 px-2 py-1 me-2 fw-semibold fs-12"><i class="mdi mdi-trending-up fs-14"></i> 2.11%</span> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">Job Applicants</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="col-md-6 col-xl-6 hrm-widget border-end">
+                                                        <div class="card shadow-none mb-0">
+                                                            <div class="card-body">
+                                                                <div class="">
+                                                                    <div class="mb-3">
+                                                                        <span class="bg-gray d-flex rounded-circle justify-content-center align-items-center me-2 shadow-sm" style="height: 40px; width: 40px;">
+                                                                            <i class="mdi mdi-file fs-22 text-dark"></i>
+                                                                        </span>
+                                                                    </div>
+                        
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <div>
+                                                                            <h3 class="mb-0 fs-26 text-dark me-3">800</h3>
+                                                                        </div>
+                                                                        <div class="me-auto">
+                                                                            <span class="text-danger bg-danger-subtle rounded-2 px-2 py-1 me-2 fw-semibold fs-12"><i class="mdi mdi-trending-down fs-14"></i> 4.18%</span> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">New Employees</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                        
+                                                    <div class="col-md-6 col-xl-6 hrm-widget">
+                                                        <div class="card shadow-none mb-0">
+                                                            <div class="card-body">
+                                                                <div class="ms-2">
+                                                                    <div class="mb-3">
+                                                                        <span class="bg-gray d-flex rounded-circle justify-content-center align-items-center me-2 shadow-sm" style="height: 40px; width: 40px;">
+                                                                            <i class="mdi mdi-account-remove fs-22 text-dark"></i>
+                                                                        </span>
+                                                                    </div>
+                        
+                                                                    <div class="d-flex align-items-center mb-2">
+                                                                        <div>
+                                                                            <h3 class="mb-0 fs-26 text-dark me-3">400</h3>
+                                                                        </div>
+                                                                        <div class="me-auto">
+                                                                            <span class="text-danger bg-danger-subtle rounded-2 px-2 py-1 me-2 fw-semibold fs-12"><i class="mdi mdi-trending-down fs-14"></i> 3.58%</span> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="text-muted mb-0">Resigned Employees</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 col-xl-7">
+                                                
+                                                <div class="card shadow-none mb-0 me-3">
+                                                    <div class="card-header p-0 border-bottom-0 pt-3">
+                                                        <div class="d-flex align-items-center">
+                                                            <h5 class="card-title mb-0">Employee Performance</h5>
+                
+                                                            <div class="ms-auto"> 
+                                                                <button class="btn btn-sm bg-light border dropdown-toggle fw-medium text-dark" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weekly<i class="mdi mdi-chevron-down ms-1 fs-14"></i></button>
+                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                    <a class="dropdown-item" href="#">Weekly</a>
+                                                                    <a class="dropdown-item" href="#">Monthly</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="card-body px-0 pb-0">
+                                                        <div id="job-report" class="apex-charts"></div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Start -->
+
+
+                        <!-- Start Row -->
+                        <div class="row">
+
+                            <!-- Start Job Summary -->
+                            <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-12">
+                                <div class="card">
+
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0">Job Summary</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div id="your-preformance" class="apex-charts"></div>
+                                        <div class="row mt-2">
+                                            <div class="col">
+                                                <div class="d-flex justify-content-between align-items-center p-1">
+                                                    <div>
+                                                        <i class="mdi mdi-circle fs-12 align-middle me-1 text-primary"></i>
+                                                        <span class="align-middle fw-semibold">Active Job</span>
+                                                    </div>
+                                                    <span class="fw-semibold text-muted float-end">20</span>
+                                                </div>
+
+                                                <div class="d-flex justify-content-between align-items-center p-1">
+                                                    <div>
+                                                        <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: rgba(42, 106, 153, 0.7);"></i>
+                                                        <span class="align-middle fw-semibold">Unactive</span>
+                                                    </div>
+                                                    <span class="fw-semibold text-muted float-end">25</span>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex justify-content-between align-items-center p-1">
+                                                    <div>
+                                                        <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: rgba(42, 106, 153, 0.5);"></i>
+                                                        <span class="align-middle fw-semibold"> Closed</span>
+                                                    </div>
+                                                    <span class="fw-semibold text-muted float-end">55</span>
+                                                </div>
+
+                                                <div class="d-flex justify-content-between align-items-center p-1">
+                                                    <div>
+                                                        <i class="mdi mdi-circle fs-12 align-middle me-1" style="color: rgba(42, 106, 153, 0.2);"></i>
+                                                        <span class="align-middle fw-semibold"> On Hold</span>
+                                                    </div>
+                                                    <span class="fw-semibold text-muted float-end">34</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Job Summary -->
+
+                            <!-- Start Income Statistics -->
+                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0">Income Statistics</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div id="staff-work" class="apex-charts"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- End Income Statistics -->
+
+                            <!-- Start Inverivew Summary -->
+                            <div class="col-xxl-3 col-xl-12 col-lg-12 col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0">Inverivew Summary</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush list-group-no-gutters">
+
+                                            <!-- List Item -->
+                                            <li class="list-group-item px-0 pt-0">
+                                                <div class="d-flex align-items-center gap-3">
+
+                                                    <div class="flex-shrink-0">
+                                                        <!-- Avatar -->
+                                                        <div class="align-content-center text-center rounded-circle p-1">
+                                                            <img src="assets/images/users/user-19.jpg" class="avatar avatar-xs rounded-circle">
+                                                        </div>
+                                                        <!-- End Avatar -->
+                                                    </div>
+
+                                                    <div class="align-content-center">
+                                                        <h6 class="mb-1 text-dark fs-15">Walter Payne</h6>
+                                                        <div class="d-flex align-items-center">
+                                                            <p class="fs-13 text-muted mb-0 text-nowrap text-truncate"><i class="mdi mdi-timer me-1 text-dark"></i>03 August (10.00am to 10.00am)</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ms-auto align-content-center">
+                                                        <a href="javascript:void(0);">
+                                                            <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                            <!-- End List Item -->
+
+                                            <!-- List Item -->
+                                            <li class="list-group-item px-0">
+                                                <div class="d-flex align-items-center gap-3">
+
+                                                    <div class="flex-shrink-0">
+                                                        <!-- Avatar -->
+                                                        <div class="align-content-center text-center rounded-circle p-1">
+                                                            <img src="assets/images/users/user-20.jpg" class="avatar avatar-xs rounded-circle">
+                                                        </div>
+                                                        <!-- End Avatar -->
+                                                    </div>
+
+                                                    <div class="align-content-center">
+                                                        <h6 class="mb-1 text-dark fs-15">Billie Hefley</h6>
+                                                        <div class="d-flex align-items-center">
+                                                            <p class="fs-13 text-muted mb-0 text-nowrap text-truncate"><i class="mdi mdi-timer me-1 text-dark"></i>06 August (9.00am to 10.30am)</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ms-auto align-content-center">
+                                                        <a href="javascript:void(0);">
+                                                            <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                            <!-- End List Item -->
+
+                                            <!-- List Item -->
+                                            <li class="list-group-item px-0">
+                                                <div class="d-flex align-items-center gap-3">
+
+                                                    <div class="flex-shrink-0">
+                                                        <!-- Avatar -->
+                                                        <div class="align-content-center text-center rounded-circle p-1">
+                                                            <img src="assets/images/users/user-21.jpg" class="avatar avatar-xs rounded-circle">
+                                                        </div>
+                                                        <!-- End Avatar -->
+                                                    </div>
+
+                                                    <div class="align-content-center">
+                                                        <h6 class="mb-1 text-dark fs-15">Terrance Tilley</h6>
+                                                        <div class="d-flex align-items-center">
+                                                            <p class="fs-13 text-muted mb-0 text-nowrap text-truncate"><i class="mdi mdi-timer me-1 text-dark"></i>15 August (2.00pm to 3.30pm)</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ms-auto align-content-center">
+                                                        <a href="javascript:void(0);">
+                                                            <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                            <!-- End List Item -->
+
+                                            <!-- List Item -->
+                                            <li class="list-group-item px-0">
+                                                <div class="d-flex align-items-center gap-3">
+
+                                                    <div class="flex-shrink-0">
+                                                        <!-- Avatar -->
+                                                        <div class="align-content-center text-center rounded-circle p-1">
+                                                            <img src="assets/images/users/user-22.jpg" class="avatar avatar-xs rounded-circle">
+                                                        </div>
+                                                        <!-- End Avatar -->
+                                                    </div>
+
+                                                    <div class="align-content-center">
+                                                        <h6 class="mb-1 text-dark fs-15">Lawrence Schilling</h6>
+                                                        <div class="d-flex align-items-center">
+                                                            <p class="fs-13 text-muted mb-0 text-nowrap text-truncate"><i class="mdi mdi-timer me-1 text-dark"></i>15 November (11.30pm to 12.30pm)</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ms-auto align-content-center">
+                                                        <a href="javascript:void(0);">
+                                                            <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                            <!-- End List Item -->
+
+                                            <!-- List Item -->
+                                            <li class="list-group-item px-0 pb-0">
+                                                <div class="d-flex align-items-center gap-3">
+
+                                                    <div class="flex-shrink-0">
+                                                        <!-- Avatar -->
+                                                        <div class="align-content-center text-center rounded-circle p-1">
+                                                            <img src="assets/images/users/user-23.jpg" class="avatar avatar-xs rounded-circle">
+                                                        </div>
+                                                        <!-- End Avatar -->
+                                                    </div>
+
+                                                    <div class="align-content-center">
+                                                        <h6 class="mb-1 text-dark fs-15">Anna Gonzalez</h6>
+                                                        <div class="d-flex align-items-center">
+                                                            <p class="fs-13 text-muted mb-0 text-nowrap text-truncate"><i class="mdi mdi-timer me-1 text-dark"></i>23 November (5.00pm to 6.30pm)</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="ms-auto align-content-center">
+                                                        <a href="javascript:void(0);">
+                                                            <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+
+
+                        <!-- Start Employee List -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card overflow-hidden">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0">Employee List</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-traffic mb-0">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Employee ID</th>
+                                                        <th>Employee Name</th>
+                                                        <th>Email</th>
+                                                        <th>Role</th>
+                                                        <th>Departments</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="text-dark fw-medium">EMP120215</a>
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <img src="assets/images/users/user-12.jpg" class="avatar avatar-sm rounded-circle me-3" />
+                                                        <div>
+                                                            <p class="mb-0 fw-medium fs-14">Hazal Nutt</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0">hazelnutt@email.com</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0"><span class="text-muted fw-medium">Lead</span> UI/UX Designer</p>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-light border text-dark fs-13 fw-normal">Team Projects</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-custom-second border border-success text-success fs-13 fw-medium"><i class="mdi mdi-circle-medium fs-14 text-success me-1"></i>Full-time</span>
+                                                    </td>
+                                                    <td>                                                       
+                                                        <a aria-label="anchor" class="btn btn-sm me-1 border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="mdi mdi-pencil-outline fs-15 text-muted"></i>
+                                                        </a>
+                                                        <a aria-label="anchor" class="btn btn-sm border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                            <i class="mdi mdi-delete fs-15 text-muted"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="text-dark">EMP120216</a>
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <img src="assets/images/users/user-11.jpg" class="avatar avatar-sm rounded-circle me-3" />
+                                                        <div>
+                                                            <p class="mb-0 fw-medium fs-14">Simon Cyrene</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0">simoncyr@email.com</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0"><span class="text-muted fw-medium">Sr</span> FrontEnd Developer</p>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-light border text-dark fs-13 fw-normal">Team Projects</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-custom-second border border-success text-success fs-13 fw-medium"><i class="mdi mdi-circle-medium fs-14 text-success me-1"></i>Full-time</span>
+                                                    </td>
+                                                    <td>                                                       
+                                                        <a aria-label="anchor" class="btn btn-sm me-1 border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="mdi mdi-pencil-outline fs-15 text-muted"></i>
+                                                        </a>
+                                                        <a aria-label="anchor" class="btn btn-sm border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                            <i class="mdi mdi-delete fs-15 text-muted"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="text-dark">EMP120217</a>
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <img src="assets/images/users/user-13.jpg" class="avatar avatar-sm rounded-circle me-3" />
+                                                        <div>
+                                                            <p class="mb-0 fw-medium fs-14">Aida Bugg</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0">simoncyr@email.com</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0"><span class="text-muted fw-medium">Sr</span> Graphics Designer</p>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-light border text-dark fs-13 fw-normal">Team Marketing</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-custom-second border border-warning text-warning fs-13 fw-medium"><i class="mdi mdi-circle-medium fs-14 text-warning me-1"></i>Freelance</span>
+                                                    </td>
+                                                    <td>                                                       
+                                                        <a aria-label="anchor" class="btn btn-sm me-1 border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="mdi mdi-pencil-outline fs-15 text-muted"></i>
+                                                        </a>
+                                                        <a aria-label="anchor" class="btn btn-sm border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                            <i class="mdi mdi-delete fs-15 text-muted"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="text-dark">EMP120218</a>
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <img src="assets/images/users/user-14.jpg" class="avatar avatar-sm rounded-circle me-3" />
+                                                        <div>
+                                                            <p class="mb-0 fw-medium fs-14">Pag Legge</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0">paglegge@email.com</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0"><span class="text-muted fw-medium">Jr</span> Animator</p>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-light border text-dark fs-13 fw-normal">Team Marketing</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-custom-second border border-warning text-warning fs-13 fw-medium"><i class="mdi mdi-circle-medium fs-14 text-warning me-1"></i>Freelance</span>
+                                                    </td>
+                                                    <td>                                                       
+                                                        <a aria-label="anchor" class="btn btn-sm me-1 border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="mdi mdi-pencil-outline fs-15 text-muted"></i>
+                                                        </a>
+                                                        <a aria-label="anchor" class="btn btn-sm border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                            <i class="mdi mdi-delete fs-15 text-muted"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="text-dark">EMP120218</a>
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <img src="assets/images/users/user-15.jpg" class="avatar avatar-sm rounded-circle me-3" />
+                                                        <div>
+                                                            <p class="mb-0 fw-medium fs-14">Hugh Jackma</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0">hughjackma@dotcom.com</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0"><span class="text-muted fw-medium">Jr</span> Animator</p>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-light border text-dark fs-13 fw-normal">Team Developing</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-custom-second border border-info text-info fs-13 fw-medium"><i class="mdi mdi-circle-medium fs-14 text-info me-1"></i>Part-time</span>
+                                                    </td>
+                                                    <td>                                                       
+                                                        <a aria-label="anchor" class="btn btn-sm me-1 border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="mdi mdi-pencil-outline fs-15 text-muted"></i>
+                                                        </a>
+                                                        <a aria-label="anchor" class="btn btn-sm border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                            <i class="mdi mdi-delete fs-15 text-muted"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="text-dark">EMP120219</a>
+                                                    </td>
+                                                    <td class="d-flex align-items-center">
+                                                        <img src="assets/images/users/user-12.jpg" class="avatar avatar-sm rounded-circle me-3" />
+                                                        <div>
+                                                            <p class="mb-0 fw-medium fs-14">Angelina Hose</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0">hughjackma@dotcom.com</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="mb-0"><span class="text-muted fw-medium">Jr</span> Animator</p>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-light border text-dark fs-13 fw-normal">Team Developing</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge badge-custom-second border border-info text-info fs-13 fw-medium"><i class="mdi mdi-circle-medium fs-14 text-info me-1"></i>Part-time</span>
+                                                    </td>
+                                                    <td>                                                       
+                                                        <a aria-label="anchor" class="btn btn-sm me-1 border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Edit">
+                                                            <i class="mdi mdi-pencil-outline fs-15 text-primary"></i>
+                                                        </a>
+                                                        <a aria-label="anchor" class="btn btn-sm border shadow-sm" data-bs-toggle="tooltip" data-bs-original-title="Delete">
+                                                            <i class="mdi mdi-delete fs-15 text-danger"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </div>    
+                                    </div>
+
+                                    <div class="card-footer py-0 border-top">
+                                        <div class="row align-items-center">
+                                            <div class="col-sm">
+                                                <div class="text-block text-center text-sm-start">
+                                                    <span class="fw-medium">1 of 3</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-auto mt-3 mt-sm-0">
+                                                <div class="pagination gap-2 justify-content-center py-3 ps-0 pe-3">
+                                                    <ul class="pagination mb-0">
+                                                        <li class="page-item disabled"> 
+                                                            <a class="page-link me-2 rounded-2" href="javascript:void(0);"> Prev </a> 
+                                                        </li>
+                                                        <li class="page-item active"> 
+                                                            <a class="page-link rounded-2 me-2" href="#" data-i="1" data-page="5">1</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a class="page-link me-2 rounded-2" href="#" data-i="2" data-page="5">2</a>
+                                                        </li>
+                                                        <li class="page-item">
+                                                            <a class="page-link text-primary rounded-2" href="javascript:void(0);"> next </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Employee List -->
+
+
+
+                    </div> <!-- container-fluid -->
+                </div> <!-- content -->
+
+                @@include('./partials/footer.html')
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+        @@include('./partials/vendor.html')
+
+        <!-- Apexcharts JS -->
+        <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <!-- for basic area chart -->
+        <script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
+
+        <!-- Widgets Init Js -->
+        <script src="assets/js/pages/hrm-dashboard.init.js"></script>
+
+        <!-- App js-->
+        <script src="assets/js/app.js"></script>
+        
+    </body>
+</html>

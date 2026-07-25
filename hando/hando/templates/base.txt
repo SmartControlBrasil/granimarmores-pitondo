@@ -1,0 +1,23 @@
+{% extends 'vertical.html' %}
+
+{% load static %}
+
+{% block html_class %}{% endblock html_class %}
+
+{% block title %}{% endblock title %}
+
+{% block extra_css %}{% endblock extra_css %}
+
+{% block body_class %}{% endblock body_class %}
+
+{% block page_content %}
+
+
+
+{% endblock page_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block extra_javascript %}
+
+{% endblock extra_javascript %}

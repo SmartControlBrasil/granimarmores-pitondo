@@ -1,0 +1,609 @@
+{% extends 'vertical.html' %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block extra_css %}{% endblock extra_css %}
+
+{% block page_content %}
+
+
+<!-- Start Container-->
+<div class="container-fluid">
+
+    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+        <div class="flex-grow-1">
+            <h4 class="fs-18 fw-semibold m-0">Jobs</h4>
+        </div>
+    </div>
+
+    <!-- Start Row -->
+    <div class="row">
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="widget-first">
+                        
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="avatar-sm rounded-circle bg-gray d-flex justify-content-center align-items-center me-2">
+                                <i class="mdi mdi-shield-account fs-22 text-dark"></i>
+                            </span>
+                            <p class="mb-0 text-dark fs-19 fw-medium">Total Applicaticants</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <p class="mb-0 text-muted mt-1">Total applicaticants over the last 6 month</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <h3 class="mb-0 fs-22 text-dark me-3">15,786</h3>
+                            <p class="text-muted mb-0 fs-13 d-flex flex-column">
+                                <span class="text-success px-2 py-1 bg-success-subtle rounded-4 me-2">+12.5%</span> 
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="widget-first">
+
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="avatar-sm rounded-circle bg-gray d-flex justify-content-center align-items-center me-2">
+                                <i class="mdi mdi-bag-checked fs-22 text-dark"></i>
+                            </span>
+                            <!-- <i class="mdi mdi-bag-checked fs-22 text-dark"></i> -->
+                            <p class="mb-0 text-dark fs-19 fw-medium">Interview Schedule</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <p class="mb-0 text-muted mt-1">Total interview over the last 6 month</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <h3 class="mb-0 fs-22 text-dark me-3">20,129</h3>
+                            <p class="text-muted mb-0 fs-13 d-flex flex-column">
+                                <span class="text-success px-2 py-1 bg-success-subtle rounded-4 me-2">+12.5%</span> 
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="widget-first">
+
+                        <div class="d-flex align-items-center mb-1">
+                            <!-- <span class="avatar-sm rounded-circle bg-gray d-flex justify-content-center align-items-center me-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#060707" fill-rule="evenodd" d="M14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14v-4c0-3.771 0-5.657 1.172-6.828S6.239 2 10.03 2c.606 0 1.091 0 1.5.017q-.02.12-.02.244l-.01 2.834c0 1.097 0 2.067.105 2.848c.114.847.375 1.694 1.067 2.386c.69.69 1.538.952 2.385 1.066c.781.105 1.751.105 2.848.105h4.052c.043.534.043 1.19.043 2.063V14c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22" clip-rule="evenodd"/><path fill="#060707" d="m19.352 7.617l-3.96-3.563c-1.127-1.015-1.69-1.523-2.383-1.788L13 5c0 2.357 0 3.536.732 4.268S15.643 10 18 10h3.58c-.362-.704-1.012-1.288-2.228-2.383"/></svg>
+                            </span> -->
+                            <span class="avatar-sm rounded-circle bg-gray d-flex justify-content-center align-items-center me-2">
+                                <i class="mdi mdi-file fs-22 text-dark"></i>
+                            </span>
+                            <p class="mb-0 text-dark fs-19 fw-medium">Profile Visited</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <p class="mb-0 text-muted mt-1">Total profile visited over the last 6 month</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <h3 class="mb-0 fs-22 text-dark me-3">8,503</h3>
+                            <p class="text-muted mb-0 fs-13 d-flex flex-column">
+                                <span class="text-success px-2 py-1 bg-success-subtle rounded-4 me-2">+12.5%</span> 
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="widget-first">
+
+                        <div class="d-flex align-items-center mb-1">
+                            <!-- <span class="avatar-sm rounded-circle bg-gray d-flex justify-content-center align-items-center me-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#060707" fill-rule="evenodd" d="M16.5 22c-1.65 0-2.475 0-2.987-.513C13 20.975 13 20.15 13 18.5s0-2.475.513-2.987C14.025 15 14.85 15 16.5 15s2.475 0 2.987.513C20 16.025 20 16.85 20 18.5s0 2.475-.513 2.987C18.975 22 18.15 22 16.5 22m-1.143-5.468a.583.583 0 1 0-.825.825l1.143 1.143l-1.143 1.143a.583.583 0 1 0 .825.825l1.143-1.143l1.143 1.143a.583.583 0 1 0 .825-.825L17.325 18.5l1.143-1.143a.583.583 0 1 0-.825-.825L16.5 17.675z" clip-rule="evenodd"/><path fill="#060707" d="M12 10a4 4 0 1 0 0-8a4 4 0 0 0 0 8m3.678 3.503c-.473.005-.914.023-1.298.074c-.643.087-1.347.293-1.928.875c-.582.581-.788 1.285-.874 1.928c-.078.578-.078 1.284-.078 2.034v.172c0 .75 0 1.456.078 2.034c.06.451.18.932.447 1.38H12c-8 0-8-2.015-8-4.5S7.582 13 12 13c1.326 0 2.577.181 3.678.503"/></svg>
+                            </span> -->
+                            <span class="avatar-sm rounded-circle bg-gray d-flex justify-content-center align-items-center me-2">
+                                <i class="mdi mdi-account-remove fs-22 text-dark"></i>
+                            </span>
+                            <p class="mb-0 text-dark fs-19 fw-medium">Not Qualified</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-2">
+                            <p class="mb-0 text-muted mt-1">Total not Qualified over the last 6 month</p>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3 justify-content-between">
+                            <h3 class="mb-0 fs-22 text-dark me-3">2,430</h3>
+                            <p class="text-muted mb-0 fs-13 d-flex flex-column">
+                                <span class="text-success px-2 py-1 bg-success-subtle rounded-4 me-2">+12.5%</span> 
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End Start -->
+
+    <!-- Chart Start -->
+    <div class="row">
+        <div class="col-md-12 col-xl-9">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0">Job Applications Statistics</h5>
+
+                        <div class="ms-auto"> 
+                            <button class="btn btn-sm bg-light border dropdown-toggle fw-medium text-dark" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Weekly<i class="mdi mdi-chevron-down ms-1 fs-14"></i></button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Weekly</a>
+                                <a class="dropdown-item" href="#">Monthly</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div id="job-report" class="apex-charts"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Inverivew Start -->
+        <div class="col-md-12 col-xl-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0">Upcoming Inverivew</h5>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <ul class="list-group list-group-flush list-group-no-gutters">
+
+                        <!-- List Item -->
+                        <li class="list-group-item px-0 pt-0">
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="flex-shrink-0">
+                                    <!-- Avatar -->
+                                    <div class="align-content-center text-center border border-dashed rounded-circle p-1">
+                                        <img src="{% static '/images/users/user-12.jpg' %}" class="avatar avatar-sm rounded-circle">
+                                    </div>
+                                    <!-- End Avatar -->
+                                </div>
+
+                                <div class="align-content-center">
+                                    <h6 class="mb-0 text-dark fs-15">Walter Payne</h6>
+                                    <span class="fs-13 text-dark">Php Developer</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fs-13 text-muted fw-medium">Nov 14, 2024</span>
+                                    </div>
+                                </div>
+
+                                <div class="ms-auto align-content-center">
+                                    <a href="javascript:void(0);">
+                                        <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <li class="list-group-item px-0">
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="flex-shrink-0">
+                                    <!-- Avatar -->
+                                    <div class="align-content-center text-center border border-dashed rounded-circle p-1">
+                                        <img src="{% static '/images/users/user-15.jpg' %}" class="avatar avatar-sm rounded-circle">
+                                    </div>
+                                    <!-- End Avatar -->
+                                </div>
+
+                                <div class="align-content-center">
+                                    <h6 class="mb-0 text-dark fs-15">Billie Hefley</h6>
+                                    <span class="fs-13 text-dark">Java Developer</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fs-13 text-muted fw-medium">Nov 17, 2024</span>
+                                    </div>
+                                </div>
+
+                                <div class="ms-auto align-content-center">
+                                    <a href="javascript:void(0);">
+                                        <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <li class="list-group-item px-0">
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="flex-shrink-0">
+                                    <!-- Avatar -->
+                                    <div class="align-content-center text-center border border-dashed rounded-circle p-1">
+                                        <img src="{% static '/images/users/user-11.jpg' %}" class="avatar avatar-sm rounded-circle">
+                                    </div>
+                                    <!-- End Avatar -->
+                                </div>
+
+                                <div class="align-content-center">
+                                    <h6 class="mb-0 text-dark fs-15">Terrance Tilley</h6>
+                                    <span class="fs-13 text-dark">React Developer</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fs-13 text-muted fw-medium">Nov 25, 2024</span>
+                                    </div>
+                                </div>
+
+                                <div class="ms-auto align-content-center">
+                                    <a href="javascript:void(0);">
+                                        <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <li class="list-group-item px-0">
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="flex-shrink-0">
+                                    <!-- Avatar -->
+                                    <div class="align-content-center text-center border border-dashed rounded-circle p-1">
+                                        <img src="{% static '/images/users/user-13.jpg' %}" class="avatar avatar-sm rounded-circle">
+                                    </div>
+                                    <!-- End Avatar -->
+                                </div>
+
+                                <div class="align-content-center">
+                                    <h6 class="mb-0 text-dark fs-15">Lawrence Schilling</h6>
+                                    <span class="fs-13 text-dark">Web Developer</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fs-13 text-muted fw-medium">Dec 08, 2024</span>
+                                    </div>
+                                </div>
+
+                                <div class="ms-auto align-content-center">
+                                    <a href="javascript:void(0);">
+                                        <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <li class="list-group-item px-0 pb-0">
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="flex-shrink-0">
+                                    <!-- Avatar -->
+                                    <div class="align-content-center text-center border border-dashed rounded-circle p-1">
+                                        <img src="{% static '/images/users/user-9.jpg' %}" class="avatar avatar-sm rounded-circle">
+                                    </div>
+                                    <!-- End Avatar -->
+                                </div>
+
+                                <div class="align-content-center">
+                                    <h6 class="mb-0 text-dark fs-15">Anna Gonzalez</h6>
+                                    <span class="fs-13 text-dark">Angular Developer</span>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fs-13 text-muted fw-medium">Dec 12, 2024</span>
+                                    </div>
+                                </div>
+
+                                <div class="ms-auto align-content-center">
+                                    <a href="javascript:void(0);">
+                                        <span class="badge bg-primary-subtle text-primary fs-12 p-1"> View</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </li>
+                        <!-- End List Item -->
+
+                    </ul>
+                </div>
+                
+            </div>
+        </div><!-- Upcoming Inverivew End -->
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-xl-8">
+            <div class="card overflow-hidden">
+
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0">Applicants</h5>
+                    </div>
+                </div>
+
+                <div class="card-body mt-0">
+                    <div class="table-responsive table-card mt-0">
+                        <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                            <thead class="text-muted table-light">
+                                <tr>
+                                    <th scope="col" class="cursor-pointer">Name</th>
+                                    <th scope="col" class="cursor-pointer">Email</th>
+                                    <th scope="col" class="cursor-pointer">Departement</th>
+                                    <th scope="col" class="cursor-pointer">Date</th>
+                                    <th scope="col" class="cursor-pointer">Status</th>
+                                    <th scope="col" class="cursor-pointer">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <img src="{% static '/images/users/user-22.jpg' %}" class="avatar avatar-sm rounded-circle me-3">
+                                        Ronald Richards
+                                    </td>
+                                    <td>ronaldrcs@gmail.com</td>
+                                    <td>Operations</td>
+                                    <td>Aug 14, 2024</td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success fs-12 fw-normal">Team Lead</span>
+                                    </td>
+                                    <td> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-success-subtle text-success me-1">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </button> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-danger-subtle text-danger">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{% static '/images/users/user-20.jpg' %}" class="avatar avatar-sm rounded-circle me-3">
+                                        Julie Davis
+                                    </td>
+                                    <td>Juliedavis@teleworm.us</td>
+                                    <td>Manufacture</td>
+                                    <td>Nov 10, 2024</td>
+                                    <td>
+                                        <span class="badge bg-secondary-subtle text-secondary fs-12 fw-normal">Director</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm bg-success-subtle text-success me-1">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </button> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-danger-subtle text-danger">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{% static '/images/users/user-22.jpg' %}" class="avatar avatar-sm rounded-circle me-3">
+                                        Robert Warner
+                                    </td>
+                                    <td>robertwarner@dayrep.com</td>
+                                    <td>Development</td>
+                                    <td>Nov 18, 2024</td>
+                                    <td>
+                                        <span class="badge bg-info-subtle text-info fs-12 fw-normal">Employee</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm bg-success-subtle text-success me-1">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </button> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-danger-subtle text-danger">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button> 
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{% static '/images/users/user-21.jpg' %}" class="avatar avatar-sm rounded-circle me-3">
+                                        Diane Richards
+                                    </td>
+                                    <td>dianetrichards@gmail.com</td>
+                                    <td>Marketing</td>
+                                    <td>Nov 22, 2024</td>
+                                    <td>
+                                        <span class="badge bg-warning-subtle text-warning fs-12 fw-normal">Senior Developer</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm bg-success-subtle text-success me-1">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </button> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-danger-subtle text-danger">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{% static '/images/users/user-19.jpg' %}" class="avatar avatar-sm rounded-circle me-3">
+                                        Edward Turner
+                                    </td>
+                                    <td>stocktonmortgage@gmail.com</td>
+                                    <td>Service</td>
+                                    <td>Nov 22, 2024</td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary fs-12 fw-normal">Manager</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm bg-success-subtle text-success me-1">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </button> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-danger-subtle text-danger">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button> 
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{% static '/images/users/user-19.jpg' %}" class="avatar avatar-sm rounded-circle me-3">
+                                        Edward Turner
+                                    </td>
+                                    <td>stocktonmortgage@gmail.com</td>
+                                    <td>Service</td>
+                                    <td>Nov 22, 2024</td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary fs-12 fw-normal">Manager</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-sm bg-success-subtle text-success me-1">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </button> 
+                                        <button type="button" class="btn btn-icon btn-sm bg-danger-subtle text-danger">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button> 
+                                    </td>
+                                </tr>
+
+                            </tbody><!-- end tbody -->
+                        </table><!-- end table -->
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="col-md-12 col-xl-4">
+            <div class="card overflow-hidden">
+
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0">Job Applied</h5>
+                    </div>
+                </div>
+
+                <div class="card-body mt-0">
+
+                    <div class="row row-cols-12 border border-dashed border-1 rounded-2">
+                        <div class="col">
+                            <div class="p-2 border-end border-inline-end-dashed">
+                                <p class="mb-1 text-muted text-center">Male Candidates</p>
+                                <div class="d-flex align-items-center mt-2 justify-content-between me-2">
+                                    <h3 class="mb-0 fs-22 text-dark me-3">1,478</h3>
+                                    <span class="text-primary fs-14"><i class="mdi mdi-trending-up fs-14"></i> 12.5%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="col">
+                            <div class="p-2 ps-0">
+                                <p class="mb-1 text-muted text-center">Female Candidates</p>
+                                <div class="d-flex align-items-center mt-2 justify-content-between">
+                                    <h3 class="mb-0 fs-22 text-dark me-3">1,978</h3>
+                                    <span class="text-danger fs-14"><i class="mdi mdi-trending-down fs-14"></i> 10%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="sales-overview" class="apex-charts"></div>
+
+                    <div class="information-details">
+                        <ul class="p-0 m-0">
+                            <li class="d-flex align-items-center mb-2">
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-circle fs-14 me-2 text-primary"></i>
+                                        <p class="mb-0 me-1 fs-14 fw-normal text-muted">Recruited</h6>
+                                    </div>
+                                    <div class="user-progress">
+                                        <p class="text-primary fw-medium mb-0 d-flex align-items-center text-dark">55%</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="d-flex align-items-center mb-2">
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-circle fs-14 me-2 text-secondary"></i>
+                                        <p class="mb-0 me-1 fs-14 fw-normal text-muted">Selected</p>
+                                    </div>
+                                    <div class="user-progress">
+                                        <p class="text-primary fw-medium mb-0 d-flex align-items-center text-dark">68.8%</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="d-flex align-items-center mb-2">
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-circle fs-14 me-2 text-success"></i>
+                                        <p class="mb-0 me-1 fs-14 fw-normal text-muted">Short Listed</p>
+                                    </div>
+                                    <div class="user-progress">
+                                        <p class="text-primary fw-medium mb-0 d-flex align-items-center text-dark">48.8%</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="d-flex align-items-center mb-0">
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-circle fs-14 me-2 text-info"></i>
+                                        <p class="mb-0 me-1 fs-14 fw-normal text-muted">Rejected</p>
+                                    </div>
+                                    <div class="user-progress">
+                                        <p class="text-primary fw-medium mb-0 d-flex align-items-center text-dark">63%</p>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<!-- End container -->
+
+{% endblock page_content %}
+
+{% block extra_javascript %}
+<script src="{% static '/libs/apexcharts/apexcharts.min.js' %}"></script>
+
+<!-- for basic area chart -->
+<script src="https://apexcharts.com/samples/assets/stock-prices.js"></script>
+
+<!-- ecommerce dashboasd Init Js -->
+<script src="{% static '/js/pages/jobs-dashboard.init.js' %}"></script>
+{% endblock extra_javascript %}
