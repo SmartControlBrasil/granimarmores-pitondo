@@ -1,7 +1,8 @@
+# ruff: noqa: S105, S106
 import re
+from http import HTTPStatus
 
 import pytest
-from allauth.account.models import EmailAddress
 from django.urls import reverse
 
 from hando.users.tests.factories import UserFactory
@@ -12,7 +13,7 @@ pytestmark = pytest.mark.django_db
 def test_allauth_login_page_uses_hando_template(client):
     response = client.get(reverse("account_login"))
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     assert any(template.name == "account/login.html" for template in response.templates)
 
 
@@ -38,19 +39,12 @@ def test_login_form_preserves_next_redirect_field(client):
 def test_valid_login_redirects_without_password_in_url(client):
     password = "safe-test-password-123"
     user = UserFactory(password=password)
-    EmailAddress.objects.create(
-        user=user,
-        email=user.email,
-        primary=True,
-        verified=True,
-    )
-
     response = client.post(
         reverse("account_login"),
         {"login": user.username, "password": password, "remember": "on", "next": "/"},
     )
 
-    assert response.status_code == 302
+    assert response.status_code == HTTPStatus.FOUND
     assert response.url == "/"
     assert password not in response.url
     assert "/accounts/login/post" not in response.url
@@ -59,19 +53,12 @@ def test_valid_login_redirects_without_password_in_url(client):
 def test_invalid_login_stays_on_page_and_does_not_leak_password(client):
     password = "wrong-password-456"
     user = UserFactory(password="right-password-123")
-    EmailAddress.objects.create(
-        user=user,
-        email=user.email,
-        primary=True,
-        verified=True,
-    )
-
     response = client.post(
         reverse("account_login"),
         {"login": user.username, "password": password},
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTPStatus.OK
     assert any(template.name == "account/login.html" for template in response.templates)
     assert response.context["form"].errors
     assert password not in response.request["PATH_INFO"]

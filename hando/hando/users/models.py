@@ -16,6 +16,16 @@ class User(AbstractUser):
     first_name = None  # type: ignore[assignment]
     last_name = None  # type: ignore[assignment]
 
+    def get_full_name(self) -> str:
+        name = self.name.strip()
+        if name:
+            return name
+        if self.username:
+            return self.username
+        if self.email:
+            return self.email
+        return ""
+
     def get_absolute_url(self) -> str:
         """Get URL for user's detail view.
 
