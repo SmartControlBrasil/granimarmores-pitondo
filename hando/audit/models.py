@@ -1,3 +1,4 @@
+# ruff: noqa: EM101, TRY003
 import uuid
 
 from django.conf import settings
@@ -31,7 +32,10 @@ class AuditEvent(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     occurred_at = models.DateTimeField(default=timezone.now, db_index=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
     session_key = models.CharField(max_length=80, blank=True)
     event_type = models.CharField(max_length=30, choices=EventType.choices)
@@ -46,7 +50,9 @@ class AuditEvent(models.Model):
     request_method = models.CharField(max_length=12, blank=True)
     request_path = models.CharField(max_length=500, blank=True)
     status = models.CharField(
-        max_length=20, choices=Status.choices, default=Status.SUCCESS,
+        max_length=20,
+        choices=Status.choices,
+        default=Status.SUCCESS,
     )
     metadata = models.JSONField(default=dict, blank=True)
 
@@ -80,7 +86,9 @@ class UserSessionLog(models.Model):
         UNKNOWN = "unknown", "Desconhecida"
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="session_logs",
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="session_logs",
     )
     session_key = models.CharField(max_length=80, db_index=True)
     login_at = models.DateTimeField(default=timezone.now)
@@ -89,7 +97,9 @@ class UserSessionLog(models.Model):
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.TextField(blank=True)
     logout_reason = models.CharField(
-        max_length=30, choices=LogoutReason.choices, blank=True,
+        max_length=30,
+        choices=LogoutReason.choices,
+        blank=True,
     )
     is_active = models.BooleanField(default=True)
 

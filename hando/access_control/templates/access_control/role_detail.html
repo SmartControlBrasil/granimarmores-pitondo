@@ -1,0 +1,96 @@
+{% extends "vertical.html" %}
+
+{% block title %}
+  {{ page_title }}
+{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3 d-flex align-items-center">
+      <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ role.name }}</h4>
+      <a href="{% url 'access_control:role_update' role.pk %}"
+         class="btn btn-sm btn-primary">Editar</a>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Dados</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Nível</dt>
+              <dd class="col-sm-8">
+                {{ role.hierarchy_level }}
+              </dd>
+              <dt class="col-sm-4">Acesso total</dt>
+              <dd class="col-sm-8">
+                {{ role.has_full_access|yesno:"Sim,Não" }}
+              </dd>
+              <dt class="col-sm-4">Status</dt>
+              <dd class="col-sm-8">
+                {{ role.is_active|yesno:"Ativo,Inativo" }}
+              </dd>
+              <dt class="col-sm-4">Sistema</dt>
+              <dd class="col-sm-8">
+                {{ role.is_system|yesno:"Sim,Não" }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Ações</h5>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="{% url 'access_control:role_permissions' role.pk %}"
+                 class="btn btn-light">Matriz</a><a href="{% url 'access_control:role_history' role.pk %}"
+   class="btn btn-light">Histórico</a>
+              {% if role.is_active %}
+                <a href="{% url 'access_control:role_deactivate' role.pk %}"
+                   class="btn btn-danger">Desativar</a>
+              {% else %}
+                <a href="{% url 'access_control:role_activate' role.pk %}"
+                   class="btn btn-success">Ativar</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Permissões</h5>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in role_permissions %}
+                <tr>
+                  <td>
+                    <code>{{ item.permission.code }}</code>
+                  </td>
+                  <td>{{ item.permission.name }}</td>
+                  <td>{{ item.allowed|yesno:"Permitida,Bloqueada" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3" class="text-muted">Nenhuma permissão configurada.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock page_content %}

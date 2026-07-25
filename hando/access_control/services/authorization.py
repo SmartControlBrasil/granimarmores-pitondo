@@ -1,3 +1,4 @@
+# ruff: noqa: BLE001, EM101, PLR0911, S110, SLF001, TRY003
 from functools import wraps
 
 from django.core.exceptions import PermissionDenied
@@ -80,7 +81,9 @@ def user_has_permission(user, permission_code):
     if cache is not None and key in cache:
         return cache[key]
     allowed = role.role_permissions.filter(
-        permission__code=permission_code, permission__is_active=True, allowed=True,
+        permission__code=permission_code,
+        permission__is_active=True,
+        allowed=True,
     ).exists()
     if cache is not None:
         cache[key] = allowed

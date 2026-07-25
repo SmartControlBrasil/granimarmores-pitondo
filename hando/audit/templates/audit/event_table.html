@@ -1,0 +1,30 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle mb-0">
+    <thead>
+      <tr>
+        <th>Quando</th>
+        <th>Usuário</th>
+        <th>Tipo</th>
+        <th>Ação</th>
+        <th>Status</th>
+        <th>Objeto</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+        <tr>
+          <td>{{ event.occurred_at }}</td>
+          <td>{{ event.user|default:"-" }}</td>
+          <td>{{ event.get_event_type_display }}</td>
+          <td>{{ event.module }}.{{ event.action }}</td>
+          <td>{{ event.get_status_display }}</td>
+          <td>{{ event.object_repr|default:"-" }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="text-muted">Nenhum evento registrado.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

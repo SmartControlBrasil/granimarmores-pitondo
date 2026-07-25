@@ -1,3 +1,4 @@
+# ruff: noqa: SLF001
 from django.contrib import admin
 
 from audit.models import AuditEvent

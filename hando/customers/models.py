@@ -1,3 +1,4 @@
+# ruff: noqa: EM101, TRY003
 import re
 
 from django.core.exceptions import ValidationError
@@ -75,10 +76,14 @@ class CustomerAddress(models.Model):
         WORKSITE = "worksite", "Obra"
 
     customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, related_name="addresses",
+        Customer,
+        on_delete=models.CASCADE,
+        related_name="addresses",
     )
     address_type = models.CharField(
-        max_length=20, choices=AddressType.choices, default=AddressType.MAIN,
+        max_length=20,
+        choices=AddressType.choices,
+        default=AddressType.MAIN,
     )
     postal_code = models.CharField(max_length=12, blank=True)
     street = models.CharField(max_length=180)

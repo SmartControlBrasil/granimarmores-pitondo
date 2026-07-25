@@ -38,7 +38,9 @@ def log_user_login(request, user, **kwargs):
 def log_user_logout(request, user, **kwargs):
     if user and request.session.session_key:
         UserSessionLog.objects.filter(
-            user=user, session_key=request.session.session_key, is_active=True,
+            user=user,
+            session_key=request.session.session_key,
+            is_active=True,
         ).update(
             is_active=False,
             logout_at=timezone.now(),

@@ -23,7 +23,9 @@ class Salesperson(TimeStampedModel, AuditableModel):
     hire_date = models.DateField(null=True, blank=True)
     termination_date = models.DateField(null=True, blank=True)
     commission_percentage = models.DecimalField(
-        max_digits=5, decimal_places=2, default=Decimal("0.00"),
+        max_digits=5,
+        decimal_places=2,
+        default=Decimal("0.00"),
     )
     manager = models.ForeignKey(
         "self",

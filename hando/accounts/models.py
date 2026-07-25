@@ -8,7 +8,9 @@ from core.models import TimeStampedModel
 
 class UserProfile(TimeStampedModel, AuditableModel):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile",
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile",
     )
     full_name = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=30, blank=True)

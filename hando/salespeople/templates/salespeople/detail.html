@@ -1,0 +1,82 @@
+{% extends "vertical.html" %}
+
+{% block title %}
+  {{ page_title }}
+{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3 d-flex align-items-center">
+      <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ salesperson.display_name }}</h4>
+      <a href="{% url 'salespeople:update' salesperson.pk %}"
+         class="btn btn-sm btn-primary">Editar</a>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="row g-3">
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Dados</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Código</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.code }}
+              </dd>
+              <dt class="col-sm-4">Usuário</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.user|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Email</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.email|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Telefone</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.phone|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Gestor</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.manager|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Comissão</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.commission_percentage }}%
+              </dd>
+              <dt class="col-sm-4">Status</dt>
+              <dd class="col-sm-8">
+                {{ salesperson.is_active|yesno:"Ativo,Inativo" }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Ações</h5>
+            <div class="d-flex flex-wrap gap-2">
+              <a href="{% url 'salespeople:history' salesperson.pk %}"
+                 class="btn btn-light">Histórico</a>
+              {% if salesperson.is_active %}
+                <a href="{% url 'salespeople:deactivate' salesperson.pk %}"
+                   class="btn btn-danger">Desativar</a>
+              {% else %}
+                <a href="{% url 'salespeople:activate' salesperson.pk %}"
+                   class="btn btn-success">Reativar</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Histórico recente</h5>
+        {% include "audit/event_table.html" with events=recent_events %}
+      </div>
+    </div>
+  </div>
+{% endblock page_content %}

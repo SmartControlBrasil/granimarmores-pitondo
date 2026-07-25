@@ -104,21 +104,23 @@ class Command(BaseCommand):
         admin_role = roles["Administrativo"]
         for permission in AccessPermission.objects.all():
             RolePermission.objects.update_or_create(
-                role=admin_role, permission=permission, defaults={"allowed": True},
+                role=admin_role,
+                permission=permission,
+                defaults={"allowed": True},
             )
 
         for category in ASSET_CATEGORIES:
             AssetCategory.objects.get_or_create(
-                name=category, defaults={"is_active": True},
+                name=category,
+                defaults={"is_active": True},
             )
 
+        user_model = get_user_model()
         admin_username = options.get("admin_username")
         if admin_username:
-            User = get_user_model()
-            user = User.objects.get(username=admin_username)
+            user = user_model.objects.get(username=admin_username)
         else:
-            User = get_user_model()
-            user = User.objects.filter(is_superuser=True).order_by("id").first()
+            user = user_model.objects.filter(is_superuser=True).order_by("id").first()
         if user:
             UserAccess.objects.update_or_create(
                 user=user,

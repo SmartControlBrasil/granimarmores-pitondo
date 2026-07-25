@@ -1,0 +1,60 @@
+{% extends "vertical.html" %}
+
+{% block title %}
+  {{ page_title }}
+{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3">
+      <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="card">
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}{{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Salvar acesso</button>
+          <a href="{% url 'accounts:user_detail' user_obj.pk %}"
+             class="btn btn-light">Cancelar</a>
+        </form>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Histórico de acessos</h5>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Cargo</th>
+                <th>Gestor</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for access in history %}
+                <tr>
+                  <td>{{ access.role }}</td>
+                  <td>{{ access.manager|default:"-" }}</td>
+                  <td>{{ access.valid_from }}</td>
+                  <td>{{ access.valid_until|default:"-" }}</td>
+                  <td>{{ access.is_active|yesno:"Ativo,Inativo" }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="5" class="text-muted">Nenhum acesso registrado.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock page_content %}

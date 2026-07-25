@@ -23,16 +23,24 @@ class AccessRole(TimeStampedModel, AuditableModel):
     is_active = models.BooleanField(default=True)
     has_full_access = models.BooleanField(default=False)
     customer_scope = models.CharField(
-        max_length=20, choices=DataScope.choices, default=DataScope.OWN,
+        max_length=20,
+        choices=DataScope.choices,
+        default=DataScope.OWN,
     )
     quote_scope = models.CharField(
-        max_length=20, choices=DataScope.choices, default=DataScope.OWN,
+        max_length=20,
+        choices=DataScope.choices,
+        default=DataScope.OWN,
     )
     asset_scope = models.CharField(
-        max_length=20, choices=DataScope.choices, default=DataScope.OWN,
+        max_length=20,
+        choices=DataScope.choices,
+        default=DataScope.OWN,
     )
     maintenance_scope = models.CharField(
-        max_length=20, choices=DataScope.choices, default=DataScope.OWN,
+        max_length=20,
+        choices=DataScope.choices,
+        default=DataScope.OWN,
     )
 
     class Meta:
@@ -63,17 +71,22 @@ class AccessPermission(models.Model):
 
 class RolePermission(models.Model):
     role = models.ForeignKey(
-        AccessRole, on_delete=models.CASCADE, related_name="role_permissions",
+        AccessRole,
+        on_delete=models.CASCADE,
+        related_name="role_permissions",
     )
     permission = models.ForeignKey(
-        AccessPermission, on_delete=models.CASCADE, related_name="role_permissions",
+        AccessPermission,
+        on_delete=models.CASCADE,
+        related_name="role_permissions",
     )
     allowed = models.BooleanField(default=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["role", "permission"], name="unique_role_permission",
+                fields=["role", "permission"],
+                name="unique_role_permission",
             ),
         ]
         verbose_name = "permissão do cargo"
@@ -90,7 +103,9 @@ class UserAccess(TimeStampedModel, AuditableModel):
         related_name="access_assignments",
     )
     role = models.ForeignKey(
-        AccessRole, on_delete=models.PROTECT, related_name="user_assignments",
+        AccessRole,
+        on_delete=models.PROTECT,
+        related_name="user_assignments",
     )
     manager = models.ForeignKey(
         settings.AUTH_USER_MODEL,

@@ -17,7 +17,7 @@ from salespeople.models import Salesperson
 @login_required
 def root_page_view(request):
     user = request.user
-    User = get_user_model()
+    user_model = get_user_model()
     cards = []
     card_specs = [
         (
@@ -37,7 +37,7 @@ def root_page_view(request):
         (
             "Usuários ativos",
             "users.view",
-            User.objects.filter(is_active=True).count(),
+            user_model.objects.filter(is_active=True).count(),
             "user",
             "success",
         ),

@@ -1,3 +1,4 @@
+# ruff: noqa: PLR2004, SLF001
 from contextvars import ContextVar
 
 from django.utils import timezone
@@ -35,7 +36,9 @@ class AuditMiddleware:
             return
         now = timezone.now()
         log = UserSessionLog.objects.filter(
-            user=request.user, session_key=session_key, is_active=True,
+            user=request.user,
+            session_key=session_key,
+            is_active=True,
         ).first()
         if not log:
             UserSessionLog.objects.create(

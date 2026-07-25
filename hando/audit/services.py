@@ -1,3 +1,4 @@
+# ruff: noqa: PLR0913
 from django.utils import timezone
 
 from audit.models import AuditEvent
