@@ -1,0 +1,17 @@
+Nova solicitação de orçamento recebida pelo site.
+
+ID: {{ contact.id }}
+Nome: {{ contact.nome }}
+Telefone: {{ contact.telefone }}
+E-mail: {{ contact.email|default:"-" }}
+Cidade: {{ contact.cidade }}
+Ambiente/projeto: {{ contact.ambiente }}
+Medidas/informações técnicas:
+{{ contact.medidas|default:"-" }}
+
+Mensagem:
+{{ contact.mensagem }}
+
+Origem: {{ contact.source_path|default:"-" }}
+IP: {{ contact.ip_address|default:"-" }}
+Criado em: {{ contact.created_at }}
