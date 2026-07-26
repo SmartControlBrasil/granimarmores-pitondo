@@ -1,0 +1,10 @@
+Olá {{ quote.opportunity.customer_name }},
+
+Segue em anexo o orçamento {{ quote.number }} revisão {{ quote.revision }}.
+{% if quote.validity_date %}
+Validade: {{ quote.validity_date|date:"d/m/Y" }}.
+{% endif %}
+Total: R$ {{ quote.total }}.
+
+Atenciosamente,
+Granimármores Pitondo

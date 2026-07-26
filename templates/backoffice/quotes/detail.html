@@ -1,0 +1,40 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Orçamento {{ quote.number }}{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <div>
+        <h1 class="h3 mb-1">{{ quote.number }} rev. {{ quote.revision }}</h1>
+        <p class="text-muted mb-0"><a href="{% url 'backoffice:opportunity_detail' quote.opportunity.pk %}">{{ quote.opportunity.customer_name }}</a> · {{ quote.get_status_display }}</p>
+    </div>
+    <div class="quote-actions">
+        <a class="btn btn-outline-secondary" href="{% url 'backoffice:quote_preview' quote.pk %}">Visualizar orçamento</a>
+        {% if can_change_quote %}
+            <form method="post" action="{% url 'backoffice:quote_revision' quote.pk %}">{% csrf_token %}<button class="btn btn-outline-secondary" type="submit">Nova revisão</button></form>
+        {% endif %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card"><div class="card-body">
+            <h2 class="h5">Itens</h2>
+            <form method="post">
+                {% csrf_token %}{{ formset.management_form }}
+                <label class="form-label">Validade</label>{{ form.validity_date }}
+                <label class="form-label mt-2">Desconto (R$)</label>{{ form.discount_amount }}
+                <label class="form-label mt-2">Observações</label>{{ form.notes }}
+                <div class="table-responsive mt-3"><table class="table"><thead><tr><th>Descrição</th><th>Qtd.</th><th>Un.</th><th>Preço</th></tr></thead><tbody>{% for item_form in formset %}<tr><td>{{ item_form.id }}{{ item_form.description }}</td><td>{{ item_form.quantity }}</td><td>{{ item_form.unit }}</td><td>{{ item_form.unit_price }}</td></tr>{% endfor %}</tbody></table></div>
+                {% if editable %}<button class="btn" type="submit">Salvar itens</button>{% else %}<p class="text-muted">Edição financeira bloqueada para este status.</p>{% endif %}
+            </form>
+        </div></div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card mb-3"><div class="card-body"><h2 class="h5">Totais</h2><dl class="row"><dt class="col-sm-6">Subtotal</dt><dd class="col-sm-6">R$ {{ quote.subtotal }}</dd><dt class="col-sm-6">Desconto</dt><dd class="col-sm-6">R$ {{ quote.discount_amount }}</dd><dt class="col-sm-6">Total</dt><dd class="col-sm-6">R$ {{ quote.total }}</dd></dl></div></div>
+        {% if can_change_quote %}<div class="card"><div class="card-body"><h2 class="h5">Status</h2><form method="post" action="{% url 'backoffice:quote_status' quote.pk %}">{% csrf_token %}<select class="form-select mb-2" name="status">{% for value,label in status_form.fields.status.choices %}<option value="{{ value }}" {% if quote.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select><button class="btn btn-outline-primary" type="submit">Alterar status</button></form></div></div>{% endif %}
+    </div>
+</div>
+<div class="card mt-3"><div class="card-body">
+    <div class="d-flex justify-content-between align-items-center"><h2 class="h5">Documentos gerados</h2>{% if can_change_quote %}<form method="post" action="{% url 'backoffice:quote_generate_document' quote.pk %}">{% csrf_token %}<button class="btn btn-sm" type="submit">Gerar PDF</button></form>{% endif %}</div>
+    <div class="table-responsive"><table class="table"><thead><tr><th>Documento</th><th>Revisão</th><th>Status</th><th>Gerado por</th><th>Gerado em</th><th>Enviado em</th><th>Download</th></tr></thead><tbody>{% for document in documents %}<tr><td>{{ document.document_number }}</td><td>{{ document.revision }}</td><td>{{ document.get_status_display }}</td><td>{{ document.generated_by|default:"-" }}</td><td>{{ document.generated_at|date:"d/m/Y H:i" }}</td><td>{{ document.sent_at|date:"d/m/Y H:i"|default:"-" }}</td><td><a href="{% url 'backoffice:quote_document_download' quote.pk document.pk %}">Baixar</a></td></tr><tr><td colspan="7">{% if can_change_quote and document.status == document.Status.GENERATED %}<div class="document-actions"><form method="post" action="{% url 'backoffice:quote_send' quote.pk document.pk %}" class="document-actions">{% csrf_token %}<input class="form-control" name="recipient" type="email" value="{{ quote.opportunity.customer_email }}" placeholder="destinatário"><label class="small"><input type="checkbox" name="allow_resend" value="1"> confirmar reenvio</label><button class="btn btn-sm" type="submit">Enviar por e-mail</button></form><form method="post" action="{% url 'backoffice:quote_document_void' quote.pk document.pk %}">{% csrf_token %}<button class="btn btn-outline-secondary btn-sm" type="submit">Anular documento</button></form></div>{% endif %}</td></tr>{% empty %}<tr><td colspan="7">Nenhum documento gerado.</td></tr>{% endfor %}</tbody></table></div>
+</div></div>
+<div class="card mt-3"><div class="card-body"><h2 class="h5">Histórico de entregas</h2><div class="table-responsive"><table class="table"><thead><tr><th>Data</th><th>Canal</th><th>Destinatário</th><th>Status</th><th>Solicitado por</th><th>Erro</th></tr></thead><tbody>{% for delivery in deliveries %}<tr><td>{{ delivery.requested_at|date:"d/m/Y H:i" }}</td><td>{{ delivery.get_channel_display }}</td><td>{{ delivery.recipient }}</td><td>{{ delivery.get_status_display }}</td><td>{{ delivery.requested_by|default:"-" }}</td><td>{{ delivery.error_message|default:"-" }}</td></tr>{% empty %}<tr><td colspan="6">Nenhuma entrega registrada.</td></tr>{% endfor %}</tbody></table></div></div></div>
+{% endblock %}

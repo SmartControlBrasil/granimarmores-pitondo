@@ -102,6 +102,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.static",
                 "django.template.context_processors.media",
+                "src.institutional.presentation.backoffice.context_processors.backoffice_user",
             ],
         },
     },
@@ -185,6 +186,7 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    BASE_DIR / "hando" / "hando" / "static",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -197,6 +199,19 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+# =============================================================================
+# DADOS INSTITUCIONAIS
+# =============================================================================
+
+COMPANY_NAME = env("COMPANY_NAME", default="Granimármores Pitondo")
+COMPANY_DOCUMENT = env("COMPANY_DOCUMENT", default="")
+COMPANY_PHONE = env("COMPANY_PHONE", default="")
+COMPANY_EMAIL = env("COMPANY_EMAIL", default="contato@granimarmorespitondo.com.br")
+COMPANY_ADDRESS = env("COMPANY_ADDRESS", default="")
+COMPANY_WEBSITE = env("COMPANY_WEBSITE", default="")
+COMPANY_LOGO_STATIC_PATH = env("COMPANY_LOGO_STATIC_PATH", default="institutional/images/logo.webp")
 
 
 # =============================================================================
@@ -223,11 +238,11 @@ CSRF_COOKIE_SAMESITE = "Lax"
 # AUTENTICAÇÃO
 # =============================================================================
 
-LOGIN_URL = "/login/"
+LOGIN_URL = "/app/login/"
 
-LOGIN_REDIRECT_URL = "/painel/"
+LOGIN_REDIRECT_URL = "/app/"
 
-LOGOUT_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/app/login/"
 
 
 # =============================================================================

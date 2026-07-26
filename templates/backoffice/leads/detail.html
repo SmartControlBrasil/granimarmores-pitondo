@@ -1,0 +1,112 @@
+{% extends "backoffice/base.html" %}
+
+{% block title %}Lead {{ lead.nome }}{% endblock %}
+{% block page_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ lead.nome }}</h1>
+        <p class="text-muted mb-0">Recebido em {{ lead.created_at|date:"d/m/Y H:i" }}</p>
+    </div>
+    <a href="{% url 'backoffice:lead_list' %}" class="btn btn-outline-secondary">Voltar</a>
+</div>
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card mb-3"><div class="card-body">
+            <h2 class="h5">Dados pessoais</h2>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Telefone</dt><dd class="col-sm-9">{{ lead.telefone }}</dd>
+                <dt class="col-sm-3">E-mail</dt><dd class="col-sm-9">{{ lead.email|default:"-" }}</dd>
+                <dt class="col-sm-3">Cidade</dt><dd class="col-sm-9">{{ lead.cidade }}</dd>
+            </dl>
+        </div></div>
+        <div class="card mb-3"><div class="card-body">
+            <h2 class="h5">Solicitação</h2>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Ambiente</dt><dd class="col-sm-9">{{ lead.ambiente }}</dd>
+                <dt class="col-sm-3">Medidas</dt><dd class="col-sm-9">{{ lead.medidas|linebreaksbr|default:"-" }}</dd>
+                <dt class="col-sm-3">Mensagem</dt><dd class="col-sm-9">{{ lead.mensagem|linebreaksbr }}</dd>
+                <dt class="col-sm-3">Origem</dt><dd class="col-sm-9">{{ lead.source_path|default:"-" }}</dd>
+            </dl>
+        </div></div>
+        <div class="card mb-3"><div class="card-body">
+            <h2 class="h5">Observações internas</h2>
+            {% if can_add_note %}
+                <form method="post" action="{% url 'backoffice:lead_note' lead.pk %}" class="mb-3">
+                    {% csrf_token %}
+                    <textarea class="form-control mb-2" name="content" rows="4" required></textarea>
+                    <button class="btn btn-primary" type="submit">Adicionar observação</button>
+                </form>
+            {% endif %}
+            {% for note in notes %}
+                <div class="border-top py-2">
+                    <div class="small text-muted">{{ note.author|default:"-" }} em {{ note.created_at|date:"d/m/Y H:i" }}</div>
+                    <div>{{ note.content|linebreaksbr }}</div>
+                </div>
+            {% empty %}
+                <p class="text-muted mb-0">Nenhuma observação.</p>
+            {% endfor %}
+        </div></div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card mb-3"><div class="card-body">
+            <h2 class="h5">Operação</h2>
+            <dl class="row">
+                <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ lead.get_status_display }}</dd>
+                <dt class="col-sm-4">Responsável</dt><dd class="col-sm-8">{{ lead.assigned_to|default:"-" }}</dd>
+                <dt class="col-sm-4">Notificação</dt><dd class="col-sm-8">{% if lead.notification_sent_at %}Enviada em {{ lead.notification_sent_at|date:"d/m/Y H:i" }}{% elif lead.notification_error %}Falhou{% else %}Pendente/não configurada{% endif %}</dd>
+                <dt class="col-sm-4">Atualização</dt><dd class="col-sm-8">{{ lead.updated_at|date:"d/m/Y H:i" }}</dd>
+            </dl>
+            {% if can_change_lead %}
+                <form method="post" action="{% url 'backoffice:lead_status' lead.pk %}" class="mb-3">
+                    {% csrf_token %}
+                    <label class="form-label">Alterar status</label>
+                    <select name="status" class="form-select mb-2">
+                        {% for value, label in status_form.fields.status.choices %}<option value="{{ value }}" {% if lead.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-outline-primary">Salvar status</button>
+                </form>
+            {% endif %}
+            {% if can_assign_lead %}
+                <form method="post" action="{% url 'backoffice:lead_assign' lead.pk %}">
+                    {% csrf_token %}
+                    <label class="form-label">Responsável</label>
+                    {{ assign_form.assigned_to }}
+                    <button type="submit" class="btn btn-outline-primary mt-2">Atribuir</button>
+                </form>
+            {% endif %}
+            <div class="border-top mt-3 pt-3">
+                <h3 class="h5">Oportunidade</h3>
+                {% if opportunity %}
+                    <p><a href="{% url 'backoffice:opportunity_detail' opportunity.pk %}">{{ opportunity.title }}</a></p>
+                {% elif can_convert_lead %}
+                    <form method="post" action="{% url 'backoffice:lead_convert' lead.pk %}">
+                        {% csrf_token %}
+                        {% if not lead.assigned_to %}
+                            <label class="form-label">Responsável</label>
+                            {{ convert_form.assigned_to }}
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary mt-2">Converter em oportunidade</button>
+                    </form>
+                {% else %}
+                    <p class="text-muted mb-0">Sem oportunidade criada.</p>
+                {% endif %}
+            </div>
+        </div></div>
+        {% if can_view_audit %}
+            <div class="card mb-3"><div class="card-body">
+                <h2 class="h5">Histórico</h2>
+                {% for log in audit_logs %}
+                    <div class="border-top py-2">
+                        <div class="small text-muted">{{ log.created_at|date:"d/m/Y H:i" }} - {{ log.actor|default:log.source|default:"sistema" }}</div>
+                        <div>{{ log.get_action_display }}</div>
+                        {% if log.previous_value or log.new_value %}<div class="small text-muted">{{ log.previous_value|default:"-" }} → {{ log.new_value|default:"-" }}</div>{% endif %}
+                    </div>
+                {% empty %}
+                    <p class="text-muted mb-0">Sem histórico.</p>
+                {% endfor %}
+            </div></div>
+        {% endif %}
+        <details class="card"><summary class="card-header">Dados técnicos</summary><div class="card-body small"><p>IP: {{ lead.ip_address|default:"-" }}</p><p>User-agent: {{ lead.user_agent|default:"-" }}</p></div></details>
+    </div>
+</div>
+{% endblock %}

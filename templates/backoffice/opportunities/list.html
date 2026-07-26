@@ -1,0 +1,17 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Lista de oportunidades{% endblock %}
+{% block page_content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h1 class="h3 mb-0">Oportunidades</h1><a href="{% url 'backoffice:opportunity_pipeline' %}" class="btn btn-outline-secondary">Pipeline</a></div>
+<form method="get" class="card card-body mb-3"><div class="row">
+    <div class="col-md-3"><input class="form-control" name="q" value="{{ filters.q }}" placeholder="Buscar"></div>
+    <div class="col-md-2"><select class="form-select" name="stage"><option value="">Etapa</option>{% for value,label in stages %}<option value="{{ value }}" {% if filters.stage == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+    <div class="col-md-2"><input class="form-control" name="cidade" value="{{ filters.cidade }}" placeholder="Cidade"></div>
+    {% if can_filter_assigned_to %}<div class="col-md-2"><select class="form-select" name="assigned_to"><option value="">Responsável</option>{% for user in users %}<option value="{{ user.pk }}" {% if filters.assigned_to == user.pk|stringformat:'s' %}selected{% endif %}>{{ user.get_username }}</option>{% endfor %}</select></div>{% endif %}
+    <div class="col-md-1"><input type="date" class="form-control" name="start" value="{{ filters.start }}"></div>
+    <div class="col-md-1"><input type="date" class="form-control" name="end" value="{{ filters.end }}"></div>
+    <div class="col-md-1"><button class="btn" type="submit">Filtrar</button></div>
+</div></form>
+<div class="card"><div class="table-responsive"><table class="table mb-0"><thead><tr><th>Cliente</th><th>Projeto</th><th>Etapa</th><th>Responsável</th><th>Cidade</th><th>Valor</th><th>Atualização</th></tr></thead><tbody>
+{% for opportunity in page_obj %}<tr><td><a href="{% url 'backoffice:opportunity_detail' opportunity.pk %}">{{ opportunity.customer_name }}</a></td><td>{{ opportunity.title }}</td><td>{{ opportunity.get_stage_display }}</td><td>{{ opportunity.assigned_to|default:"-" }}</td><td>{{ opportunity.city }}</td><td>R$ {{ opportunity.estimated_value }}</td><td>{{ opportunity.updated_at|date:"d/m/Y H:i" }}</td></tr>{% empty %}<tr><td colspan="7">Nenhuma oportunidade encontrada.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

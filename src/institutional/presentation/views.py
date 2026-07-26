@@ -6,6 +6,7 @@ from django.urls import reverse
 from src.institutional.application.services.contact_notification import (
     notify_contact_request,
 )
+from src.institutional.application.services.lead_management import record_lead_created
 from src.institutional.presentation.forms import ContactRequestForm
 
 
@@ -68,6 +69,7 @@ def contato(request):
             contact_request.ip_address = _client_ip(request)
             contact_request.user_agent = request.META.get("HTTP_USER_AGENT", "")[:1000]
             contact_request.save()
+            record_lead_created(contact_request)
             notify_contact_request(contact_request)
             messages.success(
                 request,

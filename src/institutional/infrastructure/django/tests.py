@@ -5,6 +5,7 @@ from django.test import override_settings
 from django.urls import resolve, reverse
 
 from src.institutional.infrastructure.django.models import ContactRequest
+from src.institutional.infrastructure.django.models import ContactRequestAuditLog
 
 
 PAGE_DIR = "institutional/pages/"
@@ -131,6 +132,14 @@ class ContactRequestFlowTests(TestCase):
         self.assertEqual(lead.source_path, reverse("institutional:contato"))
         self.assertEqual(lead.ip_address, "127.0.0.1")
         self.assertEqual(lead.user_agent, "pytest-browser")
+        self.assertTrue(
+            ContactRequestAuditLog.objects.filter(
+                contact_request=lead,
+                actor__isnull=True,
+                action=ContactRequestAuditLog.Action.LEAD_CREATED,
+                source="public-site",
+            ).exists(),
+        )
 
     def test_invalid_post_does_not_create_lead(self):
         response = self.client.post(reverse("institutional:contato"), data={})

@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>{% block title %}Painel Operacional{% endblock %} | Granimármores Pitondo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Painel operacional Granimármores Pitondo" />
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+    {% block css %}
+        {% block extra_css %}{% endblock extra_css %}
+        <link href="{% static 'css/app.min.css' %}" rel="stylesheet" type="text/css" id="app-style" />
+        <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <script src="{% static 'js/head.js' %}"></script>
+    {% endblock css %}
+</head>
+<body>
+    {% block content %}
+        {% if request.user.is_authenticated %}
+            <div id="app-layout">
+                {% include 'backoffice/partials/menu.html' %}
+                <div class="content-page">
+                    <div class="content">
+                        <div class="container-fluid">
+                            {% include 'backoffice/partials/messages.html' %}
+                            {% block page_content %}{% endblock page_content %}
+                        </div>
+                    </div>
+                    {% include 'backoffice/partials/footer.html' %}
+                </div>
+            </div>
+        {% else %}
+            {% block auth_content %}{% endblock auth_content %}
+        {% endif %}
+    {% endblock content %}
+    {% block modal %}{% endblock modal %}
+    {% block javascript %}
+        <script src="{% static 'js/vendors.js' %}"></script>
+        <script src="{% static 'js/app.js' %}"></script>
+        {% block extra_javascript %}{% endblock extra_javascript %}
+    {% endblock javascript %}
+</body>
+</html>

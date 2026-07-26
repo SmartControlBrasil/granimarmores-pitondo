@@ -1,0 +1,3 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Preview {{ quote.number }}{% endblock %}
+{% block page_content %}<div class="d-flex justify-content-between align-items-center mb-4"><h1 class="h3 mb-0">Preview do orçamento</h1><a class="btn btn-outline-secondary" href="{% url 'backoffice:quote_detail' quote.pk %}">Voltar</a></div><div class="card"><div class="card-body">{{ preview_html|safe }}</div></div>{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "backoffice/base.html" %}
+{% block title %}Oportunidades{% endblock %}
+{% block page_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div><h1 class="h3 mb-1">Pipeline comercial</h1><p class="text-muted mb-0">Oportunidades agrupadas por etapa</p></div>
+    <a href="{% url 'backoffice:opportunity_list' %}" class="btn btn-outline-secondary">Tabela</a>
+</div>
+<form method="get" class="card card-body mb-3">
+    <div class="row">
+        <div class="col-md-4"><input class="form-control" name="q" value="{{ filters.q }}" placeholder="Buscar cliente, contato ou título"></div>
+        <div class="col-md-3"><select class="form-select" name="stage"><option value="">Todas as etapas</option>{% for value,label in stages %}<option value="{{ value }}" {% if filters.stage == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+        <div class="col-md-3"><input class="form-control" name="cidade" value="{{ filters.cidade }}" placeholder="Cidade"></div>
+        <div class="col-md-2"><button class="btn" type="submit">Filtrar</button></div>
+    </div>
+</form>
+<div class="row">
+    {% for column in grouped %}
+        <div class="col-md-4 col-xl-3">
+            <h2 class="h5">{{ column.label }}</h2>
+            {% for opportunity in column.items %}
+                <div class="card mb-2"><div class="card-body">
+                    <h3 class="h5 mb-1"><a href="{% url 'backoffice:opportunity_detail' opportunity.pk %}">{{ opportunity.customer_name }}</a></h3>
+                    <p class="mb-1">{{ opportunity.title }}</p>
+                    <p class="small text-muted mb-1">{{ opportunity.assigned_to|default:"-" }} · {{ opportunity.city }}</p>
+                    <p class="small mb-0">R$ {{ opportunity.estimated_value }} · {{ opportunity.updated_at|date:"d/m/Y H:i" }}</p>
+                </div></div>
+            {% empty %}<p class="text-muted small">Sem oportunidades.</p>{% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

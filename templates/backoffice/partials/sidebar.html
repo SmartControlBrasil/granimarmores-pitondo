@@ -1,0 +1,33 @@
+{% load static %}
+<div class="app-sidebar-menu">
+  <div class="h-100" data-simplebar>
+    <div id="sidebar-menu">
+      <div class="logo-box">
+        <a href="{% url 'backoffice:dashboard' %}" class="logo logo-light"><span class="logo-sm"><img src="{% static 'images/logo-sm.png' %}" alt="" height="22" /></span><span class="logo-lg"><img src="{% static 'images/logo-light.png' %}" alt="" height="24" /></span></a>
+        <a href="{% url 'backoffice:dashboard' %}" class="logo logo-dark"><span class="logo-sm"><img src="{% static 'images/logo-sm.png' %}" alt="" height="22" /></span><span class="logo-lg"><img src="{% static 'images/logo-dark.png' %}" alt="" height="24" /></span></a>
+      </div>
+      <ul id="side-menu">
+        <li class="menu-title">Menu</li>
+        {% if perms.institutional.view_contactrequest %}
+          <li><a href="{% url 'backoffice:dashboard' %}" class="tp-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i data-feather="home"></i><span>Dashboard</span></a></li>
+          <li><a href="{% url 'backoffice:lead_list' %}" class="tp-link {% if 'lead' in request.resolver_match.url_name %}active{% endif %}"><i data-feather="users"></i><span>Leads</span></a></li>
+          {% if perms.institutional.view_opportunity %}
+            <li><a href="{% url 'backoffice:opportunity_pipeline' %}" class="tp-link {% if 'opportunity' in request.resolver_match.url_name %}active{% endif %}"><i data-feather="trello"></i><span>Oportunidades</span></a></li>
+          {% endif %}
+          {% if perms.institutional.view_quote %}
+            <li><a href="{% url 'backoffice:opportunity_list' %}" class="tp-link {% if 'quote' in request.resolver_match.url_name %}active{% endif %}"><i data-feather="file-text"></i><span>Orçamentos</span></a></li>
+          {% endif %}
+          <li class="menu-title mt-2">Conta</li>
+          <li><a href="{% url 'backoffice:profile' %}" class="tp-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"><i data-feather="user"></i><span>Meu Perfil</span></a></li>
+          <li>
+            <form method="post" action="{% url 'backoffice:logout' %}" id="backoffice-sidebar-logout">
+              {% csrf_token %}
+            </form>
+            <a href="#" class="tp-link" onclick="event.preventDefault(); document.getElementById('backoffice-sidebar-logout').submit();"><i data-feather="log-out"></i><span>Sair</span></a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>
