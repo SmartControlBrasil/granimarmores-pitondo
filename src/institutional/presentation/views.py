@@ -1,13 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import redirect
 from django.shortcuts import render
-from django.urls import reverse
-
-from src.institutional.application.services.contact_notification import (
-    notify_contact_request,
-)
-from src.institutional.application.services.lead_management import record_lead_created
-from src.institutional.presentation.forms import ContactRequestForm
 
 
 PAGE_DIR = "institutional/pages/"
@@ -53,39 +45,23 @@ def blog_article(request, slug):
     return render(request, template_name)
 
 
-def _client_ip(request):
-    forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR", "")
-    if forwarded_for:
-        return forwarded_for.split(",", 1)[0].strip()
-    return request.META.get("REMOTE_ADDR")
-
-
 def contato(request):
+    required_fields = ["nome", "telefone", "cidade", "ambiente", "mensagem"]
     if request.method == "POST":
-        form = ContactRequestForm(request.POST)
-        if form.is_valid():
-            contact_request = form.save(commit=False)
-            contact_request.source_path = request.path
-            contact_request.ip_address = _client_ip(request)
-            contact_request.user_agent = request.META.get("HTTP_USER_AGENT", "")[:1000]
-            contact_request.save()
-            record_lead_created(contact_request)
-            notify_contact_request(contact_request)
-            messages.success(
-                request,
-                "Solicitação recebida. A equipe poderá usar os dados informados para retornar o contato.",
-            )
-            return redirect(reverse("institutional:contato"))
+        missing_fields = [field for field in required_fields if not request.POST.get(field, "").strip()]
+        consent = request.POST.get("privacidade")
+        website = request.POST.get("website", "").strip()
 
-        for error in form.non_field_errors():
-            messages.error(request, error)
-        for field_errors in form.errors.values():
-            for error in field_errors:
-                messages.error(request, error)
-    else:
-        form = ContactRequestForm()
+        if website:
+            messages.error(request, "Não foi possível processar a solicitação. Tente novamente.")
+        elif missing_fields:
+            messages.error(request, "Preencha os campos obrigatórios para solicitar a avaliação.")
+        elif not consent:
+            messages.error(request, "Confirme o consentimento para contato antes de enviar.")
+        else:
+            messages.success(request, "Solicitação recebida. A equipe poderá usar os dados informados para retornar o contato.")
 
-    return render(request, page_template("contact"), {"form": form})
+    return render(request, page_template("contact"))
 
 
 def quotation(request):

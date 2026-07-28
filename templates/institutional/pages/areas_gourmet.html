@@ -1,30 +1,630 @@
 {% extends "institutional/base.html" %}
 {% load static %}
 
-{% block title %}Áreas Gourmet em Mármore e Granito | Granimármores Pitondo{% endblock %}
-{% block meta_description %}Bancadas, ilhas, pias e revestimentos para áreas gourmet, produzidos sob medida em mármore, granito e superfícies especiais.{% endblock %}
+{% block title %}
+    Áreas Gourmet em Mármore e Granito | Granimármores Pitondo
+{% endblock %}
+
+{% block meta_description %}
+    Bancadas, ilhas, pias e revestimentos para áreas gourmet, produzidos sob medida em mármore, granito e superfícies especiais.
+{% endblock %}
 
 {% block content %}
-<main>
-    <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a>
-    <div id="de-loader"></div>
-    <section class="relative overflow-hidden jarallax">
-        <div class="spacer-double"></div>
-        <div class="container relative z-2">
-            <div class="row g-4 align-items-center justify-content-between">
-                <div class="col-lg-12"><div class="text-start"><h1 class="fs-120 fs-sm-10vw mb-0 wow fadeInLeft">Áreas Gourmet</h1></div><div class="text-lg-end"><h1 class="fs-120 fs-sm-10vw mb-0 wow fadeInRight" data-wow-delay=".2s">Sob Medida</h1></div></div>
-                <div class="col-lg-5"><p class="wow fadeInUp" data-wow-delay=".4s">Bancadas gourmet, ilhas, churrasqueiras, balcões, pias, cubas, frontões e rodabancas pensados para integrar cozinha, lazer e convivência.</p></div>
-                <div class="col-lg-4 text-lg-end"><a href="{% url 'institutional:contato' %}" class="btn-main fx-slide wow fadeInUp" data-wow-delay=".6s"><span>Solicitar orçamento</span></a></div>
+    <main>
+
+        <a
+            href="#"
+            id="back-to-top"
+            aria-label="Voltar ao topo"
+        ></a>
+
+        <div id="de-loader"></div>
+
+        <section class="relative overflow-hidden jarallax">
+
+            <div class="spacer-double"></div>
+
+            <div class="container relative z-2">
+
+                <div class="row g-4 align-items-center justify-content-between">
+
+                    <div class="col-lg-12">
+
+                        <div class="text-start">
+
+                            <h1 class="fs-120 fs-sm-10vw mb-0 wow fadeInLeft">
+                                Áreas Gourmet
+                            </h1>
+
+                        </div>
+
+                        <div class="text-lg-end">
+
+                            <h1
+                                class="fs-120 fs-sm-10vw mb-0 wow fadeInRight"
+                                data-wow-delay=".2s"
+                            >
+                                Sob Medida
+                            </h1>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-5">
+
+                        <p
+                            class="wow fadeInUp"
+                            data-wow-delay=".4s"
+                        >
+                            Bancadas gourmet, ilhas, churrasqueiras, balcões,
+                            pias, cubas, frontões e rodabancas pensados para
+                            integrar cozinha, lazer e convivência.
+                        </p>
+
+                    </div>
+
+                    <div class="col-lg-4 text-lg-end">
+
+                        <a
+                            href="{% url 'institutional:contato' %}"
+                            class="btn-main fx-slide wow fadeInUp"
+                            data-wow-delay=".6s"
+                        >
+                            <span>
+                                Solicitar orçamento
+                            </span>
+                        </a>
+
+                    </div>
+
+                </div>
+
             </div>
+
+        </section>
+
+        <section
+            class="p-0 overflow-hidden"
+            aria-label="Galeria de áreas gourmet"
+        >
+
+            <div class="container-fluid">
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <div class="relative overflow-hidden">
+
+                            <div
+                                class="owl-custom-nav menu-float"
+                                data-target="#carousel-6"
+                            >
+
+                                <a class="btn-next"></a>
+                                <a class="btn-prev"></a>
+
+                                <div
+                                    id="carousel-6"
+                                    class="owl-single owl-carousel owl-theme"
+                                >
+
+                                    <div class="item">
+
+                                        <div class="relative">
+
+                                            <div class="overflow-hidden">
+
+                                                <img
+                                                    src="{% static 'institutional/images/slider-wide/area-gourmet-externa.webp' %}"
+                                                    class="w-100"
+                                                    alt="Área gourmet com bancada em pedra"
+                                                >
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="item">
+
+                                        <div class="relative">
+
+                                            <div class="overflow-hidden">
+
+                                                <img
+                                                    src="{% static 'institutional/images/slider-wide/2.webp' %}"
+                                                    class="w-100"
+                                                    alt="Balcão gourmet integrado ao ambiente"
+                                                >
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="item">
+
+                                        <div class="relative">
+
+                                            <div class="overflow-hidden">
+
+                                                <img
+                                                    src="{% static 'institutional/images/slider-wide/3.webp' %}"
+                                                    class="w-100"
+                                                    alt="Ilha gourmet produzida sob medida"
+                                                >
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="container">
+
+                <div class="row g-4 gx-5 justify-content-between">
+
+                    <div class="col-md-7">
+
+                        <div class="subtitle">
+                            Uso interno e externo
+                        </div>
+
+                        <h2
+                            class="wow fadeInRight"
+                            data-wow-delay=".2s"
+                        >
+                            Materiais escolhidos conforme exposição, rotina de uso
+                            e acabamento desejado
+                        </h2>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <div class="spacer-single sm-hide"></div>
+
+                        <img
+                            src="{% static 'institutional/images/misc/area-gourmet.webp' %}"
+                            class="w-150px"
+                            alt="Amostra de pedra para área gourmet"
+                        >
+
+                    </div>
+
+                    <div class="col-md-6 offset-lg-6">
+
+                        <p
+                            class="wow fadeInRight"
+                            data-wow-delay=".4s"
+                        >
+                            Áreas externas e cobertas pedem atenção à umidade,
+                            insolação, manutenção e intensidade de uso. A orientação
+                            técnica ajuda a definir o material mais adequado para
+                            cada ambiente.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="spacer-double"></div>
+
+                <div class="row g-4">
+
+                    <div class="col-md-3 col-sm-6">
+
+                        <div class="de_count wow fadeInRight">
+
+                            <h3 class="fs-40 mb-0">
+                                <i class="fa-solid fa-kitchen-set"></i>
+                            </h3>
+
+                            Bancadas e ilhas
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".2s"
+                        >
+
+                            <h3 class="fs-40 mb-0">
+                                <i class="fa-solid fa-fire-burner"></i>
+                            </h3>
+
+                            Churrasqueiras
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".4s"
+                        >
+
+                            <h3 class="fs-40 mb-0">
+                                <i class="fa-solid fa-faucet-drip"></i>
+                            </h3>
+
+                            Pias e cubas
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".6s"
+                        >
+
+                            <h3 class="fs-40 mb-0">
+                                <i class="fa-solid fa-screwdriver-wrench"></i>
+                            </h3>
+
+                            Instalação
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="bg-dark-1 text-light">
+
+            <div class="container">
+
+                <div class="row g-4 align-items-center">
+
+                    <div class="col-lg-5">
+
+                        <div class="subtitle">
+                            Soluções gourmet
+                        </div>
+
+                        <h2>
+                            Balcões, frontões e rodabancas para receber melhor
+                        </h2>
+
+                        <p>
+                            As peças são fabricadas sob medida, respeitando
+                            integração com móveis, churrasqueira, equipamentos
+                            e áreas de circulação.
+                        </p>
+
+                        <a
+                            href="{% url 'institutional:contato' %}"
+                            class="btn-main fx-slide mt-3"
+                        >
+                            <span>
+                                Falar com um especialista
+                            </span>
+                        </a>
+
+                    </div>
+
+                    <div class="col-lg-6 offset-lg-1">
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <div class="p-4 bg-dark rounded-1 h-100">
+
+                                    <h3>
+                                        Bancadas gourmet
+                                    </h3>
+
+                                    <p class="mb-0">
+                                        Superfícies para preparo, apoio e convivência.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="p-4 bg-dark rounded-1 h-100">
+
+                                    <h3>
+                                        Ilhas e balcões
+                                    </h3>
+
+                                    <p class="mb-0">
+                                        Peças centrais ou laterais para ambientes integrados.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="p-4 bg-dark rounded-1 h-100">
+
+                                    <h3>
+                                        Frontões
+                                    </h3>
+
+                                    <p class="mb-0">
+                                        Proteção e acabamento junto às paredes.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="p-4 bg-dark rounded-1 h-100">
+
+                                    <h3>
+                                        Rodabancas
+                                    </h3>
+
+                                    <p class="mb-0">
+                                        Detalhes funcionais para facilitar a limpeza.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section
+    class="section-dark text-light jarallax"
+    style="
+        background-image:
+            linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
+            url('{% static "institutional/images/background/area-gourmet-interna.webp" %}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    "
+>
+
+    <div class="container">
+
+        <div class="row g-4 align-items-center">
+
+            <div class="col-lg-8">
+
+                <div class="subtitle">
+                    Orçamento
+                </div>
+
+                <h2 class="mb-2">
+                    Vamos planejar sua Área Gourmet?
+                </h2>
+
+                <p class="mb-0">
+                    Envie fotos, medidas ou projeto para uma avaliação sob medida.
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-lg-end">
+
+                <a
+                    href="{% url 'institutional:contato' %}"
+                    class="btn-main fx-slide"
+                >
+                    <span>
+                        Solicitar orçamento
+                    </span>
+                </a>
+
+            </div>
+
         </div>
-    </section>
-    <section class="p-0 overflow-hidden" aria-label="Galeria de áreas gourmet"><div class="container-fluid"><div class="row"><div class="col-lg-12"><div class="relative overflow-hidden"><div class="owl-custom-nav menu-float" data-target="#carousel-6"><a class="btn-next"></a><a class="btn-prev"></a><div id="carousel-6" class="owl-single owl-carousel owl-theme"><div class="item"><div class="relative"><div class="overflow-hidden"><img src="{% static 'institutional/images/slider-wide/1.webp' %}" class="w-100" alt="Área gourmet com bancada em pedra"></div></div></div><div class="item"><div class="relative"><div class="overflow-hidden"><img src="{% static 'institutional/images/slider-wide/2.webp' %}" class="w-100" alt="Balcão gourmet integrado ao ambiente"></div></div></div><div class="item"><div class="relative"><div class="overflow-hidden"><img src="{% static 'institutional/images/slider-wide/3.webp' %}" class="w-100" alt="Ilha gourmet produzida sob medida"></div></div></div></div></div></div></div></div></div></section>
-    <section><div class="container"><div class="row g-4 gx-5 justify-content-between"><div class="col-md-7"><div class="subtitle">Uso interno e externo</div><h2 class="wow fadeInRight" data-wow-delay=".2s">Materiais escolhidos conforme exposição, rotina de uso e acabamento desejado</h2></div><div class="col-md-2"><div class="spacer-single sm-hide"></div><img src="{% static 'institutional/images/misc/s1.webp' %}" class="w-150px" alt="Amostra de pedra para área gourmet"></div><div class="col-md-6 offset-lg-6"><p class="wow fadeInRight" data-wow-delay=".4s">Áreas externas e cobertas pedem atenção à umidade, insolação, manutenção e intensidade de uso. A orientação técnica ajuda a definir o material mais adequado para cada ambiente.</p></div></div><div class="spacer-double"></div><div class="row g-4"><div class="col-md-3 col-sm-6"><div class="de_count wow fadeInRight"><h3 class="fs-40 mb-0"><i class="fa-solid fa-kitchen-set"></i></h3>Bancadas e ilhas</div></div><div class="col-md-3 col-sm-6"><div class="de_count wow fadeInRight" data-wow-delay=".2s"><h3 class="fs-40 mb-0"><i class="fa-solid fa-fire-burner"></i></h3>Churrasqueiras</div></div><div class="col-md-3 col-sm-6"><div class="de_count wow fadeInRight" data-wow-delay=".4s"><h3 class="fs-40 mb-0"><i class="fa-solid fa-faucet-drip"></i></h3>Pias e cubas</div></div><div class="col-md-3 col-sm-6"><div class="de_count wow fadeInRight" data-wow-delay=".6s"><h3 class="fs-40 mb-0"><i class="fa-solid fa-screwdriver-wrench"></i></h3>Instalação</div></div></div></div></section>
-    <section class="bg-dark-1 text-light"><div class="container"><div class="row g-4 align-items-center"><div class="col-lg-5"><div class="subtitle">Soluções gourmet</div><h2>Balcões, frontões e rodabancas para receber melhor</h2><p>As peças são fabricadas sob medida, respeitando integração com móveis, churrasqueira, equipamentos e áreas de circulação.</p><a href="{% url 'institutional:contato' %}" class="btn-main fx-slide mt-3"><span>Falar com um especialista</span></a></div><div class="col-lg-6 offset-lg-1"><div class="row g-4"><div class="col-md-6"><div class="p-4 bg-dark rounded-1 h-100"><h3>Bancadas gourmet</h3><p class="mb-0">Superfícies para preparo, apoio e convivência.</p></div></div><div class="col-md-6"><div class="p-4 bg-dark rounded-1 h-100"><h3>Ilhas e balcões</h3><p class="mb-0">Peças centrais ou laterais para ambientes integrados.</p></div></div><div class="col-md-6"><div class="p-4 bg-dark rounded-1 h-100"><h3>Frontões</h3><p class="mb-0">Proteção e acabamento junto às paredes.</p></div></div><div class="col-md-6"><div class="p-4 bg-dark rounded-1 h-100"><h3>Rodabancas</h3><p class="mb-0">Detalhes funcionais para facilitar a limpeza.</p></div></div></div></div></div></div></section>
-    <section class="section-dark text-light"><div class="container"><div class="row g-4 align-items-center"><div class="col-lg-8"><div class="subtitle">Orçamento</div><h2 class="mb-2">Vamos planejar sua Área Gourmet?</h2><p class="mb-0">Envie fotos, medidas ou projeto para uma avaliação sob medida.</p></div><div class="col-lg-4 text-lg-end"><a href="{% url 'institutional:contato' %}" class="btn-main fx-slide"><span>Solicitar orçamento</span></a></div></div></div></section>
 
-    <section class="pt-0"><div class="container"><div class="row"><div class="col-lg-12"><div class="border-top-2-black mb-5 pb-5"></div></div></div><div class="row g-4"><div class="col-lg-4"><div class="subtitle">Dúvidas frequentes</div><h2>Áreas Gourmet</h2></div><div class="col-lg-8"><div class="accordion wow fadeInRight"><div class="accordion-section"><div class="accordion-section-title" data-tab="#gourmet-a1">Posso usar a mesma pedra em área externa?</div><div class="accordion-section-content" id="gourmet-a1">A escolha depende da exposição ao sol, chuva, gordura, limpeza e manutenção esperada.</div><div class="accordion-section-title" data-tab="#gourmet-a2">Vocês fazem bancada para churrasqueira?</div><div class="accordion-section-content" id="gourmet-a2">Sim, a solução pode incluir bancada, frontão, rodabanca, pia, cuba e apoio para equipamentos.</div><div class="accordion-section-title" data-tab="#gourmet-a3">A medição é necessária?</div><div class="accordion-section-content" id="gourmet-a3">É recomendada para conferir paredes, pontos hidráulicos, marcenaria e interferências.</div></div></div></div></div></div></section>
-    <section class="bg-color-op-1"><div class="container"><div class="row g-4 align-items-center"><div class="col-lg-5"><div class="subtitle">Soluções relacionadas</div><h2>Integração entre preparo e convivência</h2></div><div class="col-lg-7"><div class="row g-4"><div class="col-md-6"><a class="d-block p-4 bg-light rounded-1 h-100" href="{% url 'institutional:cozinhas' %}"><h3>Cozinhas</h3><p class="mb-0">Bancadas, pias, ilhas e rodabancas.</p></a></div><div class="col-md-6"><a class="d-block p-4 bg-light rounded-1 h-100" href="{% url 'institutional:banheiros' %}"><h3>Banheiros</h3><p class="mb-0">Lavatórios, nichos e acabamentos sob medida.</p></a></div></div></div></div></div></section>
+    </div>
 
-</main>
+</section>
+
+        <section class="pt-0">
+
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <div class="border-top-2-black mb-5 pb-5"></div>
+
+                    </div>
+
+                </div>
+
+                <div class="row g-4">
+
+                    <div class="col-lg-4">
+
+                        <div class="subtitle">
+                            Dúvidas frequentes
+                        </div>
+
+                        <h2>
+                            Áreas Gourmet
+                        </h2>
+
+                    </div>
+
+                    <div class="col-lg-8">
+
+                        <div class="accordion wow fadeInRight">
+
+                            <div class="accordion-section">
+
+                                <div
+                                    class="accordion-section-title"
+                                    data-tab="#gourmet-a1"
+                                >
+                                    Posso usar a mesma pedra em área externa?
+                                </div>
+
+                                <div
+                                    class="accordion-section-content"
+                                    id="gourmet-a1"
+                                >
+                                    A escolha depende da exposição ao sol, chuva,
+                                    gordura, limpeza e manutenção esperada.
+                                </div>
+
+                                <div
+                                    class="accordion-section-title"
+                                    data-tab="#gourmet-a2"
+                                >
+                                    Vocês fazem bancada para churrasqueira?
+                                </div>
+
+                                <div
+                                    class="accordion-section-content"
+                                    id="gourmet-a2"
+                                >
+                                    Sim, a solução pode incluir bancada, frontão,
+                                    rodabanca, pia, cuba e apoio para equipamentos.
+                                </div>
+
+                                <div
+                                    class="accordion-section-title"
+                                    data-tab="#gourmet-a3"
+                                >
+                                    A medição é necessária?
+                                </div>
+
+                                <div
+                                    class="accordion-section-content"
+                                    id="gourmet-a3"
+                                >
+                                    É recomendada para conferir paredes, pontos
+                                    hidráulicos, marcenaria e interferências.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="bg-color-op-1">
+
+            <div class="container">
+
+                <div class="row g-4 align-items-center">
+
+                    <div class="col-lg-5">
+
+                        <div class="subtitle">
+                            Soluções relacionadas
+                        </div>
+
+                        <h2>
+                            Integração entre preparo e convivência
+                        </h2>
+
+                    </div>
+
+                    <div class="col-lg-7">
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <a
+                                    class="d-block p-4 bg-light rounded-1 h-100"
+                                    href="{% url 'institutional:cozinhas' %}"
+                                >
+
+                                    <h3>
+                                        Cozinhas
+                                    </h3>
+
+                                    <p class="mb-0">
+                                        Bancadas, pias, ilhas e rodabancas.
+                                    </p>
+
+                                </a>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <a
+                                    class="d-block p-4 bg-light rounded-1 h-100"
+                                    href="{% url 'institutional:banheiros' %}"
+                                >
+
+                                    <h3>
+                                        Banheiros
+                                    </h3>
+
+                                    <p class="mb-0">
+                                        Lavatórios, nichos e acabamentos sob medida.
+                                    </p>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
 {% endblock %}

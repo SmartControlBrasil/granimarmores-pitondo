@@ -5,12 +5,12 @@ from materials import views
 app_name = "materials"
 
 urlpatterns = [
-    path("", views.material_list, name="list"),
-    path("novo/", views.material_create, name="create"),
-    path("<int:pk>/", views.material_detail, name="detail"),
-    path("<int:pk>/editar/", views.material_update, name="update"),
-    path("<int:pk>/ativar/", views.material_activate, name="activate"),
-    path("<int:pk>/desativar/", views.material_deactivate, name="deactivate"),
+    path("materiais/", views.material_list, name="list"),
+    path("materiais/novo/", views.material_create, name="create"),
+    path("materiais/<int:pk>/", views.material_detail, name="detail"),
+    path("materiais/<int:pk>/editar/", views.material_update, name="update"),
+    path("materiais/<int:pk>/ativar/", views.material_activate, name="activate"),
+    path("materiais/<int:pk>/desativar/", views.material_deactivate, name="deactivate"),
     path("categorias/", views.category_list, name="categories"),
     path("categorias/nova/", views.category_create, name="category_create"),
     path("categorias/<int:pk>/editar/", views.category_update, name="category_update"),

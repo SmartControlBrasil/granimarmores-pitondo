@@ -1,1 +1,0 @@
-Orçamento {{ quote.number }} rev. {{ quote.revision }} - Granimármores Pitondo

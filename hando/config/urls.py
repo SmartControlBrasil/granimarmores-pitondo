@@ -2,29 +2,36 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
-from django.views.generic import TemplateView
 
 urlpatterns = [
-    
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("hando.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path("erp/usuarios/", include("accounts.urls", namespace="accounts")),
-    path("erp/acessos/", include("access_control.urls", namespace="access_control")),
-    path("erp/auditoria/", include("audit.urls", namespace="audit")),
-    path("erp/clientes/", include("customers.urls", namespace="customers")),
-    path("erp/vendedores/", include("salespeople.urls", namespace="salespeople")),
-    path("erp/materiais/", include("materials.urls", namespace="materials")),
-    path("erp/orcamentos/", include("quotes.urls", namespace="quotes")),
-    path("erp/ativos/", include("assets.urls", namespace="assets")),
-    path("erp/veiculos/", include("fleet.urls", namespace="fleet")),
-    path("erp/manutencao/", include("maintenance.urls", namespace="maintenance")),
-    path("", include("hando.pages.urls", namespace="pages")),
+    path("painel/comercial/orcamentos/", include("quotes.urls", namespace="quotes")),
+    path("painel/clientes/", include("customers.urls", namespace="customers")),
+    path("painel/comercial/vendedores/", include("salespeople.urls", namespace="salespeople")),
+    path("painel/cadastros/", include("materials.urls", namespace="materials")),
+    path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
+    path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),
+    path("painel/manutencao/", include("maintenance.urls", namespace="maintenance")),
+    path("painel/administracao/", include("accounts.urls", namespace="accounts")),
+    path("painel/administracao/", include("access_control.urls", namespace="access_control")),
+    path("painel/administracao/auditoria/", include("audit.urls", namespace="audit")),
+    path("painel/", include("hando.pages.urls", namespace="pages")),
+    path(
+        "",
+        lambda request: HttpResponse(
+            "Raiz disponível para o futuro site institucional da Granimármores Pitondo.",
+            content_type="text/plain; charset=utf-8",
+        ),
+        name="institutional_placeholder",
+    ),
     # Your stuff: custom urls includes go here
     # ...
     # Media files

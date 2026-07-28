@@ -50,6 +50,20 @@ def test_valid_login_redirects_without_password_in_url(client):
     assert "/accounts/login/post" not in response.url
 
 
+def test_valid_login_without_next_redirects_to_panel(client):
+    password = "safe-test-password-123"
+    user = UserFactory(password=password)
+    response = client.post(
+        reverse("account_login"),
+        {"login": user.username, "password": password, "remember": "on"},
+    )
+
+    assert response.status_code == HTTPStatus.FOUND
+    assert response.url == "/painel/"
+    assert password not in response.url
+
+
+
 def test_invalid_login_stays_on_page_and_does_not_leak_password(client):
     password = "wrong-password-456"
     user = UserFactory(password="right-password-123")

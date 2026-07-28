@@ -1,350 +1,701 @@
 {% extends "institutional/base.html" %}
 {% load static %}
+
 {% block title %}
     Escadas em Mármore e Granito | Granimármores Pitondo
 {% endblock %}
+
 {% block meta_description %}
     Escadas sob medida em mármore e granito, com degraus, espelhos, patamares, soleiras e acabamento especializado para projetos residenciais e comerciais.
 {% endblock %}
-{% block header %}
-    {% include "institutional/partials/header-index-3.html" %}
-{% endblock %}
+
 {% block content %}
     <main>
-        <a href="#" id="back-to-top" aria-label="Voltar ao topo">
-        </a>
-        <div id="de-loader">
-        </div>
+
+        <a
+            href="#"
+            id="back-to-top"
+            aria-label="Voltar ao topo"
+        ></a>
+
+        <div id="de-loader"></div>
+
         <section>
             <div class="container">
-                <div class="spacer-double">
-                </div>
+
+                <div class="spacer-double"></div>
+
                 <div class="row g-4 gx-5">
-                    <div class="col-md-3" data-0="transform: translateY(140px);" data-500="transform: translateY(-140px);">
+
+                    <div
+                        class="col-md-3"
+                        data-0="transform: translateY(140px);"
+                        data-500="transform: translateY(-140px);"
+                    >
+
                         <h3 class="mb-4">
                             Degraus, espelhos e patamares
                         </h3>
-                        <img src="{% static 'institutional/images/misc/escada-em-marmore-anti-derrapante.webp' %}" class="w-100" alt="Detalhe de acabamento em pedra natural">
+
+                        <img
+                            src="{% static 'institutional/images/misc/escada-em-marmore-anti-derrapante.webp' %}"
+                            class="w-100"
+                            alt="Detalhe de acabamento em pedra natural"
+                        >
+
                     </div>
+
                     <div class="col-lg-6">
+
                         <div class="mx-lg-2">
+
                             <h1 class="fs-120 fs-sm-10vw">
                                 Escadas em Mármore e Granito
                             </h1>
+
                             <p>
-                                Escadas sob medida para ambientes residenciais e comerciais, com atenção a segurança, resistência, acabamento de bordas e integração com a arquitetura do projeto.
+                                Escadas sob medida para ambientes residenciais e
+                                comerciais, com atenção a segurança, resistência,
+                                acabamento de bordas e integração com a arquitetura
+                                do projeto.
                             </p>
-                            <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide mt-3">
+
+                            <a
+                                href="{% url 'institutional:contato' %}"
+                                class="btn-main fx-slide mt-3"
+                            >
                                 <span>
                                     Solicitar orçamento
                                 </span>
                             </a>
+
                         </div>
+
                     </div>
-                    <div class="col-md-3" data-0="transform: translateY(0px);" data-500="transform: translateY(140px);">
-                        <img src="{% static 'institutional/images/misc/escada-giratoria-marmore.webp' %}" class="w-100 mb-4" alt="Superfície em pedra com acabamento polido">
+
+                    <div
+                        class="col-md-3"
+                        data-0="transform: translateY(0px);"
+                        data-500="transform: translateY(140px);"
+                    >
+
+                        <img
+                            src="{% static 'institutional/images/misc/escada-giratoria-marmore.webp' %}"
+                            class="w-100 mb-4"
+                            alt="Superfície em pedra com acabamento polido"
+                        >
+
                         <h2 class="hs-3">
                             Medição técnica e fabricação sob medida
                         </h2>
+
                     </div>
+
                 </div>
+
             </div>
         </section>
+
         <section class="bg-dark-1 text-light">
+
             <div class="container">
+
                 <div class="row g-4 gx-5 align-items-center">
+
                     <div class="col-md-7">
+
                         <div class="subtitle">
                             Escadas sob medida
                         </div>
-                        <h2 class="wow fadeInRight" data-wow-delay=".2s">
-                            Peças planejadas para circulação segura e acabamento alinhado ao ambiente
+
+                        <h2
+                            class="wow fadeInRight"
+                            data-wow-delay=".2s"
+                        >
+                            Peças planejadas para circulação segura e acabamento
+                            alinhado ao ambiente
                         </h2>
+
                     </div>
+
                     <div class="col-md-6 offset-lg-6">
-                        <p class="wow fadeInRight" data-wow-delay=".4s">
-                            Produzimos degraus, espelhos, patamares, rodapés e soleiras conforme as medidas do local. A definição do material considera tráfego, exposição, manutenção e linguagem visual do projeto.
+
+                        <p
+                            class="wow fadeInRight"
+                            data-wow-delay=".4s"
+                        >
+                            Produzimos degraus, espelhos, patamares, rodapés e
+                            soleiras conforme as medidas do local. A definição
+                            do material considera tráfego, exposição, manutenção
+                            e linguagem visual do projeto.
                         </p>
+
                     </div>
+
                 </div>
-                <div class="spacer-double">
-                </div>
+
+                <div class="spacer-double"></div>
+
                 <div class="row g-4">
+
                     <div class="col-md-3 col-sm-6">
-                        <div class="de_count wow fadeInRight" data-wow-delay=".0s">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".0s"
+                        >
+
                             <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-ruler-combined">
-                                </i>
+                                <i class="fa-solid fa-ruler-combined"></i>
                             </h3>
+
                             Medição técnica
+
                         </div>
+
                     </div>
+
                     <div class="col-md-3 col-sm-6">
-                        <div class="de_count wow fadeInRight" data-wow-delay=".2s">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".2s"
+                        >
+
                             <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-stairs">
-                                </i>
+                                <i class="fa-solid fa-stairs"></i>
                             </h3>
+
                             Degraus e espelhos
+
                         </div>
+
                     </div>
+
                     <div class="col-md-3 col-sm-6">
-                        <div class="de_count wow fadeInRight" data-wow-delay=".4s">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".4s"
+                        >
+
                             <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-gem">
-                                </i>
+                                <i class="fa-solid fa-gem"></i>
                             </h3>
+
                             Bordas e soleiras
+
                         </div>
+
                     </div>
+
                     <div class="col-md-3 col-sm-6">
-                        <div class="de_count wow fadeInRight" data-wow-delay=".6s">
+
+                        <div
+                            class="de_count wow fadeInRight"
+                            data-wow-delay=".6s"
+                        >
+
                             <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-screwdriver-wrench">
-                                </i>
+                                <i class="fa-solid fa-screwdriver-wrench"></i>
                             </h3>
+
                             Instalação
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
         </section>
+
         <section>
+
             <div class="container">
+
                 <div class="row mb-3 g-4 align-items-center justify-content-between">
-                    <div class="col-lg-4 wow fadeIn" data-wow-delay=".2s">
+
+                    <div
+                        class="col-lg-4 wow fadeIn"
+                        data-wow-delay=".2s"
+                    >
+
                         <div class="subtitle">
                             Aplicações
                         </div>
+
                         <h2 class="wow fadeInRight">
                             Componentes para uma escada completa
                         </h2>
+
                     </div>
+
                     <div class="col-lg-4">
+
                         <p>
-                            Cada elemento pode ser fabricado de acordo com o desenho do projeto, respeitando medidas, encaixes, paginação e acabamento previsto.
+                            Cada elemento pode ser fabricado de acordo com o
+                            desenho do projeto, respeitando medidas, encaixes,
+                            paginação e acabamento previsto.
                         </p>
+
                     </div>
+
                     <div class="col-lg-4">
+
                         <div class="relative">
-                            <div class="de-custom-nav d-flex flex-end" data-target="#services-carousel">
-                                <div class="d-prev circle">
-                                </div>
-                                <div class="d-next circle">
-                                </div>
+
+                            <div
+                                class="de-custom-nav d-flex flex-end"
+                                data-target="#services-carousel"
+                            >
+                                <div class="d-prev circle"></div>
+                                <div class="d-next circle"></div>
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
             <div class="container-fluid">
+
                 <div class="row g-4">
+
                     <div class="col-lg-12">
-                        <div id="services-carousel" class="owl-4-cols-center owl-carousel owl-theme wow fadeIn" data-wow-delay=".2s">
+
+                        <div
+                            id="services-carousel"
+                            class="owl-4-cols-center owl-carousel owl-theme wow fadeIn"
+                            data-wow-delay=".2s"
+                        >
+
                             <div class="item">
+
                                 <div class="hover">
+
                                     <div class="relative overflow-hidden">
-                                        <a href="{% url 'institutional:contato' %}" class="d-block hover relative text-light">
-                                            <img src="{% static 'institutional/images/misc/up-right-arrow.webp' %}" class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1" alt="">
+
+                                        <a
+                                            href="{% url 'institutional:contato' %}"
+                                            class="d-block hover relative text-light"
+                                        >
+
+                                            <img
+                                                src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                                alt=""
+                                            >
+
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+
                                                 <h2 class="fs-40">
                                                     Degraus
                                                 </h2>
+
                                             </div>
-                                            <div class="relative overflow-hidden rounded-1 wow scaleIn" data-wow-duration="1.5s">
-                                                <img src="{% static 'institutional/images/services/1.webp' %}" class="w-100 hover-scale-1-2" alt="Degrau em pedra natural">
+
+                                            <div
+                                                class="relative overflow-hidden rounded-1 wow scaleIn"
+                                                data-wow-duration="1.5s"
+                                            >
+
+                                                <img
+                                                    src="{% static 'institutional/images/services/1.webp' %}"
+                                                    class="w-100 hover-scale-1-2"
+                                                    alt="Degrau em pedra natural"
+                                                >
+
                                             </div>
-                                            <div class="gradient-edge-bottom h-70">
-                                            </div>
+
+                                            <div class="gradient-edge-bottom h-70"></div>
+
                                         </a>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                             <div class="item">
+
                                 <div class="hover">
+
                                     <div class="relative overflow-hidden">
-                                        <a href="{% url 'institutional:contato' %}" class="d-block hover relative text-light">
-                                            <img src="{% static 'institutional/images/misc/up-right-arrow.webp' %}" class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1" alt="">
+
+                                        <a
+                                            href="{% url 'institutional:contato' %}"
+                                            class="d-block hover relative text-light"
+                                        >
+
+                                            <img
+                                                src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                                alt=""
+                                            >
+
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+
                                                 <h2 class="fs-40">
                                                     Espelhos
                                                 </h2>
+
                                             </div>
-                                            <div class="relative overflow-hidden rounded-1 wow scaleIn" data-wow-duration="1.5s">
-                                                <img src="{% static 'institutional/images/services/espelhos-e-marmores.webp' %}" class="w-100 hover-scale-1-2" alt="Espelho de escada revestido em pedra">
+
+                                            <div
+                                                class="relative overflow-hidden rounded-1 wow scaleIn"
+                                                data-wow-duration="1.5s"
+                                            >
+
+                                                <img
+                                                    src="{% static 'institutional/images/services/espelho.webp' %}"
+                                                    class="w-100 hover-scale-1-2"
+                                                    alt="Espelho de escada revestido em pedra"
+                                                >
+
                                             </div>
-                                            <div class="gradient-edge-bottom h-70">
-                                            </div>
+
+                                            <div class="gradient-edge-bottom h-70"></div>
+
                                         </a>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                             <div class="item">
+
                                 <div class="hover">
+
                                     <div class="relative overflow-hidden">
-                                        <a href="{% url 'institutional:contato' %}" class="d-block hover relative text-light">
-                                            <img src="{% static 'institutional/images/misc/up-right-arrow.webp' %}" class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1" alt="">
+
+                                        <a
+                                            href="{% url 'institutional:contato' %}"
+                                            class="d-block hover relative text-light"
+                                        >
+
+                                            <img
+                                                src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                                alt=""
+                                            >
+
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+
                                                 <h2 class="fs-40">
                                                     Patamares
                                                 </h2>
+
                                             </div>
-                                            <div class="relative overflow-hidden rounded-1 wow scaleIn" data-wow-duration="1.5s">
-                                                <img src="{% static 'institutional/images/services/patamares.webp' %}" class="w-100 hover-scale-1-2" alt="Patamar de escada em pedra">
+
+                                            <div
+                                                class="relative overflow-hidden rounded-1 wow scaleIn"
+                                                data-wow-duration="1.5s"
+                                            >
+
+                                                <img
+                                                    src="{% static 'institutional/images/services/escada-com-patamar.webp' %}"
+                                                    class="w-100 hover-scale-1-2"
+                                                    alt="Patamar de escada em pedra"
+                                                >
+
                                             </div>
-                                            <div class="gradient-edge-bottom h-70">
-                                            </div>
+
+                                            <div class="gradient-edge-bottom h-70"></div>
+
                                         </a>
 
                                     </div>
+
                                 </div>
+
                             </div>
+
                             <div class="item">
+
                                 <div class="hover">
+
                                     <div class="relative overflow-hidden">
-                                        <a href="{% url 'institutional:contato' %}" class="d-block hover relative text-light">
-                                            <img src="{% static 'institutional/images/misc/up-right-arrow.webp' %}" class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1" alt="">
+
+                                        <a
+                                            href="{% url 'institutional:contato' %}"
+                                            class="d-block hover relative text-light"
+                                        >
+
+                                            <img
+                                                src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
+                                                alt=""
+                                            >
+
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
+
                                                 <h2 class="fs-40">
                                                     Rodapés e soleiras
                                                 </h2>
+
                                             </div>
-                                            <div class="relative overflow-hidden rounded-1 wow scaleIn" data-wow-duration="1.5s">
-                                                <img src="{% static 'institutional/images/services/rodapes-soleiras.webp' %}" class="w-100 hover-scale-1-2" alt="Rodapé e soleira em pedra">
+
+                                            <div
+                                                class="relative overflow-hidden rounded-1 wow scaleIn"
+                                                data-wow-duration="1.5s"
+                                            >
+
+                                                <img
+                                                    src="{% static 'institutional/images/services/rodape-soleira.webp' %}"
+                                                    class="w-100 hover-scale-1-2"
+                                                    alt="Rodapé e soleira em pedra"
+                                                >
+
                                             </div>
-                                            <div class="gradient-edge-bottom h-70">
-                                            </div>
+
+                                            <div class="gradient-edge-bottom h-70"></div>
+
                                         </a>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
         <section class="text-light jarallax">
-            <img src="{% static 'institutional/images/background/soleira.webp' %}" class="jarallax-img" alt="Escada com acabamento em pedra">
-            <div class="sw-overlay op-6">
-            </div>
+
+            <img
+                src="{% static 'institutional/images/background/escada-angulo-granito.webp' %}"
+                class="jarallax-img"
+                alt="Escada com acabamento em pedra"
+            >
+
+            <div class="sw-overlay op-6"></div>
+
             <div class="container relative z-2">
+
                 <div class="row g-4 justify-content">
+
                     <div class="col-md-8">
+
                         <div class="subtitle">
                             Do levantamento à instalação
                         </div>
+
                         <h2 class="mb-4">
-                            Acabamento de bordas, paginação e encaixes são definidos para unir estética, uso e segurança.
+                            Acabamento de bordas, paginação e encaixes são
+                            definidos para unir estética, uso e segurança.
                         </h2>
+
                         <p>
-                            O processo considera medições, desenhos, fabricação das peças e instalação no local, com ajustes conforme o escopo aprovado.
+                            O processo considera medições, desenhos, fabricação
+                            das peças e instalação no local, com ajustes conforme
+                            o escopo aprovado.
                         </p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
         
+
         <section class="bg-dark-1 text-light">
+
             <div class="container">
+
                 <div class="row g-4 align-items-center">
+
                     <div class="col-lg-5">
+
                         <div class="subtitle">
                             Materiais e orientação técnica
                         </div>
+
                         <h2>
                             A escolha depende do tráfego, acabamento e local de instalação
                         </h2>
+
                         <p>
-                            Mármore, granito e superfícies especiais devem ser avaliados conforme resistência, absorção, manutenção, textura, bordas e segurança de uso.
+                            Mármore, granito e superfícies especiais devem ser
+                            avaliados conforme resistência, absorção, manutenção,
+                            textura, bordas e segurança de uso.
                         </p>
+
                     </div>
+
                     <div class="col-lg-6 offset-lg-1">
+
                         <div class="row g-4">
+
                             <div class="col-md-6">
+
                                 <div class="p-4 bg-dark rounded-1 h-100">
+
                                     <h3>
                                         Granito
                                     </h3>
+
                                     <p class="mb-0">
-                                        Opção frequente para áreas de maior circulação, conforme acabamento.
+                                        Opção frequente para áreas de maior circulação,
+                                        conforme acabamento.
                                     </p>
+
                                 </div>
+
                             </div>
+
                             <div class="col-md-6">
+
                                 <div class="p-4 bg-dark rounded-1 h-100">
+
                                     <h3>
                                         Mármore
                                     </h3>
+
                                     <p class="mb-0">
-                                        Visual sofisticado, indicado após análise de uso e manutenção.
+                                        Visual sofisticado, indicado após análise
+                                        de uso e manutenção.
                                     </p>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
         <section class="pt-0">
+
             <div class="container">
+
                 <div class="row">
+
                     <div class="col-lg-12">
-                        <div class="border-top-2-black mb-5 pb-5">
-                        </div>
+                        <div class="border-top-2-black mb-5 pb-5"></div>
                     </div>
+
                 </div>
+
                 <div class="row g-4">
+
                     <div class="col-lg-4">
+
                         <div class="subtitle">
                             Dúvidas frequentes
                         </div>
+
                         <h2>
                             Escadas em pedra
                         </h2>
+
                     </div>
+
                     <div class="col-lg-8">
+
                         <div class="accordion wow fadeInRight">
+
                             <div class="accordion-section">
-                                <div class="accordion-section-title" data-tab="#escada-a1">
+
+                                <div
+                                    class="accordion-section-title"
+                                    data-tab="#escada-a1"
+                                >
                                     Vocês fazem degraus e espelhos?
                                 </div>
-                                <div class="accordion-section-content" id="escada-a1">
-                                    Sim, as peças podem incluir degraus, espelhos, patamares, rodapés e soleiras, conforme medição.
+
+                                <div
+                                    class="accordion-section-content"
+                                    id="escada-a1"
+                                >
+                                    Sim, as peças podem incluir degraus, espelhos,
+                                    patamares, rodapés e soleiras, conforme medição.
                                 </div>
-                                <div class="accordion-section-title" data-tab="#escada-a2">
+
+                                <div
+                                    class="accordion-section-title"
+                                    data-tab="#escada-a2"
+                                >
                                     O acabamento da borda é definido no projeto?
                                 </div>
-                                <div class="accordion-section-content" id="escada-a2">
-                                    Sim. A borda deve considerar estética, conforto, segurança e espessura da peça.
+
+                                <div
+                                    class="accordion-section-content"
+                                    id="escada-a2"
+                                >
+                                    Sim. A borda deve considerar estética, conforto,
+                                    segurança e espessura da peça.
                                 </div>
-                                <div class="accordion-section-title" data-tab="#escada-a3">
+
+                                <div
+                                    class="accordion-section-title"
+                                    data-tab="#escada-a3"
+                                >
                                     A escada pode ser residencial ou comercial?
                                 </div>
-                                <div class="accordion-section-content" id="escada-a3">
-                                    Pode, desde que o material e acabamento sejam escolhidos conforme o tráfego e o ambiente.
+
+                                <div
+                                    class="accordion-section-content"
+                                    id="escada-a3"
+                                >
+                                    Pode, desde que o material e acabamento sejam
+                                    escolhidos conforme o tráfego e o ambiente.
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
         <section
-            class="section-dark text-light"
+            class="section-dark text-light jarallax"
             style="
-                background:
-                    linear-gradient(
-                        rgba(0, 0, 0, 0.68),
-                        rgba(0, 0, 0, 0.68)
-                    ),
-                    url('{% static "institutional/images/escada-parallax.jpg" %}')
-                    center center / cover no-repeat fixed;
+                background-image:
+                    linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
+                    url('{% static "institutional/images/background/escada-angulo-marmore.webp" %}');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
             "
         >
+
             <div class="container">
+
                 <div class="row g-4 align-items-center">
+
                     <div class="col-lg-8">
+
                         <div class="subtitle">
                             Orçamento
                         </div>
@@ -356,9 +707,11 @@
                         <p class="mb-0">
                             Envie medidas, fotos ou planta para avaliação técnica.
                         </p>
+
                     </div>
 
                     <div class="col-lg-4 text-lg-end">
+
                         <a
                             href="{% url 'institutional:contato' %}"
                             class="btn-main fx-slide"
@@ -367,48 +720,86 @@
                                 Solicitar orçamento
                             </span>
                         </a>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
+
+
         <section class="bg-color-op-1">
+
             <div class="container">
+
                 <div class="row g-4 align-items-center">
+
                     <div class="col-lg-5">
+
                         <div class="subtitle">
                             Soluções relacionadas
                         </div>
+
                         <h2>
                             Acabamentos para outros ambientes
                         </h2>
+
                     </div>
+
                     <div class="col-lg-7">
+
                         <div class="row g-4">
+
                             <div class="col-md-6">
-                                <a class="d-block p-4 bg-light rounded-1 h-100" href="{% url 'institutional:banheiros' %}">
+
+                                <a
+                                    class="d-block p-4 bg-light rounded-1 h-100"
+                                    href="{% url 'institutional:banheiros' %}"
+                                >
+
                                     <h3>
                                         Banheiros
                                     </h3>
+
                                     <p class="mb-0">
                                         Soleiras, bancadas, nichos e revestimentos.
                                     </p>
+
                                 </a>
+
                             </div>
+
                             <div class="col-md-6">
-                                <a class="d-block p-4 bg-light rounded-1 h-100" href="{% url 'institutional:projetos_comerciais' %}">
+
+                                <a
+                                    class="d-block p-4 bg-light rounded-1 h-100"
+                                    href="{% url 'institutional:projetos_comerciais' %}"
+                                >
+
                                     <h3>
                                         Projetos Comerciais
                                     </h3>
+
                                     <p class="mb-0">
                                         Escadas e áreas de circulação em ambientes corporativos.
                                     </p>
+
                                 </a>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
+
     </main>
 {% endblock %}
