@@ -2,3 +2,16 @@ Django>=6.0,<6.1
 psycopg[binary]>=3.1.12
 django-environ>=0.12
 Pillow>=11.0
+
+# Hando ERP dependencies
+argon2-cffi>=23.1,<24
+whitenoise>=6.8,<7
+redis>=5.2,<6
+hiredis>=3.1,<4
+django-model-utils>=5.0,<6
+django-allauth[mfa]>=65.3,<66
+django-crispy-forms>=2.3,<3
+crispy-bootstrap5>=2024.10,<2025
+django-redis>=5.4,<6
+fido2>=1.1,<2
+python-slugify>=8.0,<9

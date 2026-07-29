@@ -21,46 +21,49 @@
         <div id="de-loader"></div>
 
         <section
-    class="section-dark text-light"
-    style="
-        background-image:
-            linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)),
-            url('{% static "institutional/images/background/escada-angulo-marmore.webp" %}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    "
->
+            class="section-dark text-light"
+            style="
+                background-image:
+                    linear-gradient(
+                        rgba(0, 0, 0, 0.58),
+                        rgba(0, 0, 0, 0.58)
+                    ),
+                    url('{% static "institutional/images/background/escada-angulo-marmore.webp" %}');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            "
+        >
 
-    <div class="container">
+            <div class="container">
 
-        <div class="row align-items-center min-vh-75">
+                <div class="row align-items-center min-vh-75">
 
-            <div class="col-lg-8">
+                    <div class="col-lg-8">
 
-                <div class="subtitle">
-                    Contato e orçamento
+                        <div class="subtitle">
+                            Contato e orçamento
+                        </div>
+
+                        <h1>
+                            Solicite uma avaliação para seu projeto
+                        </h1>
+
+                        <p class="lead">
+                            Informe o ambiente, cidade, medidas aproximadas e detalhes
+                            do que precisa. Fotos, planta ou referências ajudam na
+                            avaliação inicial.
+                        </p>
+
+                    </div>
+
                 </div>
-
-                <h1>
-                    Solicite uma avaliação para seu projeto
-                </h1>
-
-                <p class="lead">
-                    Informe o ambiente, cidade, medidas aproximadas e detalhes
-                    do que precisa. Fotos, planta ou referências ajudam na
-                    avaliação inicial.
-                </p>
 
             </div>
 
-        </div>
+        </section>
 
-    </div>
-
-</section>
-
-<section>
+        <section>
 
             <div class="container">
 
@@ -84,8 +87,33 @@
                         </p>
 
                         <p>
-                            Telefone, e-mail e endereço reais devem ser configurados
-                            somente quando confirmados no projeto.
+                            Nossa equipe analisará as informações do projeto e entrará
+                            em contato para orientar os próximos passos do orçamento.
+                        </p>
+
+                        <div class="spacer-single"></div>
+
+                        <h4>
+                            Granimármores Pitondo
+                        </h4>
+
+                        <p class="mb-2">
+                            <strong>Telefone:</strong>
+                            (11) 94024-1328 - 5058-0889
+                        </p>
+
+                        <p class="mb-2">
+                            <strong>E-mail:</strong>
+                            <a href="mailto:contato@granimarmorespitondo.com.br">
+                                contato@granimarmorespitondo.com.br
+                            </a>
+                        </p>
+
+                        <p>
+                            <strong>Endereço:</strong><br>
+                            Av. do Cursino, 3342<br>
+                            Jardim da Saúde<br>
+                            São Paulo - SP
                         </p>
 
                     </div>
@@ -110,6 +138,7 @@
 
                         <form
                             method="post"
+                            action="{% url 'institutional:contato' %}"
                             class="row g-3"
                             novalidate
                         >
@@ -139,6 +168,7 @@
                                     name="nome"
                                     class="form-control"
                                     placeholder="Nome*"
+                                    value="{{ request.POST.nome|default:'' }}"
                                     required
                                 >
 
@@ -151,6 +181,7 @@
                                     name="telefone"
                                     class="form-control"
                                     placeholder="Telefone ou WhatsApp*"
+                                    value="{{ request.POST.telefone|default:'' }}"
                                     required
                                 >
 
@@ -163,6 +194,7 @@
                                     name="email"
                                     class="form-control"
                                     placeholder="E-mail"
+                                    value="{{ request.POST.email|default:'' }}"
                                 >
 
                             </div>
@@ -174,6 +206,7 @@
                                     name="cidade"
                                     class="form-control"
                                     placeholder="Cidade*"
+                                    value="{{ request.POST.cidade|default:'' }}"
                                     required
                                 >
 
@@ -191,27 +224,45 @@
                                         Tipo de ambiente*
                                     </option>
 
-                                    <option>
+                                    <option
+                                        value="Cozinha"
+                                        {% if request.POST.ambiente == "Cozinha" %}selected{% endif %}
+                                    >
                                         Cozinha
                                     </option>
 
-                                    <option>
+                                    <option
+                                        value="Banheiro"
+                                        {% if request.POST.ambiente == "Banheiro" %}selected{% endif %}
+                                    >
                                         Banheiro
                                     </option>
 
-                                    <option>
+                                    <option
+                                        value="Escada"
+                                        {% if request.POST.ambiente == "Escada" %}selected{% endif %}
+                                    >
                                         Escada
                                     </option>
 
-                                    <option>
+                                    <option
+                                        value="Área Gourmet"
+                                        {% if request.POST.ambiente == "Área Gourmet" %}selected{% endif %}
+                                    >
                                         Área Gourmet
                                     </option>
 
-                                    <option>
+                                    <option
+                                        value="Projeto Comercial"
+                                        {% if request.POST.ambiente == "Projeto Comercial" %}selected{% endif %}
+                                    >
                                         Projeto Comercial
                                     </option>
 
-                                    <option>
+                                    <option
+                                        value="Outro ambiente"
+                                        {% if request.POST.ambiente == "Outro ambiente" %}selected{% endif %}
+                                    >
                                         Outro ambiente
                                     </option>
 
@@ -227,7 +278,7 @@
                                     rows="6"
                                     placeholder="Descreva o projeto, medidas aproximadas, fotos disponíveis ou planta*"
                                     required
-                                ></textarea>
+                                >{{ request.POST.mensagem|default:'' }}</textarea>
 
                             </div>
 
@@ -240,6 +291,7 @@
                                         name="privacidade"
                                         value="1"
                                         required
+                                        {% if request.POST.privacidade == "1" %}checked{% endif %}
                                     >
 
                                     Autorizo o uso dos dados informados para retorno

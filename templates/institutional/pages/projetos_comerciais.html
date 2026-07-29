@@ -20,155 +20,54 @@
 
         <div id="de-loader"></div>
 
-        <section class="relative overflow-hidden jarallax">
+        <section
+    id="section-intro"
+    class="section-dark text-light no-top no-bottom position-relative overflow-hidden z-1000"
+>
+    <div class="mh-800 relative">
 
-            <div class="spacer-double"></div>
+        <div class="spacer-double"></div>
+        <div class="spacer-double"></div>
+        <div class="spacer-single sm-hide"></div>
 
-            <div class="container relative z-2">
+        <div class="container relative z-2">
 
-                <div class="row g-4 align-items-center justify-content-between">
+            <div class="row g-4">
 
-                    <div class="col-lg-12">
+                <div class="col-md-5">
 
-                        <div class="text-start">
+                    <p>
+                        Soluções em pedra e superfícies especiais para recepções,
+                        balcões de atendimento, lojas, escritórios, clínicas,
+                        restaurantes, hotéis, condomínios e áreas corporativas.
+                    </p>
 
-                            <h1 class="fs-120 fs-sm-10vw mb-0 wow fadeInLeft">
-                                Projetos
-                            </h1>
-
-                        </div>
-
-                        <div class="text-lg-end">
-
-                            <h1
-                                class="fs-120 fs-sm-10vw mb-0 wow fadeInRight"
-                                data-wow-delay=".2s"
-                            >
-                                Comerciais
-                            </h1>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-5">
-
-                        <p
-                            class="wow fadeInUp"
-                            data-wow-delay=".4s"
-                        >
-                            Soluções em pedra e superfícies especiais para recepções,
-                            balcões de atendimento, lojas, escritórios, clínicas,
-                            restaurantes, hotéis, condomínios e áreas corporativas.
-                        </p>
-
-                    </div>
-
-                    <div class="col-lg-4 text-lg-end">
-
-                        <a
-                            href="{% url 'institutional:contato' %}"
-                            class="btn-main fx-slide wow fadeInUp"
-                            data-wow-delay=".6s"
-                        >
-                            <span>
-                                Solicitar orçamento empresarial
-                            </span>
-                        </a>
-
-                    </div>
+                    <a
+                        href="{% url 'institutional:contato' %}"
+                        class="btn-main fx-slide mt-3"
+                    >
+                        <span>
+                            Solicitar orçamento empresarial
+                        </span>
+                    </a>
 
                 </div>
 
             </div>
 
-        </section>
+        </div>
 
-        <section
-            class="p-0 overflow-hidden"
-            aria-label="Aplicações comerciais"
-        >
+        <div class="abs w-80 abs-center bottom-10 z-2 w-100">
 
-            <div class="container-fluid">
+            <div class="container">
 
                 <div class="row">
 
                     <div class="col-lg-12">
 
-                        <div class="relative overflow-hidden">
-
-                            <div
-                                class="owl-custom-nav menu-float"
-                                data-target="#carousel-6"
-                            >
-
-                                <a class="btn-next"></a>
-                                <a class="btn-prev"></a>
-
-                                <div
-                                    id="carousel-6"
-                                    class="owl-single owl-carousel owl-theme"
-                                >
-
-                                    <div class="item">
-
-                                        <div class="relative">
-
-                                            <div class="overflow-hidden">
-
-                                                <img
-                                                    src="{% static 'institutional/images/slider-wide/projeto-comercial-01.webp' %}"
-                                                    class="w-100"
-                                                    alt="Balcão comercial em pedra"
-                                                >
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="item">
-
-                                        <div class="relative">
-
-                                            <div class="overflow-hidden">
-
-                                                <img
-                                                    src="{% static 'institutional/images/slider-wide/projeto-comercial-02.webp' %}"
-                                                    class="w-100"
-                                                    alt="Recepção com revestimento em pedra"
-                                                >
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="item">
-
-                                        <div class="relative">
-
-                                            <div class="overflow-hidden">
-
-                                                <img
-                                                    src="{% static 'institutional/images/slider-wide/projeto-comercial-03.webp' %}"
-                                                    class="w-100"
-                                                    alt="Ambiente corporativo com bancada sob medida"
-                                                >
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
+                        <h1 class="fs-sm-10vw mb-0 wow fadeInLeft">
+                            Projetos Comerciais
+                        </h1>
 
                     </div>
 
@@ -176,7 +75,51 @@
 
             </div>
 
-        </section>
+        </div>
+
+        <div class="swiper">
+
+            <div class="swiper-wrapper">
+
+                <div class="swiper-slide">
+
+                    <div
+                        class="swiper-inner"
+                        data-bgimage="url({% static 'institutional/images/slider-wide/projeto-comercial-01.webp' %})"
+                    >
+                        <div class="sw-overlay op-5"></div>
+                    </div>
+
+                </div>
+
+                <div class="swiper-slide">
+
+                    <div
+                        class="swiper-inner"
+                        data-bgimage="url({% static 'institutional/images/slider-wide/projeto-comercial-02.webp' %})"
+                    >
+                        <div class="sw-overlay op-5"></div>
+                    </div>
+
+                </div>
+
+                <div class="swiper-slide">
+
+                    <div
+                        class="swiper-inner"
+                        data-bgimage="url({% static 'institutional/images/slider-wide/projeto-comercial-03.webp' %})"
+                    >
+                        <div class="sw-overlay op-5"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
 
         <section>
 

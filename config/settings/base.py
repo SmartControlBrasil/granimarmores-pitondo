@@ -5,9 +5,11 @@ Este arquivo contém as configurações compartilhadas entre os ambientes
 de desenvolvimento e produção.
 """
 
+import sys
 from pathlib import Path
 
 import environ
+from django.core.exceptions import ImproperlyConfigured
 
 
 # =============================================================================
@@ -15,6 +17,10 @@ import environ
 # =============================================================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+HANDO_DIR = BASE_DIR / "hando"
+
+if str(HANDO_DIR) not in sys.path:
+    sys.path.insert(0, str(HANDO_DIR))
 
 
 # =============================================================================
@@ -60,9 +66,33 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
 
-    # Aplicações do projeto
+    # Terceiros usados pelo Hando
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "allauth",
+    "allauth.account",
+    "allauth.mfa",
+    "allauth.socialaccount",
+
+    # Site institucional
     "src.institutional.infrastructure.django.apps.InstitutionalConfig",
+
+    # ERP Hando canônico
+    "hando.users",
+    "hando.pages",
+    "core",
+    "accounts",
+    "access_control",
+    "audit",
+    "customers",
+    "salespeople",
+    "materials",
+    "quotes",
+    "assets",
+    "fleet",
+    "maintenance",
 ]
 
 
@@ -72,6 +102,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -79,6 +110,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
+    "audit.middleware.AuditMiddleware",
 ]
 
 
@@ -93,15 +126,21 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             BASE_DIR / "templates",
+            HANDO_DIR / "hando" / "templates",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.i18n",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.static",
                 "django.template.context_processors.media",
+                "django.template.context_processors.tz",
+                "hando.users.context_processors.allauth_settings",
+                "access_control.context_processors.erp_permissions",
             ],
         },
     },
@@ -127,7 +166,6 @@ DATABASES["default"]["CONN_MAX_AGE"] = env.int(
     "DATABASE_CONN_MAX_AGE",
     default=0,
 )
-
 
 # =============================================================================
 # VALIDAÇÃO DE SENHAS
@@ -185,6 +223,7 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    HANDO_DIR / "hando" / "static",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -223,11 +262,48 @@ CSRF_COOKIE_SAMESITE = "Lax"
 # AUTENTICAÇÃO
 # =============================================================================
 
-LOGIN_URL = "/login/"
+AUTH_USER_MODEL = "users.User"
 
-LOGIN_REDIRECT_URL = "/painel/"
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+LOGIN_URL = "account_login"
+
+LOGIN_REDIRECT_URL = "pages:dashboard"
 
 LOGOUT_REDIRECT_URL = "/"
+
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+ACCOUNT_ALLOW_REGISTRATION = env.bool(
+    "DJANGO_ACCOUNT_ALLOW_REGISTRATION",
+    default=False,
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+ACCOUNT_ADAPTER = "hando.users.adapters.AccountAdapter"
+
+ACCOUNT_FORMS = {"signup": "hando.users.forms.UserSignupForm"}
+
+SOCIALACCOUNT_ADAPTER = "hando.users.adapters.SocialAccountAdapter"
+
+SOCIALACCOUNT_FORMS = {"signup": "hando.users.forms.UserSocialSignupForm"}
+
+DJANGO_ADMIN_FORCE_ALLAUTH = env.bool(
+    "DJANGO_ADMIN_FORCE_ALLAUTH",
+    default=False,
+)
 
 
 # =============================================================================
@@ -239,9 +315,33 @@ EMAIL_BACKEND = env(
     default="django.core.mail.backends.console.EmailBackend",
 )
 
+EMAIL_HOST = env("EMAIL_HOST", default="")
+
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=False)
+
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
+
+if EMAIL_USE_TLS and EMAIL_USE_SSL:
+    raise ImproperlyConfigured(
+        "EMAIL_USE_TLS e EMAIL_USE_SSL não podem estar ativos ao mesmo tempo.",
+    )
+
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=10)
+
 DEFAULT_FROM_EMAIL = env(
     "DEFAULT_FROM_EMAIL",
     default="Granimármores Pitondo <contato@granimarmorespitondo.com.br>",
+)
+
+CONTACT_RECIPIENT_EMAIL = env(
+    "CONTACT_RECIPIENT_EMAIL",
+    default="contato@granimarmorespitondo.com.br",
 )
 
 SERVER_EMAIL = env(

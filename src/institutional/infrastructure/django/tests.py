@@ -1,5 +1,13 @@
-from django.test import SimpleTestCase
-from django.urls import resolve, reverse
+from unittest.mock import patch
+
+from django.core import mail
+from django.test import TestCase
+from django.test import override_settings
+from django.urls import resolve
+from django.urls import reverse
+
+from audit.models import AuditEvent
+from customers.models import Customer
 
 
 PAGE_DIR = "institutional/pages/"
@@ -10,7 +18,27 @@ def template(name):
     return f"{PAGE_DIR}{name}{HTML}"
 
 
-class InstitutionalPagesTests(SimpleTestCase):
+def valid_contact_data(**overrides):
+    data = {
+        "nome": "Maria Silva",
+        "telefone": "(11) 99999-0000",
+        "email": "maria@example.com",
+        "cidade": "São Paulo",
+        "ambiente": "Cozinha",
+        "mensagem": "Bancada em granito para cozinha com ilha central.",
+        "privacidade": "on",
+        "website": "",
+    }
+    data.update(overrides)
+    return data
+
+
+@override_settings(
+    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+    DEFAULT_FROM_EMAIL="Granimármores Pitondo <contato@granimarmorespitondo.com.br>",
+    CONTACT_RECIPIENT_EMAIL="contato@granimarmorespitondo.com.br",
+)
+class InstitutionalPagesTests(TestCase):
     pages = {
         "home": ("/", template("home"), "Mármores e granitos"),
         "sobre": ("/sobre/", template("about"), "Sobre a Granimármores Pitondo"),
@@ -28,6 +56,12 @@ class InstitutionalPagesTests(SimpleTestCase):
         "marmore-ou-granito-diferencas": "Mármore ou granito",
         "cuidados-conservar-bancadas-pedra": "Cuidados para conservar",
     }
+
+    def post_contact(self, **overrides):
+        return self.client.post(
+            reverse("institutional:contato"),
+            data=valid_contact_data(**overrides),
+        )
 
     def test_pages_render_expected_template_and_content(self):
         for route_name, (path, template_name, title) in self.pages.items():
@@ -71,13 +105,191 @@ class InstitutionalPagesTests(SimpleTestCase):
                 self.assertContains(response, title)
                 self.assertContains(response, reverse("institutional:contato"))
 
-    def test_contact_form_has_csrf_and_validates_required_fields(self):
+    def test_contact_form_get_has_csrf_and_fields(self):
         response = self.client.get(reverse("institutional:contato"))
-        self.assertContains(response, "csrfmiddlewaretoken")
-        self.assertContains(response, 'name="nome"')
-        self.assertContains(response, 'name="telefone"')
-        self.assertContains(response, 'name="ambiente"')
 
-        post_response = self.client.post(reverse("institutional:contato"), data={})
-        self.assertEqual(post_response.status_code, 200)
-        self.assertContains(post_response, "Preencha os campos obrigatórios")
+        self.assertEqual(response.status_code, 200)
+        for field in ["nome", "telefone", "email", "cidade", "ambiente", "mensagem", "privacidade", "website"]:
+            self.assertContains(response, f'name="{field}"')
+        self.assertContains(response, "csrfmiddlewaretoken")
+
+    def test_valid_post_persists_customer_and_sends_notification_after_commit(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.post_contact()
+
+        self.assertRedirects(response, reverse("institutional:contato"))
+        customer = Customer.objects.get()
+        self.assertEqual(customer.name, "Maria Silva")
+        self.assertEqual(customer.mobile_phone, "(11) 99999-0000")
+        self.assertEqual(customer.email, "maria@example.com")
+        self.assertIn("Site institucional", customer.notes)
+        self.assertIn("Cozinha", customer.notes)
+        self.assertIn("Bancada em granito", customer.notes)
+        self.assertEqual(len(mail.outbox), 1)
+        message = mail.outbox[0]
+        self.assertEqual(message.to, ["contato@granimarmorespitondo.com.br"])
+        self.assertEqual(
+            message.from_email,
+            "Granimármores Pitondo <contato@granimarmorespitondo.com.br>",
+        )
+        self.assertEqual(message.reply_to, ["maria@example.com"])
+        self.assertIn("Nova solicitação de orçamento pelo site - Maria Silva - Cozinha", message.subject)
+        self.assertIn("Telefone / WhatsApp: (11) 99999-0000", message.body)
+        self.assertIn("Origem:" + "\n" + "Site institucional", message.body)
+        self.assertTrue(AuditEvent.objects.filter(action="public_contact_received").exists())
+        self.assertTrue(AuditEvent.objects.filter(action="public_contact_notification", status="success").exists())
+
+    def test_smtp_is_not_called_before_commit(self):
+        with patch("src.institutional.presentation.views.send_public_contact_notification") as mocked:
+            with self.captureOnCommitCallbacks(execute=False) as callbacks:
+                response = self.post_contact()
+
+        self.assertRedirects(response, reverse("institutional:contato"))
+        self.assertEqual(Customer.objects.count(), 1)
+        self.assertEqual(len(callbacks), 1)
+        mocked.assert_not_called()
+
+    def test_valid_post_without_customer_email_persists_and_sends_without_reply_to(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.post_contact(email="")
+
+        self.assertRedirects(response, reverse("institutional:contato"))
+        customer = Customer.objects.get()
+        self.assertEqual(customer.email, "")
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].reply_to, [])
+        self.assertIn("E-mail: Não informado", mail.outbox[0].body)
+
+    def test_required_fields_are_validated_in_backend(self):
+        response = self.client.post(reverse("institutional:contato"), data={})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Preencha os campos obrigatórios")
+        self.assertFalse(Customer.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_privacy_is_required_in_backend(self):
+        response = self.post_contact(privacidade="")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Confirme o consentimento")
+        self.assertFalse(Customer.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_invalid_email_is_validated_in_backend(self):
+        response = self.post_contact(email="email-invalido")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Informe um e-mail válido")
+        self.assertFalse(Customer.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_honeypot_filled_redirects_without_creating_customer_or_email(self):
+        response = self.post_contact(website="https://spam.example")
+
+        self.assertRedirects(response, reverse("institutional:contato"))
+        self.assertFalse(Customer.objects.exists())
+        self.assertFalse(AuditEvent.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_two_requests_same_phone_keep_one_customer_and_two_histories(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            self.post_contact(ambiente="Cozinha", mensagem="Mensagem A")
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.post_contact(ambiente="Banheiro", mensagem="Mensagem B")
+
+        self.assertRedirects(response, reverse("institutional:contato"))
+        self.assertEqual(Customer.objects.count(), 1)
+        customer = Customer.objects.get()
+        self.assertIn("Tipo de ambiente: Cozinha", customer.notes)
+        self.assertIn("Mensagem A", customer.notes)
+        self.assertIn("Tipo de ambiente: Banheiro", customer.notes)
+        self.assertIn("Mensagem B", customer.notes)
+        self.assertEqual(
+            AuditEvent.objects.filter(
+                object_type="Customer",
+                object_id=str(customer.pk),
+                action__in=["public_contact_received", "public_contact_deduplicated"],
+            ).count(),
+            2,
+        )
+        self.assertEqual(len(mail.outbox), 2)
+
+    def test_phone_email_conflict_does_not_merge_customers(self):
+        Customer.objects.create(
+            customer_type=Customer.CustomerType.INDIVIDUAL,
+            name="Cliente A",
+            mobile_phone="11999999999",
+            email="a@example.com",
+        )
+        Customer.objects.create(
+            customer_type=Customer.CustomerType.INDIVIDUAL,
+            name="Cliente B",
+            mobile_phone="11888888888",
+            email="b@example.com",
+        )
+
+        response = self.post_contact(
+            telefone="(11) 99999-9999",
+            email="b@example.com",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Não foi possível validar os dados informados")
+        self.assertEqual(Customer.objects.count(), 2)
+        self.assertEqual(Customer.objects.get(name="Cliente A").email, "a@example.com")
+        self.assertEqual(Customer.objects.get(name="Cliente B").mobile_phone, "11888888888")
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                action="public_contact_identity_conflict",
+                status="failed",
+            ).exists(),
+        )
+
+    def test_smtp_failure_keeps_customer_and_does_not_return_500(self):
+        with (
+            patch(
+                "src.institutional.application.contact_requests.EmailMessage.send",
+                side_effect=RuntimeError("SMTP indisponível"),
+            ),
+            patch("src.institutional.application.contact_requests.logger.exception"),
+            self.captureOnCommitCallbacks(execute=True),
+        ):
+            response = self.post_contact()
+
+        self.assertRedirects(response, reverse("institutional:contato"))
+        customer = Customer.objects.get()
+        self.assertIn("Bancada em granito", customer.notes)
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                object_type="Customer",
+                object_id=str(customer.pk),
+                action="public_contact_notification",
+                status="failed",
+            ).exists(),
+        )
+
+    def test_database_failure_does_not_send_smtp(self):
+        self.client.raise_request_exception = False
+        with patch(
+            "src.institutional.presentation.views.persist_public_contact_request",
+            side_effect=RuntimeError("falha banco"),
+        ):
+            response = self.post_contact()
+
+        self.assertEqual(response.status_code, 500)
+        self.assertFalse(Customer.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_submission_is_visible_to_commercial_customer_flow(self):
+        with self.captureOnCommitCallbacks(execute=True):
+            self.post_contact()
+
+        self.assertTrue(
+            Customer.objects.filter(
+                name="Maria Silva",
+                notes__contains="[Site institucional] Solicitação de orçamento",
+                is_active=True,
+            ).exists(),
+        )

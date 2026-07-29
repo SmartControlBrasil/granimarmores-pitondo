@@ -1,5 +1,26 @@
 from django.contrib import messages
+from django.db import transaction
+from django.shortcuts import redirect
 from django.shortcuts import render
+
+from src.institutional.application.contact_requests import (
+    PublicContactIdentityConflict,
+)
+from src.institutional.application.contact_requests import (
+    PublicContactValidationError,
+)
+from src.institutional.application.contact_requests import (
+    persist_public_contact_request,
+)
+from src.institutional.application.contact_requests import (
+    record_public_contact_identity_conflict,
+)
+from src.institutional.application.contact_requests import (
+    send_public_contact_notification,
+)
+from src.institutional.application.contact_requests import (
+    validate_public_contact_request,
+)
 
 
 PAGE_DIR = "institutional/pages/"
@@ -46,20 +67,42 @@ def blog_article(request, slug):
 
 
 def contato(request):
-    required_fields = ["nome", "telefone", "cidade", "ambiente", "mensagem"]
     if request.method == "POST":
-        missing_fields = [field for field in required_fields if not request.POST.get(field, "").strip()]
-        consent = request.POST.get("privacidade")
         website = request.POST.get("website", "").strip()
 
         if website:
-            messages.error(request, "Não foi possível processar a solicitação. Tente novamente.")
-        elif missing_fields:
-            messages.error(request, "Preencha os campos obrigatórios para solicitar a avaliação.")
-        elif not consent:
-            messages.error(request, "Confirme o consentimento para contato antes de enviar.")
+            messages.success(request, "Solicitação recebida. Nossa equipe entrará em contato.")
+            return redirect("institutional:contato")
+
+        try:
+            contact_request = validate_public_contact_request(request.POST)
+        except PublicContactValidationError as exc:
+            messages.error(request, str(exc))
         else:
-            messages.success(request, "Solicitação recebida. A equipe poderá usar os dados informados para retornar o contato.")
+            try:
+                customer, _ = persist_public_contact_request(
+                    contact_request,
+                    request=request,
+                )
+            except PublicContactIdentityConflict as exc:
+                record_public_contact_identity_conflict(
+                    contact_request,
+                    request=request,
+                )
+                messages.error(request, str(exc))
+            else:
+                transaction.on_commit(
+                    lambda: send_public_contact_notification(
+                        customer,
+                        contact_request,
+                        request=request,
+                    ),
+                )
+                messages.success(
+                    request,
+                    "Solicitação recebida. Nossa equipe entrará em contato.",
+                )
+                return redirect("institutional:contato")
 
     return render(request, page_template("contact"))
 
