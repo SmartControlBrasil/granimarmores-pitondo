@@ -20,288 +20,83 @@
 
         <div id="de-loader"></div>
 
-        <section class="relative overflow-hidden jarallax">
 
-            <div class="spacer-double"></div>
+<section
+    id="section-intro"
+    class="section-dark text-light no-top no-bottom position-relative overflow-hidden z-1000"
+>
+    <div class="mh-800 relative">
 
-            <div class="container relative z-2">
+        <div class="spacer-double"></div>
+        <div class="spacer-double"></div>
+        <div class="spacer-single sm-hide"></div>
 
-                <div class="row g-4 align-items-center justify-content-between">
+        <div class="container relative z-2">
+            <div class="row g-4">
+                <div class="col-md-5">
 
-                    <div class="col-lg-12">
+                    <p>
+                        Transformamos áreas gourmet em ambientes elegantes,
+                        funcionais e preparados para momentos de convivência,
+                        com bancadas, ilhas, churrasqueiras, pias e superfícies
+                        produzidas sob medida para cada projeto.
+                    </p>
 
-                        <div class="text-start">
-
-                            <h1 class="fs-120 fs-sm-10vw mb-0 wow fadeInLeft">
-                                Áreas Gourmet
-                            </h1>
-
-                        </div>
-
-                        <div class="text-lg-end">
-
-                            <h1
-                                class="fs-120 fs-sm-10vw mb-0 wow fadeInRight"
-                                data-wow-delay=".2s"
-                            >
-                                Sob Medida
-                            </h1>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-5">
-
-                        <p
-                            class="wow fadeInUp"
-                            data-wow-delay=".4s"
-                        >
-                            Bancadas gourmet, ilhas, churrasqueiras, balcões,
-                            pias, cubas, frontões e rodabancas pensados para
-                            integrar cozinha, lazer e convivência.
-                        </p>
-
-                    </div>
-
-                    <div class="col-lg-4 text-lg-end">
-
-                        <a
-                            href="{% url 'institutional:contato' %}"
-                            class="btn-main fx-slide wow fadeInUp"
-                            data-wow-delay=".6s"
-                        >
-                            <span>
-                                Solicitar orçamento
-                            </span>
-                        </a>
-
-                    </div>
+                    <a
+                        href="{% url 'institutional:contato' %}"
+                        class="btn-main fx-slide mt-3"
+                    >
+                        <span>
+                            Solicitar orçamento
+                        </span>
+                    </a>
 
                 </div>
-
             </div>
+        </div>
 
-        </section>
-
-        <section
-            class="p-0 overflow-hidden"
-            aria-label="Galeria de áreas gourmet"
-        >
-
-            <div class="container-fluid">
-
-                <div class="row">
-
-                    <div class="col-lg-12">
-
-                        <div class="relative overflow-hidden">
-
-                            <div
-                                class="owl-custom-nav menu-float"
-                                data-target="#carousel-6"
-                            >
-
-                                <a class="btn-next"></a>
-                                <a class="btn-prev"></a>
-
-                                <div
-                                    id="carousel-6"
-                                    class="owl-single owl-carousel owl-theme"
-                                >
-
-                                    <div class="item">
-
-                                        <div class="relative">
-
-                                            <div class="overflow-hidden">
-
-                                                <img
-                                                    src="{% static 'institutional/images/slider-wide/area-gourmet-externa.webp' %}"
-                                                    class="w-100"
-                                                    alt="Área gourmet com bancada em pedra"
-                                                >
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="item">
-
-                                        <div class="relative">
-
-                                            <div class="overflow-hidden">
-
-                                                <img
-                                                    src="{% static 'institutional/images/slider-wide/2.webp' %}"
-                                                    class="w-100"
-                                                    alt="Balcão gourmet integrado ao ambiente"
-                                                >
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="item">
-
-                                        <div class="relative">
-
-                                            <div class="overflow-hidden">
-
-                                                <img
-                                                    src="{% static 'institutional/images/slider-wide/3.webp' %}"
-                                                    class="w-100"
-                                                    alt="Ilha gourmet produzida sob medida"
-                                                >
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section>
-
+        <div class="abs w-80 abs-center bottom-10 z-2 w-100">
             <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
 
-                <div class="row g-4 gx-5 justify-content-between">
-
-                    <div class="col-md-7">
-
-                        <div class="subtitle">
-                            Uso interno e externo
-                        </div>
-
-                        <h2
-                            class="wow fadeInRight"
-                            data-wow-delay=".2s"
-                        >
-                            Materiais escolhidos conforme exposição, rotina de uso
-                            e acabamento desejado
-                        </h2>
+                        <h1 class="fs-sm-10vw mb-0 wow fadeInLeft">
+                            Áreas gourmet feitas para viver bons momentos
+                        </h1>
 
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="col-md-2">
+        <div class="swiper">
+            <div class="swiper-wrapper">
 
-                        <div class="spacer-single sm-hide"></div>
-
-                        <img
-                            src="{% static 'institutional/images/misc/area-gourmet.webp' %}"
-                            class="w-150px"
-                            alt="Amostra de pedra para área gourmet"
-                        >
-
+                <div class="swiper-slide">
+                    <div
+                        class="swiper-inner"
+                        data-bgimage="url({% static 'institutional/images/slider-wide/area-gourmet-externa.webp' %})"
+                    >
+                        <div class="sw-overlay op-5"></div>
                     </div>
-
-                    <div class="col-md-6 offset-lg-6">
-
-                        <p
-                            class="wow fadeInRight"
-                            data-wow-delay=".4s"
-                        >
-                            Áreas externas e cobertas pedem atenção à umidade,
-                            insolação, manutenção e intensidade de uso. A orientação
-                            técnica ajuda a definir o material mais adequado para
-                            cada ambiente.
-                        </p>
-
-                    </div>
-
                 </div>
 
-                <div class="spacer-double"></div>
-
-                <div class="row g-4">
-
-                    <div class="col-md-3 col-sm-6">
-
-                        <div class="de_count wow fadeInRight">
-
-                            <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-kitchen-set"></i>
-                            </h3>
-
-                            Bancadas e ilhas
-
-                        </div>
-
+                <div class="swiper-slide">
+                    <div
+                        class="swiper-inner"
+                        data-bgimage="url({% static 'institutional/images/slider-wide/2.webp' %})"
+                    >
+                        <div class="sw-overlay op-5"></div>
                     </div>
-
-                    <div class="col-md-3 col-sm-6">
-
-                        <div
-                            class="de_count wow fadeInRight"
-                            data-wow-delay=".2s"
-                        >
-
-                            <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-fire-burner"></i>
-                            </h3>
-
-                            Churrasqueiras
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-
-                        <div
-                            class="de_count wow fadeInRight"
-                            data-wow-delay=".4s"
-                        >
-
-                            <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-faucet-drip"></i>
-                            </h3>
-
-                            Pias e cubas
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-
-                        <div
-                            class="de_count wow fadeInRight"
-                            data-wow-delay=".6s"
-                        >
-
-                            <h3 class="fs-40 mb-0">
-                                <i class="fa-solid fa-screwdriver-wrench"></i>
-                            </h3>
-
-                            Instalação
-
-                        </div>
-
-                    </div>
-
                 </div>
 
             </div>
+        </div>
 
-        </section>
+    </div>
+</section>
+
+
 
         <section class="bg-dark-1 text-light">
 
