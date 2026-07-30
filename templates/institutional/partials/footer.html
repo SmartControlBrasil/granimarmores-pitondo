@@ -165,6 +165,23 @@
 
                     </div>
 
+                    <div class="mt-4">
+
+                        <a
+                             href="https://wa.me/5511940241328?text=Olá%20vim%20pelo%20site%2C%20gostaria%20de%20um%20orçamento."
+                            class="btn-main fx-slide"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Falar com a Granimármores Pitondo pelo WhatsApp"
+                        >
+                            <span>
+                                <i class="fa-brands fa-whatsapp me-2"></i>
+                                Falar pelo WhatsApp
+                            </span>
+                        </a>
+
+                    </div>
+
                 </div>
 
             </div>
@@ -188,15 +205,58 @@
         </div>
 
     </div>
-
+    </footer>
     <a
     href="https://wa.me/5511940241328?text=Olá%20vim%20pelo%20site%2C%20gostaria%20de%20um%20orçamento."
     class="whatsapp-float"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Falar pelo WhatsApp"
->
+    >
     <i class="fa-brands fa-whatsapp"></i>
-</a>
+    </a>
 
-</footer>
+    <style>
+    .whatsapp-float {
+        position: fixed;
+        right: 25px;
+        bottom: 95px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #25d366;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        text-decoration: none;
+        z-index: 9999;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease,
+            background 0.25s ease;
+    }
+
+    .whatsapp-float:hover {
+        background: #1ebe5d;
+        color: #ffffff;
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .whatsapp-float:focus {
+        color: #ffffff;
+    }
+
+    @media (max-width: 767px) {
+        .whatsapp-float {
+            right: 18px;
+            bottom: 90px;
+            width: 55px;
+            height: 55px;
+            font-size: 29px;
+        }
+    }
+    </style>
