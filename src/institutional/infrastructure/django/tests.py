@@ -293,3 +293,81 @@ class InstitutionalPagesTests(TestCase):
                 is_active=True,
             ).exists(),
         )
+
+
+@override_settings(SITE_DOMAIN="granimarmorespitondo.com.br")
+class InstitutionalSitemapTests(TestCase):
+    PUBLIC_PATHS = (
+        "/",
+        "/sobre/",
+        "/solucoes/",
+        "/projetos/",
+        "/materiais/",
+        "/cozinhas/",
+        "/banheiros/",
+        "/escadas/",
+        "/areas-gourmet/",
+        "/projetos-comerciais/",
+        "/blog/",
+        "/contato/",
+        "/orcamento/",
+        "/blog/escolher-pedra-bancada-cozinha/",
+        "/blog/marmore-ou-granito-diferencas/",
+        "/blog/cuidados-conservar-bancadas-pedra/",
+    )
+
+    PRIVATE_PATH_FRAGMENTS = (
+        "/admin/",
+        "/accounts/",
+        "/users/",
+        "/painel/",
+        "/painel/comercial/orcamentos/",
+        "/painel/clientes/",
+        "/painel/administracao/",
+    )
+
+    def test_sitemap_returns_xml_with_public_urls(self):
+        response = self.client.get("/sitemap.xml")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/xml")
+        content = response.content.decode()
+
+        self.assertIn('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"', content)
+        self.assertIn("<urlset", content)
+
+        for path in self.PUBLIC_PATHS:
+            with self.subTest(path=path):
+                self.assertIn(
+                    f"https://granimarmorespitondo.com.br{path}",
+                    content,
+                )
+
+        for fragment in self.PRIVATE_PATH_FRAGMENTS:
+            with self.subTest(fragment=fragment):
+                self.assertNotIn(fragment, content)
+
+    def test_sitemap_uses_reverse_for_institutional_routes(self):
+        response = self.client.get("/sitemap.xml")
+        content = response.content.decode()
+
+        expected_urls = {
+            reverse("institutional:home"),
+            reverse("institutional:sobre"),
+            reverse("institutional:cozinhas"),
+            reverse("institutional:banheiros"),
+            reverse("institutional:escadas"),
+            reverse("institutional:areas_gourmet"),
+            reverse("institutional:projetos_comerciais"),
+            reverse("institutional:blog"),
+            reverse("institutional:contato"),
+            reverse(
+                "institutional:blog_article",
+                kwargs={"slug": "escolher-pedra-bancada-cozinha"},
+            ),
+        }
+
+        for path in expected_urls:
+            with self.subTest(path=path):
+                self.assertIn(f"https://granimarmorespitondo.com.br{path}", content)
+

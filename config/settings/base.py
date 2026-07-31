@@ -53,6 +53,11 @@ ALLOWED_HOSTS = env.list(
     ],
 )
 
+SITE_DOMAIN = env(
+    "SITE_DOMAIN",
+    default="granimarmorespitondo.com.br",
+)
+
 
 # =============================================================================
 # APLICAÇÕES
@@ -66,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     "django.forms",
 
     # Terceiros usados pelo Hando
