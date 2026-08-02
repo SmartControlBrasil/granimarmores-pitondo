@@ -1,0 +1,22 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:survey_create' %}" class="btn btn-sm btn-primary">Nova pesquisa</a>
+{% endblock card_actions %}
+{% block table_content %}
+<table class="table table-sm">
+  <thead><tr><th>Cliente</th><th>Pedido</th><th>Tipo</th><th>Status</th><th>Nota</th><th>Solicitada</th><th></th></tr></thead>
+  <tbody>
+    {% for s in page_obj %}
+      <tr>
+        <td>{{ s.customer }}</td>
+        <td>{% if s.sales_order %}{{ s.sales_order.number }}{% else %}—{% endif %}</td>
+        <td>{{ s.get_survey_type_display }}</td>
+        <td>{{ s.get_status_display }}</td>
+        <td>{% if s.overall_score %}{{ s.overall_score }}{% else %}—{% endif %}</td>
+        <td>{{ s.requested_at|date:"d/m/Y" }}</td>
+        <td>{% if s.status != "responded" %}<a href="{% url 'after_sales:survey_respond' s.pk %}">Responder</a>{% endif %}</td>
+      </tr>
+    {% empty %}<tr><td colspan="7" class="text-muted">Nenhuma pesquisa.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock table_content %}

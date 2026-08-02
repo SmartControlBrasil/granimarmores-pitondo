@@ -125,6 +125,26 @@
     </div>
   {% endif %}
 
+  {% if after_sales_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Pós-venda</h5>
+            <a href="{% url 'after_sales:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard de Pós-venda</a>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-2"><p class="text-muted mb-1">Casos abertos</p><h4>{{ after_sales_summary.open_cases }}</h4></div>
+            <div class="col-md-2"><p class="text-muted mb-1">Críticos</p><h4>{{ after_sales_summary.critical }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Pendências vencidas</p><h4>{{ after_sales_summary.overdue_pending }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Visitas assistência hoje</p><h4>{{ after_sales_summary.visits_today }}</h4></div>
+            <div class="col-md-2"><p class="text-muted mb-1">Satisfação recente</p><h4>{% if after_sales_summary.avg_satisfaction %}{{ after_sales_summary.avg_satisfaction }}{% else %}—{% endif %}</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

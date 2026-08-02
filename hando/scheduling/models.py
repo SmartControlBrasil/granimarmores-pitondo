@@ -216,6 +216,13 @@ class OperationalEvent(TimeStampedModel, AuditableModel):
         on_delete=models.SET_NULL,
         related_name="operational_event",
     )
+    after_sales_case = models.ForeignKey(
+        "after_sales.AfterSalesCase",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="operational_events",
+    )
     vehicle = models.ForeignKey(
         "fleet.Vehicle",
         null=True,

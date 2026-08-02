@@ -1,0 +1,44 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:case_create' %}" class="btn btn-sm btn-primary">Novo caso</a>
+{% endblock card_actions %}
+{% block table_content %}
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-2"><input type="text" name="q" class="form-control" placeholder="Buscar" value="{{ request.GET.q }}"></div>
+  <div class="col-md-2"><select name="status" class="form-select"><option value="">Status</option>{% for val, label in status_choices %}<option value="{{ val }}"{% if request.GET.status == val %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="case_type" class="form-select"><option value="">Tipo</option>{% for val, label in type_choices %}<option value="{{ val }}"{% if request.GET.case_type == val %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="priority" class="form-select"><option value="">Prioridade</option>{% for val, label in priority_choices %}<option value="{{ val }}"{% if request.GET.priority == val %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="severity" class="form-select"><option value="">Severidade</option>{% for val, label in severity_choices %}<option value="{{ val }}"{% if request.GET.severity == val %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2 form-check"><input class="form-check-input" type="checkbox" name="open" value="1" id="open"{% if request.GET.open == "1" %} checked{% endif %}><label class="form-check-label" for="open">Abertos</label></div>
+  <div class="col-md-2 form-check"><input class="form-check-input" type="checkbox" name="critical" value="1" id="critical"{% if request.GET.critical == "1" %} checked{% endif %}><label class="form-check-label" for="critical">Críticos</label></div>
+  <div class="col-md-2 form-check"><input class="form-check-input" type="checkbox" name="no_owner" value="1" id="no_owner"{% if request.GET.no_owner == "1" %} checked{% endif %}><label class="form-check-label" for="no_owner">Sem responsável</label></div>
+  <div class="col-md-2 form-check"><input class="form-check-input" type="checkbox" name="overdue" value="1" id="overdue"{% if request.GET.overdue == "1" %} checked{% endif %}><label class="form-check-label" for="overdue">Atrasados</label></div>
+  <div class="col-md-2"><button class="btn btn-light" type="submit">Filtrar</button></div>
+</form>
+<div class="table-responsive">
+  <table class="table table-sm">
+    <thead><tr><th>Código</th><th>Cliente</th><th>Pedido</th><th>Tipo</th><th>Assunto</th><th>Status</th><th>Prioridade</th><th>Severidade</th><th>Responsável</th><th>Próx. ação</th><th>Garantia</th><th>Abertura</th><th></th></tr></thead>
+    <tbody>
+      {% for case in page_obj %}
+        <tr>
+          <td><a href="{% url 'after_sales:case_detail' case.pk %}">{{ case.code }}</a></td>
+          <td>{{ case.customer }}</td>
+          <td>{% if case.sales_order %}{{ case.sales_order.number }}{% else %}—{% endif %}</td>
+          <td>{{ case.get_case_type_display }}</td>
+          <td>{{ case.subject }}</td>
+          <td>{{ case.get_status_display }}</td>
+          <td>{{ case.get_priority_display }}</td>
+          <td>{{ case.get_severity_display }}</td>
+          <td>{% if case.assigned_user %}{{ case.assigned_user }}{% elif case.assigned_salesperson %}{{ case.assigned_salesperson }}{% else %}—{% endif %}</td>
+          <td>{% if case.next_action_at %}{{ case.next_action_at|date:"d/m/Y H:i" }}{% else %}—{% endif %}</td>
+          <td>{% if case.warranty_eligible %}{{ case.get_warranty_eligible_display }}{% else %}—{% endif %}</td>
+          <td>{{ case.opened_at|date:"d/m/Y" }}</td>
+          <td><a href="{% url 'after_sales:case_detail' case.pk %}">Abrir</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="13" class="text-muted">Nenhum caso.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock table_content %}

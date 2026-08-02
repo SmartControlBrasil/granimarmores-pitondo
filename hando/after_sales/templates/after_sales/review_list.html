@@ -1,0 +1,20 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:review_create' %}" class="btn btn-sm btn-primary">Solicitar avaliação</a>
+{% endblock card_actions %}
+{% block table_content %}
+<table class="table table-sm">
+  <thead><tr><th>Cliente</th><th>Pedido</th><th>Canal</th><th>Status</th><th>Data</th></tr></thead>
+  <tbody>
+    {% for r in page_obj %}
+      <tr>
+        <td>{{ r.customer }}</td>
+        <td>{% if r.sales_order %}{{ r.sales_order.number }}{% else %}—{% endif %}</td>
+        <td>{{ r.channel|default:"—" }}</td>
+        <td>{{ r.get_status_display }}</td>
+        <td>{{ r.requested_at|date:"d/m/Y" }}</td>
+      </tr>
+    {% empty %}<tr><td colspan="5" class="text-muted">Nenhuma solicitação.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock table_content %}

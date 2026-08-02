@@ -1,0 +1,23 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:referral_create' %}" class="btn btn-sm btn-primary">Registrar indicação</a>
+{% endblock card_actions %}
+{% block table_content %}
+<table class="table table-sm">
+  <thead><tr><th>Indicador</th><th>Indicado</th><th>Telefone</th><th>Status</th><th>Lead</th><th></th></tr></thead>
+  <tbody>
+    {% for r in page_obj %}
+      <tr>
+        <td>{{ r.referring_customer }}</td>
+        <td>{{ r.referred_name }}</td>
+        <td>{{ r.referred_phone|default:"—" }}</td>
+        <td>{{ r.get_status_display }}</td>
+        <td>{% if r.converted_lead %}{{ r.converted_lead.code }}{% else %}—{% endif %}</td>
+        <td>{% if not r.converted_lead_id %}
+          <form method="post" action="{% url 'after_sales:referral_convert' r.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-primary">Converter em lead</button></form>
+        {% endif %}</td>
+      </tr>
+    {% empty %}<tr><td colspan="6" class="text-muted">Nenhuma indicação.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock table_content %}

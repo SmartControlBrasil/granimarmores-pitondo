@@ -1,0 +1,27 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:pending_create' %}" class="btn btn-sm btn-primary">Registrar pendência</a>
+{% endblock card_actions %}
+{% block table_content %}
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-3"><select name="status" class="form-select"><option value="">Status</option>{% for val, label in status_choices %}<option value="{{ val }}"{% if request.GET.status == val %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2 form-check"><input class="form-check-input" type="checkbox" name="open" value="1" id="open"{% if request.GET.open == "1" %} checked{% endif %}><label for="open" class="form-check-label">Abertas</label></div>
+  <div class="col-md-2"><button class="btn btn-light" type="submit">Filtrar</button></div>
+</form>
+<table class="table table-sm">
+  <thead><tr><th>Pedido</th><th>Descrição</th><th>Prioridade</th><th>Prazo</th><th>Status</th><th>Caso</th><th></th></tr></thead>
+  <tbody>
+    {% for item in page_obj %}
+      <tr>
+        <td>{{ item.sales_order.number }}</td>
+        <td>{{ item.description|truncatechars:80 }}</td>
+        <td>{{ item.get_priority_display }}</td>
+        <td>{% if item.due_date %}{{ item.due_date|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+        <td>{{ item.get_status_display }}</td>
+        <td>{% if item.after_sales_case %}<a href="{% url 'after_sales:case_detail' item.after_sales_case.pk %}">{{ item.after_sales_case.code }}</a>{% else %}—{% endif %}</td>
+        <td>{% if item.status != "resolved" and item.status != "cancelled" %}<a href="{% url 'after_sales:pending_resolve' item.pk %}">Resolver</a>{% endif %}</td>
+      </tr>
+    {% empty %}<tr><td colspan="7" class="text-muted">Nenhuma pendência.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock table_content %}

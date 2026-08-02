@@ -1,0 +1,37 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
+  <form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+      <select name="period" class="form-select">
+        <option value="today"{% if period == "today" %} selected{% endif %}>Hoje</option>
+        <option value="7d"{% if period == "7d" %} selected{% endif %}>7 dias</option>
+        <option value="30d"{% if period == "30d" %} selected{% endif %}>30 dias</option>
+        <option value="month"{% if period == "month" %} selected{% endif %}>Mês</option>
+      </select>
+    </div>
+    <div class="col-auto"><button class="btn btn-light" type="submit">Filtrar</button></div>
+  </form>
+  {% if metrics.alerts %}
+    <div class="mb-3">{% for alert in metrics.alerts %}<div class="alert alert-{{ alert.level }} py-2">{{ alert.message }}</div>{% endfor %}</div>
+  {% endif %}
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Casos abertos</div><div class="fs-20 fw-bold">{{ metrics.open_cases }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Críticos</div><div class="fs-20 fw-bold">{{ metrics.critical }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Sem responsável</div><div class="fs-20 fw-bold">{{ metrics.no_owner }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Visitas hoje</div><div class="fs-20 fw-bold">{{ metrics.visits_today }}</div></div></div></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Resolvidos</div><div class="fs-20 fw-bold">{{ metrics.resolved }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Fechados</div><div class="fs-20 fw-bold">{{ metrics.closed }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Taxa resolução</div><div class="fs-20 fw-bold">{{ metrics.resolution_rate }}%</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Satisfação média</div><div class="fs-20 fw-bold">{% if metrics.avg_satisfaction %}{{ metrics.avg_satisfaction }}{% else %}—{% endif %}</div></div></div></div>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-6"><div class="card"><div class="card-body"><h5>Por tipo</h5>{% for row in metrics.by_type %}<div>{{ row.case_type }}: {{ row.total }}</div>{% empty %}<p class="text-muted">Sem dados.</p>{% endfor %}</div></div></div>
+    <div class="col-lg-6"><div class="card"><div class="card-body"><h5>Por causa raiz</h5>{% for row in metrics.by_root_cause %}<div>{{ row.root_cause }}: {{ row.total }}</div>{% empty %}<p class="text-muted">Sem dados.</p>{% endfor %}</div></div></div>
+  </div>
+</div>
+{% endblock page_content %}

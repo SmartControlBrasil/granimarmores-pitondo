@@ -30,6 +30,7 @@ from production.models import SalesOrder
 from production.models import SalesOrderStatus
 from production.selectors import overdue_production_orders
 from production.selectors import sales_orders_queryset_for_user
+from after_sales.selectors import main_dashboard_after_sales_summary
 from materials.stock_selectors import main_dashboard_stock_summary
 from quotes.models import Quote
 from scheduling.selectors import main_dashboard_schedule_summary
@@ -257,12 +258,15 @@ def root_page_view(request):
     ):
         schedule_summary = main_dashboard_schedule_summary(user)
 
+    after_sales_summary = main_dashboard_after_sales_summary(user)
+
     context = {
         "cards": cards,
         "lead_links": lead_links,
         "performance_summary": performance_summary,
         "stock_summary": stock_summary,
         "schedule_summary": schedule_summary,
+        "after_sales_summary": after_sales_summary,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")
         else [],

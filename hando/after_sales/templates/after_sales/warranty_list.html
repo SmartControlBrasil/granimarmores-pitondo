@@ -1,0 +1,23 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:warranty_create' %}" class="btn btn-sm btn-primary">Nova garantia</a>
+{% endblock card_actions %}
+{% block table_content %}
+<table class="table table-sm">
+  <thead><tr><th>Número</th><th>Cliente</th><th>Pedido</th><th>Cobertura</th><th>Início</th><th>Fim</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+    {% for w in page_obj %}
+      <tr>
+        <td><a href="{% url 'after_sales:warranty_detail' w.pk %}">{{ w.number }}</a></td>
+        <td>{{ w.customer }}</td>
+        <td>{{ w.sales_order.number }}</td>
+        <td>{{ w.get_coverage_type_display }}</td>
+        <td>{{ w.start_date|date:"d/m/Y" }}</td>
+        <td>{% if w.end_date %}{{ w.end_date|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+        <td>{{ w.get_status_display }}</td>
+        <td><a href="{% url 'after_sales:warranty_detail' w.pk %}">Detalhe</a></td>
+      </tr>
+    {% empty %}<tr><td colspan="8" class="text-muted">Nenhuma garantia.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock table_content %}

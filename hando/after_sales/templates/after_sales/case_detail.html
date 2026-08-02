@@ -1,0 +1,141 @@
+{% extends "vertical.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex align-items-center gap-2">
+    <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ case.code }} — {{ case.subject }}</h4>
+    <span class="badge bg-secondary">{{ case.get_status_display }}</span>
+    <span class="badge bg-warning text-dark">{{ case.get_priority_display }}</span>
+    <span class="badge bg-danger">{{ case.get_severity_display }}</span>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-8">
+      <div class="card"><div class="card-body">
+        <p><strong>Cliente:</strong> {{ case.customer }}</p>
+        {% if case.sales_order %}<p><strong>Pedido:</strong> <a href="{% url 'operacao:order_detail' case.sales_order.pk %}">{{ case.sales_order.number }}</a></p>{% endif %}
+        {% if case.delivery_schedule %}<p><strong>Entrega:</strong> {{ case.delivery_schedule }}</p>{% endif %}
+        {% if case.installation_schedule %}<p><strong>Instalação:</strong> {{ case.installation_schedule }}</p>{% endif %}
+        <p><strong>Tipo:</strong> {{ case.get_case_type_display }}</p>
+        <p><strong>Responsável:</strong> {% if case.assigned_user %}{{ case.assigned_user }}{% elif case.assigned_salesperson %}{{ case.assigned_salesperson }}{% else %}—{% endif %}</p>
+        <p><strong>Descrição:</strong><br>{{ case.description|linebreaksbr }}</p>
+        {% if case.technical_diagnosis %}<p><strong>Diagnóstico:</strong><br>{{ case.technical_diagnosis|linebreaksbr }}</p>{% endif %}
+        {% if case.root_cause %}<p><strong>Causa raiz:</strong> {{ case.get_root_cause_display }}{% if case.root_cause_notes %} — {{ case.root_cause_notes }}{% endif %}</p>{% endif %}
+        {% if case.responsibility %}<p><strong>Responsabilidade:</strong> {{ case.get_responsibility_display }}{% if case.responsibility_notes %} — {{ case.responsibility_notes }}{% endif %}</p>{% endif %}
+        {% if case.warranty or case.warranty_eligible %}
+          <p><strong>Garantia:</strong> {% if case.warranty %}{{ case.warranty.number }} · {% endif %}{% if case.warranty_eligible %}{{ case.get_warranty_eligible_display }}{% endif %}</p>
+          {% if case.warranty_decision_notes %}<p class="small text-muted">{{ case.warranty_decision_notes }}</p>{% endif %}
+        {% endif %}
+        {% if case.resolution %}<p><strong>Resolução:</strong><br>{{ case.resolution|linebreaksbr }}</p>{% endif %}
+        {% if case.material_request_notes %}<p><strong>Material:</strong> {{ case.material_request_notes }}</p>{% endif %}
+        {% if case.rework_production_order %}<p><strong>Retrabalho:</strong> {{ case.rework_production_order.number }} ({{ case.get_rework_origin_display }})</p>{% endif %}
+      </div></div>
+
+      {% if interactions %}
+      <div class="card mt-3"><div class="card-body"><h5>Interações</h5>
+        {% for i in interactions %}<div class="border-bottom py-2"><div class="small text-muted">{{ i.occurred_at|date:"d/m/Y H:i" }} · {{ i.get_interaction_type_display }} · {{ i.created_by }}</div>{{ i.description }}</div>{% endfor %}
+      </div></div>
+      {% endif %}
+
+      {% if events %}
+      <div class="card mt-3"><div class="card-body"><h5>Visitas / eventos</h5>
+        {% for e in events %}<div><a href="{% url 'scheduling:event_detail' e.pk %}">{{ e.code }}</a> — {{ e.title }} · {{ e.start_at|date:"d/m/Y H:i" }} · {{ e.get_status_display }}</div>{% endfor %}
+      </div></div>
+      {% endif %}
+
+      {% if pending_items %}
+      <div class="card mt-3"><div class="card-body"><h5>Pendências</h5>
+        {% for p in pending_items %}<div>{{ p.description }} — {{ p.get_status_display }}</div>{% endfor %}
+      </div></div>
+      {% endif %}
+
+      {% if attachments %}
+      <div class="card mt-3"><div class="card-body"><h5>Anexos</h5>
+        {% for a in attachments %}<div>{{ a.get_attachment_type_display }} — {{ a.description|default:a.file.name }} <span class="small text-muted">(acesso restrito ao painel)</span></div>{% endfor %}
+      </div></div>
+      {% endif %}
+
+      {% if surveys %}
+      <div class="card mt-3"><div class="card-body"><h5>Satisfação</h5>
+        {% for s in surveys %}<div>{{ s.get_survey_type_display }} · {{ s.get_status_display }}{% if s.overall_score %} · nota {{ s.overall_score }}{% endif %}</div>{% endfor %}
+      </div></div>
+      {% endif %}
+
+      {% if history %}
+      <div class="card mt-3"><div class="card-body"><h5>Histórico</h5>
+        {% for h in history %}<div class="small border-bottom py-1">{{ h.created_at|date:"d/m/Y H:i" }} · {{ h.get_action_display }}{% if h.old_status %} ({{ h.old_status }} → {{ h.new_status }}){% endif %} — {{ h.description }}</div>{% endfor %}
+      </div></div>
+      {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card mb-3"><div class="card-body">
+        <h5>Ações rápidas</h5>
+        <form method="post" action="{% url 'after_sales:case_triage' case.pk %}" class="mb-2">{% csrf_token %}<button class="btn btn-light btn-sm w-100">Triar</button></form>
+        <form method="post" action="{% url 'after_sales:case_start' case.pk %}" class="mb-2">{% csrf_token %}<button class="btn btn-light btn-sm w-100">Iniciar atendimento</button></form>
+        <form method="post" action="{% url 'after_sales:case_evaluate_warranty' case.pk %}" class="mb-2">{% csrf_token %}<button class="btn btn-light btn-sm w-100">Avaliar garantia</button></form>
+      </div></div>
+
+      {% if can_assign %}
+      <div class="card mb-3"><div class="card-body"><h6>Atribuir</h6>
+        <form method="post" action="{% url 'after_sales:case_assign' case.pk %}">{% csrf_token %}{{ assign_form|crispy }}<button class="btn btn-primary btn-sm">Atribuir</button></form>
+      </div></div>
+      {% endif %}
+
+      <div class="card mb-3"><div class="card-body"><h6>Registrar contato</h6>
+        <form method="post" action="{% url 'after_sales:case_interaction' case.pk %}">{% csrf_token %}{{ interaction_form|crispy }}<button class="btn btn-primary btn-sm">Salvar</button></form>
+      </div></div>
+
+      {% if can_diagnose %}
+      <div class="card mb-3"><div class="card-body"><h6>Diagnóstico</h6>
+        <form method="post" action="{% url 'after_sales:case_diagnosis' case.pk %}">{% csrf_token %}{{ diagnosis_form|crispy }}<button class="btn btn-primary btn-sm">Salvar</button></form>
+      </div></div>
+      {% endif %}
+
+      <div class="card mb-3"><div class="card-body"><h6>Alterar status</h6>
+        <form method="post" action="{% url 'after_sales:case_change_status' case.pk %}">{% csrf_token %}{{ status_form|crispy }}<button class="btn btn-primary btn-sm">Atualizar</button></form>
+      </div></div>
+
+      <div class="card mb-3"><div class="card-body"><h6>Agendar visita</h6>
+        <form method="post" action="{% url 'after_sales:case_schedule_visit' case.pk %}">{% csrf_token %}{{ visit_form|crispy }}<button class="btn btn-primary btn-sm">Agendar</button></form>
+      </div></div>
+
+      {% if can_decide_warranty %}
+      <div class="card mb-3"><div class="card-body"><h6>Decisão de garantia</h6>
+        <form method="post" action="{% url 'after_sales:case_decide_warranty' case.pk %}">{% csrf_token %}{{ warranty_decision_form|crispy }}<button class="btn btn-primary btn-sm">Registrar</button></form>
+      </div></div>
+      {% endif %}
+
+      <div class="card mb-3"><div class="card-body"><h6>Solicitar material</h6>
+        <form method="post" action="{% url 'after_sales:case_request_material' case.pk %}">{% csrf_token %}{{ material_form|crispy }}<button class="btn btn-primary btn-sm">Solicitar</button></form>
+      </div></div>
+
+      <div class="card mb-3"><div class="card-body"><h6>Retrabalho</h6>
+        <form method="post" action="{% url 'after_sales:case_link_rework' case.pk %}">{% csrf_token %}{{ rework_form|crispy }}<button class="btn btn-primary btn-sm">Vincular</button></form>
+      </div></div>
+
+      <div class="card mb-3"><div class="card-body"><h6>Anexo</h6>
+        <form method="post" action="{% url 'after_sales:case_attach' case.pk %}" enctype="multipart/form-data">{% csrf_token %}{{ attachment_form|crispy }}<button class="btn btn-primary btn-sm">Enviar</button></form>
+      </div></div>
+
+      {% if can_resolve %}
+      <div class="card mb-3"><div class="card-body"><h6>Resolver</h6>
+        <form method="post" action="{% url 'after_sales:case_resolve' case.pk %}">{% csrf_token %}{{ resolve_form|crispy }}<button class="btn btn-success btn-sm">Resolver</button></form>
+      </div></div>
+      {% endif %}
+
+      {% if can_close %}
+      <div class="card mb-3"><div class="card-body"><h6>Fechar</h6>
+        <form method="post" action="{% url 'after_sales:case_close' case.pk %}">{% csrf_token %}{{ close_form|crispy }}<button class="btn btn-dark btn-sm">Fechar</button></form>
+      </div></div>
+      {% endif %}
+
+      <div class="card mb-3"><div class="card-body"><h6>Reabrir / rejeitar / cancelar</h6>
+        <form method="post" action="{% url 'after_sales:case_reopen' case.pk %}" class="mb-2">{% csrf_token %}{{ reason_form|crispy }}<button class="btn btn-warning btn-sm">Reabrir</button></form>
+        <form method="post" action="{% url 'after_sales:case_reject' case.pk %}" class="mb-2">{% csrf_token %}{{ reason_form|crispy }}<button class="btn btn-outline-danger btn-sm">Rejeitar</button></form>
+        <form method="post" action="{% url 'after_sales:case_cancel' case.pk %}">{% csrf_token %}{{ reason_form|crispy }}<button class="btn btn-outline-secondary btn-sm">Cancelar</button></form>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock page_content %}

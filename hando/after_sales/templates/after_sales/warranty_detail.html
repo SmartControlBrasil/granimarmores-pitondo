@@ -1,0 +1,21 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ warranty.number }}</h4>
+  <div class="card"><div class="card-body">
+    <p><strong>Cliente:</strong> {{ warranty.customer }}</p>
+    <p><strong>Pedido:</strong> {{ warranty.sales_order.number }}</p>
+    <p><strong>Status:</strong> {{ warranty.get_status_display }}</p>
+    <p><strong>Cobertura:</strong> {{ warranty.get_coverage_type_display }}</p>
+    <p><strong>Vigência:</strong> {{ warranty.start_date|date:"d/m/Y" }} — {% if warranty.end_date %}{{ warranty.end_date|date:"d/m/Y" }}{% else %}sem fim definido{% endif %}</p>
+    {% if warranty.coverage_description %}<p>{{ warranty.coverage_description }}</p>{% endif %}
+    {% if warranty.exclusions %}<p><strong>Exclusões:</strong> {{ warranty.exclusions }}</p>{% endif %}
+  </div></div>
+  {% if cases %}
+  <div class="card mt-3"><div class="card-body"><h5>Casos vinculados</h5>
+    {% for c in cases %}<div><a href="{% url 'after_sales:case_detail' c.pk %}">{{ c.code }}</a> — {{ c.subject }}</div>{% endfor %}
+  </div></div>
+  {% endif %}
+</div>
+{% endblock page_content %}

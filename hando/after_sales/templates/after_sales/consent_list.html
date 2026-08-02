@@ -1,0 +1,23 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'after_sales:consent_create' %}" class="btn btn-sm btn-primary">Registrar autorização</a>
+{% endblock card_actions %}
+{% block table_content %}
+<table class="table table-sm">
+  <thead><tr><th>Cliente</th><th>Pedido</th><th>Status</th><th>Escopo</th><th>Autorizado em</th><th></th></tr></thead>
+  <tbody>
+    {% for c in page_obj %}
+      <tr>
+        <td>{{ c.customer }}</td>
+        <td>{% if c.sales_order %}{{ c.sales_order.number }}{% else %}—{% endif %}</td>
+        <td>{{ c.get_consent_status_display }}</td>
+        <td>{{ c.get_consent_scope_display }}</td>
+        <td>{% if c.authorized_at %}{{ c.authorized_at|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+        <td>{% if c.consent_status == "granted" %}
+          <form method="post" action="{% url 'after_sales:consent_revoke' c.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Revogar</button></form>
+        {% endif %}</td>
+      </tr>
+    {% empty %}<tr><td colspan="6" class="text-muted">Nenhuma autorização.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock table_content %}

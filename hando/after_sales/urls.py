@@ -1,0 +1,46 @@
+from django.urls import path
+
+from after_sales import views
+
+app_name = "after_sales"
+
+urlpatterns = [
+    path("dashboard/", views.dashboard, name="dashboard"),
+    path("casos/", views.case_list, name="case_list"),
+    path("casos/novo/", views.case_create, name="case_create"),
+    path("casos/<int:pk>/", views.case_detail, name="case_detail"),
+    path("casos/<int:pk>/triar/", views.case_triage, name="case_triage"),
+    path("casos/<int:pk>/atribuir/", views.case_assign, name="case_assign"),
+    path("casos/<int:pk>/status/", views.case_change_status, name="case_change_status"),
+    path("casos/<int:pk>/contato/", views.case_interaction, name="case_interaction"),
+    path("casos/<int:pk>/diagnostico/", views.case_diagnosis, name="case_diagnosis"),
+    path("casos/<int:pk>/garantia/avaliar/", views.case_evaluate_warranty, name="case_evaluate_warranty"),
+    path("casos/<int:pk>/garantia/decidir/", views.case_decide_warranty, name="case_decide_warranty"),
+    path("casos/<int:pk>/visita/", views.case_schedule_visit, name="case_schedule_visit"),
+    path("casos/<int:pk>/material/", views.case_request_material, name="case_request_material"),
+    path("casos/<int:pk>/iniciar/", views.case_start, name="case_start"),
+    path("casos/<int:pk>/resolver/", views.case_resolve, name="case_resolve"),
+    path("casos/<int:pk>/fechar/", views.case_close, name="case_close"),
+    path("casos/<int:pk>/reabrir/", views.case_reopen, name="case_reopen"),
+    path("casos/<int:pk>/rejeitar/", views.case_reject, name="case_reject"),
+    path("casos/<int:pk>/cancelar/", views.case_cancel, name="case_cancel"),
+    path("casos/<int:pk>/retrabalho/", views.case_link_rework, name="case_link_rework"),
+    path("casos/<int:pk>/anexo/", views.case_attach, name="case_attach"),
+    path("pendencias/", views.pending_list, name="pending_list"),
+    path("pendencias/nova/", views.pending_create, name="pending_create"),
+    path("pendencias/<int:pk>/resolver/", views.pending_resolve, name="pending_resolve"),
+    path("garantias/", views.warranty_list, name="warranty_list"),
+    path("garantias/nova/", views.warranty_create, name="warranty_create"),
+    path("garantias/<int:pk>/", views.warranty_detail, name="warranty_detail"),
+    path("pesquisas/", views.survey_list, name="survey_list"),
+    path("pesquisas/nova/", views.survey_create, name="survey_create"),
+    path("pesquisas/<int:pk>/responder/", views.survey_respond, name="survey_respond"),
+    path("avaliacoes/", views.review_list, name="review_list"),
+    path("avaliacoes/nova/", views.review_create, name="review_create"),
+    path("autorizacoes/", views.consent_list, name="consent_list"),
+    path("autorizacoes/nova/", views.consent_create, name="consent_create"),
+    path("autorizacoes/<int:pk>/revogar/", views.consent_revoke, name="consent_revoke"),
+    path("indicacoes/", views.referral_list, name="referral_list"),
+    path("indicacoes/nova/", views.referral_create, name="referral_create"),
+    path("indicacoes/<int:pk>/converter/", views.referral_convert, name="referral_convert"),
+]

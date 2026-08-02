@@ -329,6 +329,70 @@ SCHEDULE_OPERATIONS = [
     "schedule_measurements.update",
 ]
 
+AFTER_SALES_VIEW = [
+    "after_sales_dashboard.view",
+    "after_sales_cases.view",
+    "installation_pending_items.view",
+    "warranties.view",
+    "customer_satisfaction.view",
+    "review_requests.view",
+    "media_usage_consents.view",
+    "customer_referrals.view",
+]
+
+AFTER_SALES_SELLER = [
+    *AFTER_SALES_VIEW,
+    "after_sales_cases.create",
+    "after_sales_cases.update",
+    "customer_satisfaction.create",
+    "customer_satisfaction.update",
+    "review_requests.create",
+    "review_requests.update",
+    "media_usage_consents.create",
+    "customer_referrals.create",
+    "customer_referrals.convert",
+]
+
+AFTER_SALES_MANAGER = [
+    *AFTER_SALES_SELLER,
+    "after_sales_cases.view_all",
+    "after_sales_cases.assign",
+    "after_sales_cases.change_status",
+    "after_sales_cases.close",
+    "after_sales_cases.reopen",
+    "after_sales_cases.reject",
+    "after_sales_cases.cancel",
+    "warranties.create",
+    "warranties.update",
+    "installation_pending_items.create",
+    "installation_pending_items.update",
+    "media_usage_consents.update",
+    "customer_referrals.update",
+]
+
+AFTER_SALES_OPERATIONS = [
+    *AFTER_SALES_VIEW,
+    "after_sales_cases.view_all",
+    "after_sales_cases.create",
+    "after_sales_cases.update",
+    "after_sales_cases.assign",
+    "after_sales_cases.change_status",
+    "after_sales_cases.diagnose",
+    "after_sales_cases.resolve",
+    "after_sales_cases.close",
+    "after_sales_cases.reopen",
+    "installation_pending_items.create",
+    "installation_pending_items.update",
+    "warranties.view",
+]
+
+AFTER_SALES_PRODUCTION = [
+    "after_sales_cases.view",
+    "after_sales_cases.diagnose",
+    "after_sales_cases.update",
+    "installation_pending_items.view",
+]
+
 ORDERS_MANAGER = [
     "quotes.accept",
     "quotes.refuse",
@@ -346,7 +410,7 @@ ORDERS_MANAGER = [
     "installations.view",
     "installations.schedule",
     "installations.complete",
-] + STOCK_COMMERCIAL_VIEW + SCHEDULE_MANAGER
+] + STOCK_COMMERCIAL_VIEW + SCHEDULE_MANAGER + AFTER_SALES_MANAGER
 
 ORDERS_SELLER = [
     "quotes.accept",
@@ -356,7 +420,7 @@ ORDERS_SELLER = [
     "production_dashboard.view",
     "deliveries.view",
     "installations.view",
-] + STOCK_SELLER_VIEW + SCHEDULE_SELLER
+] + STOCK_SELLER_VIEW + SCHEDULE_SELLER + AFTER_SALES_SELLER
 
 PRODUCTION_OPERATIONS = [
     "sales_orders.view",
@@ -388,7 +452,7 @@ PRODUCTION_OPERATIONS = [
     "deliveries.view",
     "installations.view",
     "production_dashboard.view",
-] + SCHEDULE_OPERATIONS
+] + SCHEDULE_OPERATIONS + AFTER_SALES_OPERATIONS + AFTER_SALES_PRODUCTION
 
 PRODUCTION_STAGE_SEEDS = [
     ("Medição final", "medicao-final", "waiting", 10),

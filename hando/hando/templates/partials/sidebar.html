@@ -77,6 +77,19 @@
           {% if can_prod_stages %}<li><a href="{% url 'producao:stage_list' %}" class="tp-link{% if request.resolver_match.url_name == 'stage_list' %} active{% endif %}"><i data-feather="list"></i><span>Etapas Produtivas</span></a></li>{% endif %}
         {% endif %}
 
+        {% has_permission "after_sales_dashboard.view" as can_as_dash %}{% has_permission "after_sales_cases.view" as can_as_cases %}{% has_permission "installation_pending_items.view" as can_as_pending %}{% has_permission "warranties.view" as can_as_warranties %}{% has_permission "customer_satisfaction.view" as can_as_surveys %}{% has_permission "review_requests.view" as can_as_reviews %}{% has_permission "media_usage_consents.view" as can_as_consents %}{% has_permission "customer_referrals.view" as can_as_referrals %}
+        {% if can_as_dash or can_as_cases or can_as_pending or can_as_warranties or can_as_surveys or can_as_reviews or can_as_consents or can_as_referrals %}
+          <li class="menu-title mt-2">Pós-venda</li>
+          {% if can_as_dash %}<li><a href="{% url 'after_sales:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'after_sales' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
+          {% if can_as_cases %}<li><a href="{% url 'after_sales:case_list' %}" class="tp-link{% if 'case' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'after_sales' %} active{% endif %}"><i data-feather="life-buoy"></i><span>Casos</span></a></li>{% endif %}
+          {% if can_as_pending %}<li><a href="{% url 'after_sales:pending_list' %}" class="tp-link{% if 'pending' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="alert-circle"></i><span>Pendências</span></a></li>{% endif %}
+          {% if can_as_warranties %}<li><a href="{% url 'after_sales:warranty_list' %}" class="tp-link{% if 'warranty' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="shield"></i><span>Garantias</span></a></li>{% endif %}
+          {% if can_as_surveys %}<li><a href="{% url 'after_sales:survey_list' %}" class="tp-link{% if 'survey' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="smile"></i><span>Pesquisas</span></a></li>{% endif %}
+          {% if can_as_reviews %}<li><a href="{% url 'after_sales:review_list' %}" class="tp-link{% if 'review' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="star"></i><span>Avaliações</span></a></li>{% endif %}
+          {% if can_as_consents %}<li><a href="{% url 'after_sales:consent_list' %}" class="tp-link{% if 'consent' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="image"></i><span>Autorizações de Imagem</span></a></li>{% endif %}
+          {% if can_as_referrals %}<li><a href="{% url 'after_sales:referral_list' %}" class="tp-link{% if 'referral' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="users"></i><span>Indicações</span></a></li>{% endif %}
+        {% endif %}
+
         {% has_permission "stock_dashboard.view" as can_stock_dash %}{% has_permission "slabs.view" as can_slabs %}{% has_permission "slab_reservations.view" as can_reservations %}{% has_permission "slab_remnants.view" as can_remnants %}{% has_permission "stock_movements.view" as can_movements %}{% has_permission "stock_inventory.view" as can_inventory %}{% has_permission "stock_locations.view" as can_locations %}{% has_permission "material_suppliers.view" as can_suppliers %}
         {% if can_stock_dash or can_slabs or can_reservations or can_remnants or can_movements or can_inventory or can_locations or can_suppliers %}
           <li class="menu-title mt-2">Estoque</li>

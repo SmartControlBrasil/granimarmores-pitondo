@@ -54,6 +54,8 @@
           {% endif %}
           <a href="{% url 'operacao:delivery_schedule' order.pk %}" class="btn btn-light w-100 mb-2">Agendar entrega</a>
           <a href="{% url 'operacao:installation_schedule' order.pk %}" class="btn btn-light w-100 mb-2">Agendar instalação</a>
+          <a href="{% url 'after_sales:pending_create' %}?order={{ order.pk }}" class="btn btn-light w-100 mb-2">Registrar pendência</a>
+          <a href="{% url 'after_sales:case_create' %}?order={{ order.pk }}" class="btn btn-outline-secondary w-100 mb-2">Abrir caso pós-venda</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}" class="btn btn-outline-primary w-100 mb-2">Agenda operacional</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}?type=measurement" class="btn btn-outline-info w-100 mb-2">Agendar medição</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}?type=return" class="btn btn-outline-info w-100 mb-2">Agendar retorno técnico</a>
