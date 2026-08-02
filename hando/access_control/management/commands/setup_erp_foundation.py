@@ -287,6 +287,48 @@ STOCK_MANAGER = [
     "stock_costs.view",
 ]
 
+SCHEDULE_VIEW = [
+    "operational_events.view",
+    "schedule_dashboard.view",
+    "schedule_calendar.view",
+    "schedule_measurements.view",
+]
+
+SCHEDULE_SELLER = [
+    *SCHEDULE_VIEW,
+    "operational_events.create",
+    "operational_events.confirm",
+    "operational_events.complete",
+    "operational_events.reschedule",
+    "operational_events.cancel",
+    "schedule_measurements.create",
+]
+
+SCHEDULE_MANAGER = [
+    *SCHEDULE_SELLER,
+    "operational_events.view_all",
+    "operational_events.update",
+    "operational_events.assign",
+    "operational_events.start",
+    "operational_events.override_conflict",
+    "schedule_measurements.update",
+]
+
+SCHEDULE_OPERATIONS = [
+    *SCHEDULE_VIEW,
+    "operational_events.view_all",
+    "operational_events.create",
+    "operational_events.update",
+    "operational_events.assign",
+    "operational_events.confirm",
+    "operational_events.start",
+    "operational_events.complete",
+    "operational_events.reschedule",
+    "operational_events.cancel",
+    "schedule_measurements.create",
+    "schedule_measurements.update",
+]
+
 ORDERS_MANAGER = [
     "quotes.accept",
     "quotes.refuse",
@@ -304,7 +346,7 @@ ORDERS_MANAGER = [
     "installations.view",
     "installations.schedule",
     "installations.complete",
-] + STOCK_COMMERCIAL_VIEW
+] + STOCK_COMMERCIAL_VIEW + SCHEDULE_MANAGER
 
 ORDERS_SELLER = [
     "quotes.accept",
@@ -314,7 +356,7 @@ ORDERS_SELLER = [
     "production_dashboard.view",
     "deliveries.view",
     "installations.view",
-] + STOCK_SELLER_VIEW
+] + STOCK_SELLER_VIEW + SCHEDULE_SELLER
 
 PRODUCTION_OPERATIONS = [
     "sales_orders.view",
@@ -346,7 +388,7 @@ PRODUCTION_OPERATIONS = [
     "deliveries.view",
     "installations.view",
     "production_dashboard.view",
-]
+] + SCHEDULE_OPERATIONS
 
 PRODUCTION_STAGE_SEEDS = [
     ("Medição final", "medicao-final", "waiting", 10),

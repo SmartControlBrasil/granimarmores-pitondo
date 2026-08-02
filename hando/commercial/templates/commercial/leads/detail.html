@@ -60,6 +60,10 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-sm btn-outline-secondary">Criar orçamento</button>
               </form>
+              <a href="{% url 'scheduling:lead_schedule' lead.pk %}?type=contact" class="btn btn-sm btn-outline-info">Agendar contato</a>
+              <a href="{% url 'scheduling:lead_schedule' lead.pk %}?type=meeting" class="btn btn-sm btn-outline-info">Agendar reunião</a>
+              <a href="{% url 'scheduling:lead_schedule' lead.pk %}?type=visit" class="btn btn-sm btn-outline-info">Agendar visita</a>
+              <a href="{% url 'scheduling:lead_schedule' lead.pk %}?type=measurement" class="btn btn-sm btn-outline-info">Agendar medição</a>
               {% if lead.status == "won" or lead.status == "lost" or lead.status == "disqualified" %}
                 <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="collapse" data-bs-target="#reopenForm">Reabrir lead</button>
               {% endif %}

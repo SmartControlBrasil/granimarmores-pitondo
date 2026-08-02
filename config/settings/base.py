@@ -101,6 +101,7 @@ INSTALLED_APPS = [
     "fleet",
     "maintenance",
     "production",
+    "scheduling",
 ]
 
 
@@ -222,6 +223,9 @@ TIME_ZONE = "America/Sao_Paulo"
 USE_I18N = True
 
 USE_TZ = True
+
+# Agenda operacional: alerta de confirmação pendente (horas antes do início)
+AGENDA_CONFIRMATION_WARNING_HOURS = 24
 
 
 # =============================================================================

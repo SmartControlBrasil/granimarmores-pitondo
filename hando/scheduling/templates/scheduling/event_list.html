@@ -1,0 +1,23 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}<a href="{% url 'scheduling:event_create' %}" class="btn btn-sm btn-primary">Novo</a>{% endblock card_actions %}
+{% block table_content %}
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-2"><select name="event_type" class="form-select"><option value="">Tipo</option>{% for v,l in event_types %}<option value="{{ v }}"{% if request.GET.event_type == v %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="status" class="form-select"><option value="">Status</option>{% for v,l in status_choices %}<option value="{{ v }}"{% if request.GET.status == v %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><input type="date" name="start" class="form-control" value="{{ request.GET.start }}"></div>
+  <div class="col-md-2"><input type="date" name="end" class="form-control" value="{{ request.GET.end }}"></div>
+  <div class="col-md-2"><button class="btn btn-light" type="submit">Filtrar</button></div>
+</form>
+<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Código</th><th>Data</th><th>Tipo</th><th>Título</th><th>Cliente</th><th>Responsável</th><th>Status</th><th>Prioridade</th></tr></thead><tbody>
+{% for e in page_obj %}<tr>
+  <td><a href="{% url 'scheduling:event_detail' e.pk %}">{{ e.code }}</a></td>
+  <td>{{ e.start_at|date:"d/m/Y H:i" }}</td>
+  <td>{{ e.get_event_type_display }}</td>
+  <td>{{ e.title }}</td>
+  <td>{{ e.customer|default:"—" }}</td>
+  <td>{{ e.assigned_user|default:e.assigned_salesperson|default:"—" }}</td>
+  <td>{{ e.get_status_display }}</td>
+  <td>{{ e.get_priority_display }}</td>
+</tr>{% empty %}<tr><td colspan="8" class="text-muted">Sem eventos.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock table_content %}

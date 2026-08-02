@@ -105,6 +105,26 @@
     </div>
   {% endif %}
 
+  {% if schedule_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Agenda</h5>
+            <a href="{% url 'scheduling:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard da Agenda</a>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-2"><p class="text-muted mb-1">Hoje</p><h4>{{ schedule_summary.today }}</h4></div>
+            <div class="col-md-2"><p class="text-muted mb-1">Não confirmados</p><h4>{{ schedule_summary.unconfirmed }}</h4></div>
+            <div class="col-md-2"><p class="text-muted mb-1">Conflitos</p><h4>{{ schedule_summary.conflicts }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Entregas hoje</p><h4>{{ schedule_summary.deliveries_today }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Instalações hoje</p><h4>{{ schedule_summary.installations_today }}</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

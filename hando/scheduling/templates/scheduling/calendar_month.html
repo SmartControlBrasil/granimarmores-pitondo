@@ -1,0 +1,29 @@
+{% extends "vertical.html" %}
+{% load static %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex justify-content-between align-items-center">
+    <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    <a href="{% url 'scheduling:event_create' %}" class="btn btn-sm btn-primary">Novo evento</a>
+  </div>
+  <div class="card"><div class="card-body"><div id="calendar"></div></div></div>
+</div>
+{% endblock page_content %}
+{% block extra_javascript %}
+<script src="{% static '/libs/fullcalendar/index.global.min.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var calendarEl = document.getElementById("calendar");
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    timeZone: "America/Sao_Paulo",
+    initialView: "{{ initial_view|default:'dayGridMonth' }}",
+    themeSystem: "bootstrap",
+    headerToolbar: { left: "prev,next today", center: "title", right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek" },
+    events: {{ events_json|safe }},
+    locale: "pt-br",
+  });
+  calendar.render();
+});
+</script>
+{% endblock extra_javascript %}

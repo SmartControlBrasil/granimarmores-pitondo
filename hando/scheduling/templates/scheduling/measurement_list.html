@@ -1,0 +1,12 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Evento</th><th>Tipo</th><th>Técnico</th><th>Data</th><th>Status</th></tr></thead><tbody>
+{% for m in page_obj %}<tr>
+  <td><a href="{% url 'scheduling:event_detail' m.event.pk %}">{{ m.event.code }}</a></td>
+  <td>{{ m.get_measurement_type_display }}</td>
+  <td>{{ m.technician|default:"—" }}</td>
+  <td>{{ m.event.start_at|date:"d/m/Y H:i" }}</td>
+  <td>{% if m.measurement_completed %}Concluída{% else %}{{ m.event.get_status_display }}{% endif %}</td>
+</tr>{% empty %}<tr><td colspan="5" class="text-muted">Sem medições.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock table_content %}

@@ -32,6 +32,7 @@ from production.selectors import overdue_production_orders
 from production.selectors import sales_orders_queryset_for_user
 from materials.stock_selectors import main_dashboard_stock_summary
 from quotes.models import Quote
+from scheduling.selectors import main_dashboard_schedule_summary
 from salespeople.models import Salesperson
 
 
@@ -249,11 +250,19 @@ def root_page_view(request):
     if user_has_permission(user, "slabs.view") or user_has_permission(user, "stock_dashboard.view"):
         stock_summary = main_dashboard_stock_summary()
 
+    schedule_summary = None
+    if user_has_permission(user, "schedule_dashboard.view") or user_has_permission(
+        user,
+        "operational_events.view",
+    ):
+        schedule_summary = main_dashboard_schedule_summary(user)
+
     context = {
         "cards": cards,
         "lead_links": lead_links,
         "performance_summary": performance_summary,
         "stock_summary": stock_summary,
+        "schedule_summary": schedule_summary,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")
         else [],

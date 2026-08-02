@@ -55,6 +55,9 @@ def schedule_delivery(*, sales_order, actor, scheduled_date, request=None, **fie
         action="delivery_scheduled",
         obj=delivery,
     )
+    from scheduling.services.events import sync_event_from_delivery
+
+    sync_event_from_delivery(delivery=delivery, actor=actor, request=request)
     return delivery
 
 
@@ -140,6 +143,9 @@ def schedule_installation(*, sales_order, actor, scheduled_date, request=None, *
         action="installation_scheduled",
         obj=installation,
     )
+    from scheduling.services.events import sync_event_from_installation
+
+    sync_event_from_installation(installation=installation, actor=actor, request=request)
     return installation
 
 

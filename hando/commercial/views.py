@@ -555,7 +555,11 @@ def master_data_summary(request):
                 "url_name": "materials:list",
                 "query": "",
             })
-        slabs_no_location = MaterialSlab.objects.filter(is_active=True, location="").count()
+        slabs_no_location = MaterialSlab.objects.filter(
+            is_active=True,
+            stock_location__isnull=True,
+            location_text="",
+        ).count()
         if slabs_no_location:
             alerts.append({
                 "label": f"{slabs_no_location} chapa(s) sem localização",

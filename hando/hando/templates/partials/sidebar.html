@@ -51,6 +51,17 @@
         {% if can_orders or can_deliveries or can_installations %}
           <li class="menu-title mt-2">Operação</li>
           {% if can_orders %}<li><a href="{% url 'operacao:order_list' %}" class="tp-link{% if request.resolver_match.namespace == 'operacao' %} active{% endif %}"><i data-feather="shopping-cart"></i><span>Pedidos</span></a></li>{% endif %}
+        {% endif %}
+
+        {% has_permission "schedule_dashboard.view" as can_agenda_dash %}{% has_permission "schedule_calendar.view" as can_agenda_cal %}{% has_permission "operational_events.view" as can_agenda_events %}{% has_permission "schedule_measurements.view" as can_measurements %}
+        {% if can_agenda_dash or can_agenda_cal or can_agenda_events or can_measurements or can_deliveries or can_installations %}
+          <li class="menu-title mt-2">Agenda</li>
+          {% if can_agenda_dash %}<li><a href="{% url 'scheduling:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'scheduling' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
+          {% if can_agenda_cal %}<li><a href="{% url 'scheduling:today' %}" class="tp-link{% if request.resolver_match.url_name == 'today' %} active{% endif %}"><i data-feather="sun"></i><span>Hoje</span></a></li>{% endif %}
+          {% if can_agenda_cal %}<li><a href="{% url 'scheduling:week' %}" class="tp-link{% if request.resolver_match.url_name == 'week' %} active{% endif %}"><i data-feather="calendar"></i><span>Semana</span></a></li>{% endif %}
+          {% if can_agenda_cal %}<li><a href="{% url 'scheduling:month' %}" class="tp-link{% if request.resolver_match.url_name == 'month' or request.resolver_match.url_name == 'calendar' %} active{% endif %}"><i data-feather="calendar"></i><span>Mês</span></a></li>{% endif %}
+          {% if can_agenda_events %}<li><a href="{% url 'scheduling:event_list' %}" class="tp-link{% if 'event' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="list"></i><span>Eventos</span></a></li>{% endif %}
+          {% if can_measurements %}<li><a href="{% url 'scheduling:measurement_list' %}" class="tp-link{% if request.resolver_match.url_name == 'measurement_list' %} active{% endif %}"><i data-feather="ruler"></i><span>Medições</span></a></li>{% endif %}
           {% if can_deliveries %}<li><a href="{% url 'operacao:delivery_list' %}" class="tp-link{% if request.resolver_match.url_name == 'delivery_list' %} active{% endif %}"><i data-feather="package"></i><span>Entregas</span></a></li>{% endif %}
           {% if can_installations %}<li><a href="{% url 'operacao:installation_list' %}" class="tp-link{% if request.resolver_match.url_name == 'installation_list' %} active{% endif %}"><i data-feather="tool"></i><span>Instalações</span></a></li>{% endif %}
         {% endif %}

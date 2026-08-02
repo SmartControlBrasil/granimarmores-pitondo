@@ -1,0 +1,22 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Hoje</div><div class="fs-20 fw-bold">{{ metrics.today }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Amanhã</div><div class="fs-20 fw-bold">{{ metrics.tomorrow }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Não confirmados</div><div class="fs-20 fw-bold">{{ metrics.unconfirmed }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Atrasados</div><div class="fs-20 fw-bold">{{ metrics.overdue }}</div></div></div></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-2"><div class="card"><div class="card-body"><div class="small text-muted">Em andamento</div><strong>{{ metrics.in_progress }}</strong></div></div></div>
+    <div class="col-md-2"><div class="card"><div class="card-body"><div class="small text-muted">Medições</div><strong>{{ metrics.measurements }}</strong></div></div></div>
+    <div class="col-md-2"><div class="card"><div class="card-body"><div class="small text-muted">Entregas</div><strong>{{ metrics.deliveries }}</strong></div></div></div>
+    <div class="col-md-2"><div class="card"><div class="card-body"><div class="small text-muted">Instalações</div><strong>{{ metrics.installations }}</strong></div></div></div>
+    <div class="col-md-2"><div class="card"><div class="card-body"><div class="small text-muted">Conflitos</div><strong>{{ metrics.conflicts }}</strong></div></div></div>
+    <div class="col-md-2"><div class="card"><div class="card-body"><div class="small text-muted">Conclusão</div><strong>{{ metrics.completion_rate }}%</strong></div></div></div>
+  </div>
+  {% for alert in metrics.alerts %}<div class="alert alert-{{ alert.level }} py-2">{{ alert.message }}</div>{% endfor %}
+</div>
+{% endblock page_content %}
