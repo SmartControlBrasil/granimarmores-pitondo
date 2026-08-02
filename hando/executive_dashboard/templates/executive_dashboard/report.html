@@ -1,0 +1,119 @@
+{% load formatters %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>{{ page_title }}</title>
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; color: #222; margin: 24px; }
+    h1, h2 { font-family: system-ui, sans-serif; }
+    h1 { font-size: 22px; margin-bottom: 4px; }
+    h2 { font-size: 16px; margin-top: 24px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; }
+    th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+    th { background: #f5f5f5; }
+    .meta { color: #555; font-size: 12px; margin-bottom: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .kpi { border: 1px solid #ddd; padding: 8px; }
+    .kpi small { display: block; color: #666; }
+    @media print {
+      .no-print { display: none !important; }
+      body { margin: 12mm; }
+    }
+  </style>
+</head>
+<body>
+  <button class="no-print" onclick="window.print()">Imprimir</button>
+  <h1>Relatório Executivo — Granimármores Pitondo</h1>
+  <div class="meta">
+    Período: {{ start|date:"d/m/Y H:i" }} — {{ end|date:"d/m/Y H:i" }}<br>
+    Gerado em: {{ generated_at|date:"d/m/Y H:i" }} · Usuário: {{ request.user.get_username }}
+  </div>
+
+  <h2>Resumo</h2>
+  <div class="grid">
+    <div class="kpi"><small>Leads</small><strong>{{ summary.leads_received|default:0 }}</strong></div>
+    <div class="kpi"><small>Vendas aceitas</small><strong>{{ summary.quotes_accepted|default:0 }}</strong></div>
+    {% if can_view_sales_values %}
+      <div class="kpi"><small>Valor potencial</small><strong>{{ summary.potential_value|format_brl }}</strong></div>
+      <div class="kpi"><small>Valor aprovado</small><strong>{{ summary.approved_value|format_brl }}</strong></div>
+      <div class="kpi"><small>Ticket médio</small><strong>{{ summary.ticket_average|format_brl }}</strong></div>
+    {% endif %}
+    <div class="kpi"><small>Conversão</small><strong>{{ summary.conversion_rate|default:0 }}%</strong></div>
+    <div class="kpi"><small>Pedidos atrasados</small><strong>{{ summary.orders_overdue|default:0 }}</strong></div>
+    <div class="kpi"><small>Pós-venda crítico</small><strong>{{ summary.critical_after_sales|default:0 }}</strong></div>
+    <div class="kpi"><small>Satisfação</small><strong>{{ summary.avg_satisfaction|default:"—" }}</strong></div>
+  </div>
+
+  {% if "commercial" in domains %}
+  <h2>Comercial e vendas</h2>
+  <table>
+    <tr><th>Indicador</th><th>Valor</th></tr>
+    <tr><td>Leads recebidos</td><td>{{ commercial.leads_received }}</td></tr>
+    <tr><td>Leads sem contato</td><td>{{ commercial.leads_no_contact }}</td></tr>
+    <tr><td>Orçamentos enviados</td><td>{{ commercial.quotes_sent }}</td></tr>
+    <tr><td>Vendas aceitas (ACCEPTED)</td><td>{{ commercial.quotes_accepted }}</td></tr>
+    {% if can_view_sales_values %}
+      <tr><td>Valor potencial</td><td>{{ commercial.potential_value|format_brl }}</td></tr>
+      <tr><td>Valor aprovado</td><td>{{ commercial.approved_value|format_brl }}</td></tr>
+    {% endif %}
+  </table>
+  {% endif %}
+
+  {% if "production" in domains %}
+  <h2>Produção</h2>
+  <table>
+    <tr><th>Indicador</th><th>Valor</th></tr>
+    <tr><td>Em andamento</td><td>{{ production.production_in_progress|default:0 }}</td></tr>
+    <tr><td>Pausadas</td><td>{{ production.production_on_hold|default:0 }}</td></tr>
+    <tr><td>Atrasados</td><td>{{ production.orders_overdue|default:0 }}</td></tr>
+    <tr><td>Retrabalhos</td><td>{{ production.rework_count|default:0 }}</td></tr>
+    <tr><td>Concluídos no período</td><td>{{ production.completed_in_period|default:0 }}</td></tr>
+  </table>
+  <h2>Riscos</h2>
+  <table>
+    <tr><th>Pedido</th><th>Nível</th><th>Motivos</th></tr>
+    {% for row in risks %}
+      <tr><td>{{ row.order.number }}</td><td>{{ row.level }}</td><td>{{ row.reasons|join:", " }}</td></tr>
+    {% empty %}<tr><td colspan="3">Sem riscos identificados.</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+
+  {% if "stock" in domains %}
+  <h2>Estoque</h2>
+  <table>
+    <tr><th>Indicador</th><th>Valor</th></tr>
+    <tr><td>Chapas disponíveis</td><td>{{ stock.available_slabs|default:0 }}</td></tr>
+    <tr><td>Área disponível</td><td>{{ stock.total_available_area|default:0 }}</td></tr>
+    <tr><td>Área reservada</td><td>{{ stock.total_reserved_area|default:0 }}</td></tr>
+    <tr><td>Perdas no período</td><td>{{ stock.lost_period|default:0 }}</td></tr>
+  </table>
+  {% endif %}
+
+  {% if "schedule" in domains %}
+  <h2>Agenda</h2>
+  <table>
+    <tr><th>Indicador</th><th>Valor</th></tr>
+    <tr><td>Eventos hoje</td><td>{{ schedule.today|default:0 }}</td></tr>
+    <tr><td>Conflitos</td><td>{{ schedule.conflicts|default:0 }}</td></tr>
+    <tr><td>Entregas concluídas</td><td>{{ delivery_installation.deliveries_completed|default:0 }}</td></tr>
+    <tr><td>Instalações concluídas</td><td>{{ delivery_installation.installations_completed|default:0 }}</td></tr>
+  </table>
+  {% endif %}
+
+  {% if "after_sales" in domains %}
+  <h2>Pós-venda</h2>
+  <table>
+    <tr><th>Indicador</th><th>Valor</th></tr>
+    <tr><td>Casos abertos</td><td>{{ after_sales.open_cases|default:0 }}</td></tr>
+    <tr><td>Críticos</td><td>{{ after_sales.critical|default:0 }}</td></tr>
+    <tr><td>Satisfação média</td><td>{{ after_sales.avg_satisfaction|default:"—" }}</td></tr>
+  </table>
+  {% endif %}
+
+  <h2>Alertas</h2>
+  <ul>
+    {% for alert in alerts %}<li>[{{ alert.level }}] {{ alert.message }}</li>{% empty %}<li>Nenhum alerta crítico.</li>{% endfor %}
+  </ul>
+</body>
+</html>

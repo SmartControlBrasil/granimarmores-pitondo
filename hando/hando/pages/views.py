@@ -262,6 +262,15 @@ def root_page_view(request):
     after_sales_summary = main_dashboard_after_sales_summary(user)
     media_summary = main_dashboard_media_summary(user)
 
+    executive_link = None
+    from executive_dashboard.views import can_access_executive
+
+    if can_access_executive(user):
+        executive_link = {
+            "label": "Painel da Diretoria",
+            "url_name": "executive_dashboard:dashboard",
+        }
+
     context = {
         "cards": cards,
         "lead_links": lead_links,
@@ -270,6 +279,7 @@ def root_page_view(request):
         "schedule_summary": schedule_summary,
         "after_sales_summary": after_sales_summary,
         "media_summary": media_summary,
+        "executive_link": executive_link,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")
         else [],

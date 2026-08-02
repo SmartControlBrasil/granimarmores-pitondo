@@ -20,6 +20,12 @@
         <li>
           <a href="{% url 'pages:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'pages' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="home"></i><span>Dashboard</span></a>
         </li>
+        {% has_permission "executive_dashboard.view" as can_exec %}{% has_permission "executive_dashboard.view_commercial" as can_exec_com %}{% has_permission "executive_dashboard.view_production" as can_exec_prod %}{% has_permission "executive_dashboard.view_stock" as can_exec_stock %}{% has_permission "executive_dashboard.view_schedule" as can_exec_sch %}{% has_permission "executive_dashboard.view_after_sales" as can_exec_as %}{% has_permission "executive_dashboard.view_quality" as can_exec_q %}{% has_permission "executive_dashboard.view_audit" as can_exec_audit %}
+        {% if can_exec or can_exec_com or can_exec_prod or can_exec_stock or can_exec_sch or can_exec_as or can_exec_q or can_exec_audit %}
+          <li>
+            <a href="{% url 'executive_dashboard:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'executive_dashboard' %} active{% endif %}"><i data-feather="briefcase"></i><span>Painel da Diretoria</span></a>
+          </li>
+        {% endif %}
 
         {% has_permission "leads.view" as can_leads %}{% has_permission "quotes.view" as can_quotes %}{% has_permission "customers.view" as can_customers %}{% has_permission "salespeople.view" as can_salespeople %}{% has_permission "materials.view" as can_materials %}{% has_permission "quotes.manage_policy" as can_policy %}{% has_permission "sales_performance.view_own" as can_perf_own %}{% has_permission "sales_performance.view_all" as can_perf_all %}{% has_permission "sales_ranking.view" as can_ranking %}{% has_permission "sales_goals.view" as can_goals %}
         {% if can_leads or can_quotes or can_customers or can_salespeople or can_materials or can_policy or can_perf_own or can_perf_all or can_ranking or can_goals %}

@@ -104,7 +104,11 @@ INSTALLED_APPS = [
     "scheduling",
     "after_sales",
     "media_library",
+    "executive_dashboard",
 ]
+
+# Painel executivo: cache curto por usuário/filtros (0 desativa)
+EXECUTIVE_DASHBOARD_CACHE_SECONDS = env.int("EXECUTIVE_DASHBOARD_CACHE_SECONDS", default=60)
 
 # Biblioteca interna de mídia (armazenamento local do ERP)
 MEDIA_LIBRARY_MAX_IMAGE_SIZE_MB = 10

@@ -204,4 +204,5 @@ python manage.py test
 | [docs/OPERATIONAL_SCHEDULE.md](docs/OPERATIONAL_SCHEDULE.md) | Agenda operacional interna |
 | [docs/AFTER_SALES.md](docs/AFTER_SALES.md) | Pós-venda, garantia e assistência |
 | [docs/MEDIA_LIBRARY.md](docs/MEDIA_LIBRARY.md) | Biblioteca interna de mídias |
+| [docs/EXECUTIVE_DASHBOARD.md](docs/EXECUTIVE_DASHBOARD.md) | Painel executivo da diretoria |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |

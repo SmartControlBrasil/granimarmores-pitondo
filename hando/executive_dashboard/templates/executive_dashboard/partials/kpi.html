@@ -1,0 +1,14 @@
+<div class="col-md-6 col-lg-4 col-xl-3">
+  <div class="card h-100">
+    <div class="card-body">
+      <div class="text-muted small">{{ label }}{% if note %} <span class="badge bg-light text-muted">{{ note }}</span>{% endif %}</div>
+      <div class="fs-20 fw-semibold">
+        {% if href_name %}
+          <a href="{% url href_name %}{% if href_query %}?{{ href_query }}{% endif %}" class="text-decoration-none text-dark">{{ value }}{% if suffix %}{{ suffix }}{% endif %}</a>
+        {% else %}
+          {{ value }}{% if suffix %}{{ suffix }}{% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

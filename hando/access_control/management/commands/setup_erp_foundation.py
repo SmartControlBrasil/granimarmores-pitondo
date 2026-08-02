@@ -546,10 +546,50 @@ QUALITY_CHECKLIST_ITEMS = [
     "Fotos registradas",
 ]
 
+EXECUTIVE_FULL = [
+    "executive_dashboard.view",
+    "executive_dashboard.view_commercial",
+    "executive_dashboard.view_sales_values",
+    "executive_dashboard.view_production",
+    "executive_dashboard.view_stock",
+    "executive_dashboard.view_stock_costs",
+    "executive_dashboard.view_schedule",
+    "executive_dashboard.view_after_sales",
+    "executive_dashboard.view_quality",
+    "executive_dashboard.view_audit",
+    "executive_dashboard.export",
+    "executive_dashboard.print",
+]
+
+EXECUTIVE_COMMERCIAL = [
+    "executive_dashboard.view_commercial",
+    "executive_dashboard.view_sales_values",
+    "executive_dashboard.view_production",
+    "executive_dashboard.view_schedule",
+    "executive_dashboard.view_after_sales",
+    "executive_dashboard.export",
+    "executive_dashboard.print",
+]
+
+EXECUTIVE_OPERATIONS = [
+    "executive_dashboard.view_production",
+    "executive_dashboard.view_stock",
+    "executive_dashboard.view_quality",
+    "executive_dashboard.view_schedule",
+    "executive_dashboard.export",
+]
+
 SYSTEM_ROLE_PERMISSIONS = {
-    "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER + PERFORMANCE_MANAGER + ORDERS_MANAGER,
+    "Gestor Comercial": COMMERCIAL_MASTER_EDIT
+    + LEADS_MANAGER
+    + PERFORMANCE_MANAGER
+    + ORDERS_MANAGER
+    + EXECUTIVE_COMMERCIAL,
     "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER + PERFORMANCE_SELLER + ORDERS_SELLER,
-    "Operacional": ["project_types.view", "service_regions.view", "leads.view"] + PRODUCTION_OPERATIONS + STOCK_OPERATIONS,
+    "Operacional": ["project_types.view", "service_regions.view", "leads.view"]
+    + PRODUCTION_OPERATIONS
+    + STOCK_OPERATIONS
+    + EXECUTIVE_OPERATIONS,
 }
 
 

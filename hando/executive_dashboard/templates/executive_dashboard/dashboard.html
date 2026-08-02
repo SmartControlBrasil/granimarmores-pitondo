@@ -1,0 +1,383 @@
+{% extends "vertical.html" %}
+{% load static formatters %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column gap-2">
+    <div class="flex-grow-1">
+      <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+      <ol class="breadcrumb m-0 py-1">
+        <li class="breadcrumb-item"><a href="{% url 'pages:dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Diretoria</li>
+      </ol>
+      <p class="text-muted small mb-0">
+        Período: {{ start|date:"d/m/Y H:i" }} — {{ end|date:"d/m/Y H:i" }}
+        {% if from_cache %}<span class="badge bg-secondary-subtle text-secondary ms-1">cache</span>{% endif %}
+      </p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      {% if can_print %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'executive_dashboard:report' %}?{{ querystring }}" target="_blank">Relatório</a>{% endif %}
+      {% if can_export and "commercial" in domains %}
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'executive_dashboard:export_csv' 'vendas' %}?{{ querystring }}">CSV vendas</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'executive_dashboard:export_csv' 'vendedores' %}?{{ querystring }}">CSV vendedores</a>
+      {% endif %}
+      {% if can_export and "production" in domains %}
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'executive_dashboard:export_csv' 'producao' %}?{{ querystring }}">CSV produção</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'executive_dashboard:export_csv' 'riscos' %}?{{ querystring }}">CSV riscos</a>
+      {% endif %}
+      {% if can_export and "stock" in domains %}<a class="btn btn-sm btn-outline-primary" href="{% url 'executive_dashboard:export_csv' 'estoque' %}?{{ querystring }}">CSV estoque</a>{% endif %}
+      {% if can_export and "after_sales" in domains %}<a class="btn btn-sm btn-outline-primary" href="{% url 'executive_dashboard:export_csv' 'pos-venda' %}?{{ querystring }}">CSV pós-venda</a>{% endif %}
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-2">
+          <label class="form-label small">Período</label>
+          <select name="period" class="form-select form-select-sm">
+            {% for key, label in period_choices %}
+              <option value="{{ key }}" {% if period == key %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2"><label class="form-label small">Início</label><input type="date" name="start" class="form-control form-control-sm" value="{{ request.GET.start }}"></div>
+        <div class="col-md-2"><label class="form-label small">Fim</label><input type="date" name="end" class="form-control form-control-sm" value="{{ request.GET.end }}"></div>
+        <div class="col-md-2">{{ filter_form.salesperson.label_tag }}{{ filter_form.salesperson }}</div>
+        <div class="col-md-2">{{ filter_form.commercial_source.label_tag }}{{ filter_form.commercial_source }}</div>
+        <div class="col-md-2">{{ filter_form.city.label_tag }}{{ filter_form.city }}</div>
+        <div class="col-md-2">{{ filter_form.project_type.label_tag }}{{ filter_form.project_type }}</div>
+        <div class="col-md-2">{{ filter_form.material.label_tag }}{{ filter_form.material }}</div>
+        <div class="col-md-2">{{ filter_form.production_stage.label_tag }}{{ filter_form.production_stage }}</div>
+        <div class="col-md-2">{{ filter_form.order_status.label_tag }}{{ filter_form.order_status }}</div>
+        <div class="col-md-2">{{ filter_form.after_sales_status.label_tag }}{{ filter_form.after_sales_status }}</div>
+        <div class="col-md-2"><button class="btn btn-sm btn-primary w-100" type="submit">Aplicar</button></div>
+      </form>
+      <p class="text-muted small mt-2 mb-0">Filtros são aplicados apenas aos módulos compatíveis. Valores monetários exigem permissão específica.</p>
+    </div>
+  </div>
+
+  {% if alerts %}
+    <div class="mb-3">
+      {% for alert in alerts %}
+        <div class="alert alert-{{ alert.level }} py-2 d-flex justify-content-between align-items-center">
+          <span>{{ alert.message }}</span>
+          {% if alert.url_name %}<a class="btn btn-sm btn-light" href="{% url alert.url_name %}{% if alert.query %}?{{ alert.query }}{% endif %}">Ver</a>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <h5 class="mb-2">Resumo executivo</h5>
+  <div class="row g-3 mb-4">
+    {% include "executive_dashboard/partials/kpi.html" with label="Leads recebidos" value=summary.leads_received %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Oportunidades abertas" value=summary.open_opportunities %}
+    {% if can_view_sales_values %}
+      {% include "executive_dashboard/partials/kpi.html" with label="Valor potencial" value=summary.potential_value|format_brl note="Abertos" %}
+      {% include "executive_dashboard/partials/kpi.html" with label="Valor aprovado" value=summary.approved_value|format_brl note="ACCEPTED" %}
+      {% include "executive_dashboard/partials/kpi.html" with label="Ticket médio" value=summary.ticket_average|format_brl %}
+    {% endif %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Orçamentos enviados" value=summary.quotes_sent %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Vendas aceitas" value=summary.quotes_accepted %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Conversão" value=summary.conversion_rate suffix="%" %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Em produção" value=summary.orders_in_production %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Pedidos atrasados" value=summary.orders_overdue href_name="operacao:order_list" href_query="overdue=1" %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Pós-venda crítico" value=summary.critical_after_sales href_name="after_sales:case_list" href_query="critical=1" %}
+    {% include "executive_dashboard/partials/kpi.html" with label="Satisfação média" value=summary.avg_satisfaction|default:"—" %}
+  </div>
+
+  {% if trends %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="card-title mb-0">Tendências (período vs anterior equivalente)</h5></div>
+      <div class="card-body table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Indicador</th><th>Atual</th><th>Anterior</th><th>Diferença</th><th>%</th></tr></thead>
+          <tbody>
+            {% for key, row in trends.items %}
+              {% if row %}
+              <tr>
+                <td>{{ key }}</td>
+                <td>{{ row.current }}</td>
+                <td>{{ row.previous }}</td>
+                <td>{{ row.absolute }}</td>
+                <td>{{ row.percent }}%</td>
+              </tr>
+              {% endif %}
+            {% empty %}
+              <tr><td colspan="5" class="text-muted">Sem tendência disponível.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6"><div class="card h-100"><div class="card-header"><h5 class="mb-0">Vendas por período</h5></div><div class="card-body"><div id="chart-sales" style="min-height:280px"></div><div id="chart-sales-empty" class="text-muted d-none">Sem vendas aceitas no período.</div></div></div></div>
+    <div class="col-lg-6"><div class="card h-100"><div class="card-header"><h5 class="mb-0">Leads por origem</h5></div><div class="card-body"><div id="chart-sources" style="min-height:280px"></div><div id="chart-sources-empty" class="text-muted d-none">Sem leads no período.</div></div></div></div>
+    <div class="col-lg-6"><div class="card h-100"><div class="card-header"><h5 class="mb-0">Funil comercial</h5></div><div class="card-body"><div id="chart-funnel" style="min-height:280px"></div></div></div></div>
+    <div class="col-lg-6"><div class="card h-100"><div class="card-header"><h5 class="mb-0">Produção por etapa</h5></div><div class="card-body"><div id="chart-production" style="min-height:280px"></div><div id="chart-production-empty" class="text-muted d-none">Sem fila produtiva.</div></div></div></div>
+  </div>
+
+  {% if "commercial" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Comercial</h5></div>
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-md-2"><small class="text-muted">Sem contato</small><div><a href="{% url 'leads:list' %}?sem_contato=1">{{ commercial.leads_no_contact|default:0 }}</a></div></div>
+          <div class="col-md-2"><small class="text-muted">Sem vendedor</small><div><a href="{% url 'leads:list' %}?unassigned=1">{{ commercial.leads_no_owner|default:0 }}</a></div></div>
+          <div class="col-md-2"><small class="text-muted">Qualificados</small><div>{{ commercial.qualified|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Negociação</small><div>{{ commercial.negotiation|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Ganhos</small><div>{{ commercial.won|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Perdidos</small><div>{{ commercial.lost|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">1ª resposta (h)</small><div>{{ commercial.avg_first_response_hours|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Enviados</small><div>{{ commercial.quotes_sent|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Aceitos</small><div>{{ commercial.quotes_accepted|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Recusados</small><div>{{ commercial.quotes_refused|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Expirados</small><div>{{ commercial.quotes_expired|default:0 }}</div></div>
+        </div>
+        <h6>Funil</h6>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm">
+            <thead><tr><th>Etapa</th><th>No período</th><th>Abertos</th><th>Valor estimado</th><th>Tempo médio</th></tr></thead>
+            <tbody>
+              {% for row in commercial.funnel %}
+                <tr>
+                  <td>{{ row.label }}</td>
+                  <td>{{ row.count }}</td>
+                  <td>{{ row.open_count }}</td>
+                  <td>{% if can_view_sales_values %}{{ row.estimated_value|format_brl }}{% else %}—{% endif %}</td>
+                  <td>{% if row.avg_stage_hours != None %}{{ row.avg_stage_hours }} h{% else %}<span class="text-muted">Sem histórico de transição</span>{% endif %}</td>
+                </tr>
+              {% empty %}<tr><td colspan="5" class="text-muted">Sem dados.</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <h6>Vendedores</h6>
+        <div class="table-responsive">
+          <table class="table table-hover table-sm mb-0">
+            <thead>
+              <tr>
+                <th>Vendedor</th><th>Leads</th><th>Atendidos</th><th>Enviados</th><th>Aceitos</th>
+                {% if can_view_sales_values %}<th>Valor aprovado</th><th>Ticket</th>{% endif %}
+                <th>Conv.%</th><th>Resp.(min)</th><th>Follow-up%</th><th>Score</th><th>#</th><th>Meta</th><th>Alertas</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in salespeople %}
+                <tr>
+                  <td>{{ row.salesperson.display_name }}</td>
+                  <td>{{ row.leads_received }}</td>
+                  <td>{{ row.leads_attended }}</td>
+                  <td>{{ row.quotes_sent }}</td>
+                  <td>{{ row.closed_sales }}</td>
+                  {% if can_view_sales_values %}
+                    <td>{{ row.approved_value|format_brl }}</td>
+                    <td>{{ row.ticket_average|format_brl }}</td>
+                  {% endif %}
+                  <td>{{ row.conversion_rate }}</td>
+                  <td>{{ row.response_minutes|default:"—" }}</td>
+                  <td>{{ row.follow_up_compliance }}</td>
+                  <td>{{ row.total_score }}</td>
+                  <td>{{ row.position|default:"—" }}</td>
+                  <td>{% if row.goal_progress %}{{ row.goal_progress.situation|default:row.goal_progress.overall_percent }}{% else %}—{% endif %}</td>
+                  <td>{% for a in row.alerts %}<span class="badge bg-warning-subtle text-dark me-1">{{ a }}</span>{% empty %}—{% endfor %}</td>
+                </tr>
+              {% empty %}<tr><td colspan="14" class="text-muted">Sem vendedores ativos.</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "production" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Produção e gargalos</h5></div>
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-md-2"><small class="text-muted">Revisão técnica</small><div>{{ production.orders_technical_review|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Aguardando medição</small><div>{{ production.orders_awaiting_measurement|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Prontos p/ produção</small><div>{{ production.orders_ready_for_production|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Ordens abertas</small><div>{{ production.production_open|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Em andamento</small><div>{{ production.production_in_progress|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Pausadas</small><div>{{ production.production_on_hold|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Corte</small><div>{{ production.pieces_in_cut|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Acabamento</small><div>{{ production.pieces_in_finish|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Polimento</small><div>{{ production.pieces_in_polish|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Qualidade</small><div>{{ production.awaiting_quality|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Retrabalho</small><div>{{ production.rework_count|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Concluídos período</small><div>{{ production.completed_in_period|default:0 }}</div></div>
+        </div>
+        <h6>Gargalos (volume + bloqueios + atraso)</h6>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm">
+            <thead><tr><th>Etapa</th><th>Volume em fila</th><th>Bloqueadas</th><th>Atrasadas</th><th>Tempo médio</th></tr></thead>
+            <tbody>
+              {% for row in bottlenecks.stages %}
+                <tr>
+                  <td>{{ row.stage }}</td>
+                  <td>{{ row.volume }}</td>
+                  <td>{{ row.blocked }}</td>
+                  <td>{{ row.overdue }}</td>
+                  <td>{% if row.avg_hours != None %}{{ row.avg_hours }}{% else %}<span class="text-muted">n/d</span>{% endif %}</td>
+                </tr>
+              {% empty %}<tr><td colspan="5" class="text-muted">Sem gargalos identificados.</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="small text-muted mb-0">Peças sem chapa: {{ bottlenecks.pieces_without_slab|default:0 }} · Sem responsável: {{ bottlenecks.no_responsible|default:0 }} · Pausadas: {{ bottlenecks.paused_orders|default:0 }}</p>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Pedidos em risco</h5></div>
+      <div class="card-body table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Pedido</th><th>Cliente</th><th>Nível</th><th>Motivos</th></tr></thead>
+          <tbody>
+            {% for row in risks %}
+              <tr>
+                <td><a href="{% url 'operacao:order_detail' row.order.pk %}">{{ row.order.number }}</a></td>
+                <td>{{ row.order.customer }}</td>
+                <td><span class="badge bg-{% if row.level == 'Crítico' %}danger{% elif row.level == 'Alto risco' %}warning{% else %}secondary{% endif %}">{{ row.level }}</span></td>
+                <td>{{ row.reasons|join:", " }}</td>
+              </tr>
+            {% empty %}<tr><td colspan="4" class="text-muted">Nenhum pedido com risco identificado.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "quality" in domains or quality %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Qualidade</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Inspeções</small><div>{{ quality.inspections|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Aprovadas</small><div>{{ quality.approved|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Com observação</small><div>{{ quality.approved_with_notes|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Rejeitadas</small><div>{{ quality.rejected|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Taxa aprovação</small><div>{{ quality.approval_rate|default:0 }}%</div></div>
+        <div class="col-md-2"><small class="text-muted">Retrabalho aberto</small><div>{{ quality.rework_pieces|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "stock" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Estoque</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Chapas disponíveis</small><div>{{ stock.available_slabs|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Área disponível</small><div>{{ stock.total_available_area|default:0 }} m²</div></div>
+        <div class="col-md-2"><small class="text-muted">Área reservada</small><div>{{ stock.total_reserved_area|default:0 }} m²</div></div>
+        <div class="col-md-2"><small class="text-muted">Consumo período</small><div>{{ stock.consumed_period|default:0 }} m²</div></div>
+        <div class="col-md-2"><small class="text-muted">Perdas período</small><div>{{ stock.lost_period|default:0 }} m²</div></div>
+        <div class="col-md-2"><small class="text-muted">Reservas ativas</small><div>{{ stock.active_reservations|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Bloqueadas</small><div>{{ stock.blocked_slabs|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Sem localização</small><div>{{ stock.no_location|default:0 }}</div></div>
+        {% if can_view_stock_costs and stock.total_cost != None %}
+          <div class="col-md-2"><small class="text-muted">Custo total</small><div>{{ stock.total_cost }}</div></div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "schedule" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Agenda, entregas e instalações</h5></div>
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-md-2"><small class="text-muted">Hoje</small><div>{{ schedule.today|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Amanhã</small><div>{{ schedule.tomorrow|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Não confirmados</small><div>{{ schedule.unconfirmed|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Conflitos</small><div>{{ schedule.conflicts|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Atrasados</small><div>{{ schedule.overdue|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">No-show</small><div>{{ schedule.no_show|default:0 }}</div></div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><small class="text-muted">Entregas agendadas</small><div>{{ delivery_installation.deliveries_scheduled|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Entregas concluídas</small><div>{{ delivery_installation.deliveries_completed|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Taxa entrega</small><div>{{ delivery_installation.deliveries_completion_rate|default:0 }}%</div></div>
+          <div class="col-md-2"><small class="text-muted">Instalações agendadas</small><div>{{ delivery_installation.installations_scheduled|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Instalações concluídas</small><div>{{ delivery_installation.installations_completed|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Com retorno</small><div>{{ delivery_installation.installations_with_return|default:0 }}</div></div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "after_sales" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Pós-venda</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Abertos</small><div>{{ after_sales.open_cases|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Críticos</small><div><a href="{% url 'after_sales:case_list' %}?critical=1">{{ after_sales.critical|default:0 }}</a></div></div>
+        <div class="col-md-2"><small class="text-muted">Sem responsável</small><div>{{ after_sales.no_owner|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Resolvidos</small><div>{{ after_sales.resolved|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Satisfação</small><div>{{ after_sales.avg_satisfaction|default:"—" }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Pendências vencidas</small><div>{{ after_sales.overdue_pending|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "media" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Mídia (resumo)</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Uploads período</small><div>{{ media.uploads_period|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Em revisão</small><div>{{ media.under_review|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Consent. pendente</small><div>{{ media.pending_consent|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Revogados</small><div>{{ media.revoked_consent|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Portfólio</small><div>{{ media.portfolio_approved|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if "audit" in domains %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Governança e auditoria</h5></div>
+      <div class="card-body">
+        <div class="row g-2 mb-2">
+          <div class="col-md-2"><small class="text-muted">Usuários ativos</small><div>{{ governance.active_users|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Logins</small><div>{{ governance.logins|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Ações</small><div>{{ governance.audit_events|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Críticas</small><div>{{ governance.critical_actions|default:0 }}</div></div>
+          <div class="col-md-2"><small class="text-muted">Permissões</small><div>{{ governance.permission_changes|default:0 }}</div></div>
+        </div>
+        <p class="small text-muted mb-0">Atividade de sistema é indicativo de governança, não produtividade isolada.</p>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock page_content %}
+
+{% block javascript %}
+{{ block.super }}
+<script src="{% static '/libs/apexcharts/apexcharts.min.js' %}"></script>
+<script>
+(function () {
+  const charts = {{ charts_json|safe }};
+  function bar(el, seriesName, rows, emptyId) {
+    const node = document.querySelector(el);
+    if (!node) return;
+    if (!rows || !rows.length) {
+      if (emptyId) document.getElementById(emptyId)?.classList.remove('d-none');
+      node.innerHTML = '';
+      return;
+    }
+    new ApexCharts(node, {
+      chart: { type: 'bar', height: 280, toolbar: { show: false } },
+      series: [{ name: seriesName, data: rows.map(r => r.value || 0) }],
+      xaxis: { categories: rows.map(r => r.label || '') },
+      dataLabels: { enabled: false },
+      tooltip: { y: { formatter: v => Number(v).toLocaleString('pt-BR') } }
+    }).render();
+  }
+  bar('#chart-sales', 'Vendas', charts.sales_by_period, 'chart-sales-empty');
+  bar('#chart-sources', 'Leads', charts.leads_by_source, 'chart-sources-empty');
+  bar('#chart-funnel', 'Funil', charts.funnel);
+  bar('#chart-production', 'Etapas', charts.production_by_stage, 'chart-production-empty');
+})();
+</script>
+{% endblock javascript %}

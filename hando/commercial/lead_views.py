@@ -93,6 +93,8 @@ def _apply_lead_filters(qs, request):
         qs = qs.filter(state__iexact=state)
     if request.GET.get("unassigned") == "1":
         qs = qs.filter(assigned_salesperson__isnull=True)
+    if request.GET.get("sem_contato") == "1":
+        qs = qs.filter(first_contact_at__isnull=True).exclude(status__in=TERMINAL_STATUSES)
     if request.GET.get("overdue_followup") == "1":
         qs = qs.filter(next_follow_up_at__lt=timezone.now()).exclude(status__in=TERMINAL_STATUSES)
     if request.GET.get("won") == "1":
