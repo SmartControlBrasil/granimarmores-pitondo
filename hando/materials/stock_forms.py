@@ -1,5 +1,7 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from materials.models import Material
 from materials.models import MaterialSlab
 from materials.stock_models import MaterialSupplier
@@ -9,7 +11,7 @@ from materials.stock_models import StockInventory
 from materials.stock_models import StockLocation
 
 
-class MaterialSupplierForm(forms.ModelForm):
+class MaterialSupplierForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = MaterialSupplier
         fields = [
@@ -26,7 +28,7 @@ class MaterialSupplierForm(forms.ModelForm):
         ]
 
 
-class StockLocationForm(forms.ModelForm):
+class StockLocationForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = StockLocation
         fields = [
@@ -40,7 +42,7 @@ class StockLocationForm(forms.ModelForm):
         ]
 
 
-class SlabReceiveForm(forms.Form):
+class SlabReceiveForm(BootstrapFormMixin, forms.Form):
     material = forms.ModelChoiceField(queryset=Material.objects.filter(is_active=True))
     width = forms.DecimalField(label="Largura (mm)", min_value=0.01, max_digits=10, decimal_places=2)
     height = forms.DecimalField(label="Altura (mm)", min_value=0.01, max_digits=10, decimal_places=2)
@@ -64,21 +66,21 @@ class SlabReceiveForm(forms.Form):
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class SlabTransferForm(forms.Form):
+class SlabTransferForm(BootstrapFormMixin, forms.Form):
     destination = forms.ModelChoiceField(queryset=StockLocation.objects.filter(is_active=True))
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class SlabBlockForm(forms.Form):
+class SlabBlockForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(label="Motivo", widget=forms.Textarea(attrs={"rows": 3}))
 
 
-class SlabAdjustForm(forms.Form):
+class SlabAdjustForm(BootstrapFormMixin, forms.Form):
     new_available_area = forms.DecimalField(label="Nova área disponível (m²)", max_digits=10, decimal_places=4)
     reason = forms.CharField(label="Justificativa", widget=forms.Textarea(attrs={"rows": 3}))
 
 
-class SlabReservationForm(forms.Form):
+class SlabReservationForm(BootstrapFormMixin, forms.Form):
     slab = forms.ModelChoiceField(queryset=MaterialSlab.objects.none())
     reserved_area = forms.DecimalField(label="Área reservada (m²)", max_digits=10, decimal_places=4, min_value=0.0001)
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
@@ -91,7 +93,7 @@ class SlabReservationForm(forms.Form):
             self.fields["slab"].queryset = compatible_slabs_for_piece(piece=piece)
 
 
-class SlabConsumptionForm(forms.Form):
+class SlabConsumptionForm(BootstrapFormMixin, forms.Form):
     consumed_area = forms.DecimalField(label="Área consumida (m²)", max_digits=10, decimal_places=4, min_value=0.0001)
     lost_area = forms.DecimalField(label="Área perdida (m²)", max_digits=10, decimal_places=4, min_value=0, required=False, initial=0)
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
@@ -99,24 +101,24 @@ class SlabConsumptionForm(forms.Form):
     remnant_height = forms.DecimalField(label="Sobra altura (mm)", required=False, max_digits=10, decimal_places=2)
 
 
-class SlabLossForm(forms.Form):
+class SlabLossForm(BootstrapFormMixin, forms.Form):
     area = forms.DecimalField(label="Área (m²)", max_digits=10, decimal_places=4, min_value=0.0001)
     loss_reason = forms.ChoiceField(choices=SlabLoss.LossReason.choices)
     description = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class StockInventoryForm(forms.ModelForm):
+class StockInventoryForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = StockInventory
         fields = ["location", "notes"]
 
 
-class StockInventoryItemForm(forms.Form):
+class StockInventoryItemForm(BootstrapFormMixin, forms.Form):
     counted_area = forms.DecimalField(label="Área contada (m²)", max_digits=10, decimal_places=4, min_value=0)
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class MaterialSlabEditForm(forms.ModelForm):
+class MaterialSlabEditForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = MaterialSlab
         fields = [

@@ -1,10 +1,12 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from access_control.models import AccessRole
 from access_control.models import DataScope
 
 
-class RoleForm(forms.ModelForm):
+class RoleForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = AccessRole
         fields = [
@@ -42,7 +44,7 @@ class RoleForm(forms.ModelForm):
         self.fields["maintenance_scope"].choices = scope_choices
 
 
-class PermissionMatrixForm(forms.Form):
+class PermissionMatrixForm(BootstrapFormMixin, forms.Form):
     def __init__(self, *args, permissions=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.permissions = list(permissions or [])

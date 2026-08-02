@@ -1,5 +1,6 @@
 {% extends "vertical.html" %}
 {% load erp_permissions %}
+{% load erp_forms %}
 
 {% block title %}{{ page_title }}{% endblock title %}
 
@@ -79,12 +80,12 @@
         <div class="card-body">
           <h5 class="card-title">Alterar status</h5>
           <form method="post" action="{% url 'operacao:order_change_status' order.pk %}">{% csrf_token %}
-            {{ status_form.as_p }}
+            {% erp_form_fields status_form %}
             <button class="btn btn-primary btn-sm" type="submit">Atualizar</button>
           </form>
           <hr />
           <form method="post" action="{% url 'operacao:order_hold' order.pk %}">{% csrf_token %}
-            {{ hold_form.as_p }}
+            {% erp_form_fields hold_form %}
             <button class="btn btn-warning btn-sm" type="submit">Em espera</button>
           </form>
         </div>

@@ -1,5 +1,7 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from materials.models import AdditionalService
 from materials.models import FinishType
 from materials.models import Material
@@ -7,13 +9,13 @@ from materials.models import MaterialCategory
 from materials.models import MaterialSlab
 
 
-class MaterialCategoryForm(forms.ModelForm):
+class MaterialCategoryForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = MaterialCategory
         fields = ["name", "slug", "description", "is_active"]
 
 
-class MaterialForm(forms.ModelForm):
+class MaterialForm(BootstrapFormMixin, forms.ModelForm):
     price_change_reason = forms.CharField(
         label="Justificativa de alteração de preço",
         required=False,
@@ -56,7 +58,7 @@ class MaterialForm(forms.ModelForm):
         return cleaned
 
 
-class MaterialPriceChangeForm(forms.Form):
+class MaterialPriceChangeForm(BootstrapFormMixin, forms.Form):
     price_type = forms.ChoiceField(
         choices=[
             ("cost", "Custo"),
@@ -71,7 +73,7 @@ class MaterialPriceChangeForm(forms.Form):
     )
 
 
-class MaterialSlabForm(forms.ModelForm):
+class MaterialSlabForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = MaterialSlab
         fields = [
@@ -96,7 +98,7 @@ class MaterialSlabForm(forms.ModelForm):
         ]
 
 
-class FinishTypeForm(forms.ModelForm):
+class FinishTypeForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = FinishType
         fields = [
@@ -110,7 +112,7 @@ class FinishTypeForm(forms.ModelForm):
         ]
 
 
-class AdditionalServiceForm(forms.ModelForm):
+class AdditionalServiceForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = AdditionalService
         fields = [

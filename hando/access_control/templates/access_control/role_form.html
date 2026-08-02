@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 
 {% block title %}
   {{ page_title }}
@@ -15,8 +16,8 @@
     {% endif %}
     <div class="card">
       <div class="card-body">
-        <form method="post" novalidate>
-          {% csrf_token %}{{ form.as_p }}
+        <form method="post" class="erp-form" novalidate>
+          {% csrf_token %}{% erp_form_fields form %}
           <button type="submit" class="btn btn-primary">Salvar</button>
           <a href="{% url 'access_control:roles' %}" class="btn btn-light">Cancelar</a>
         </form>

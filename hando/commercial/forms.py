@@ -1,5 +1,7 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from commercial.models import CommercialPartner
 from commercial.models import CommercialSource
 from commercial.models import ContactChannel
@@ -8,7 +10,7 @@ from commercial.models import ProjectType
 from commercial.models import ServiceRegion
 
 
-class CommercialSourceForm(forms.ModelForm):
+class CommercialSourceForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = CommercialSource
         fields = [
@@ -29,7 +31,7 @@ class CommercialSourceForm(forms.ModelForm):
         }
 
 
-class ProjectTypeForm(forms.ModelForm):
+class ProjectTypeForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = ProjectType
         fields = [
@@ -52,7 +54,7 @@ class ProjectTypeForm(forms.ModelForm):
         }
 
 
-class CommercialPartnerForm(forms.ModelForm):
+class CommercialPartnerForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = CommercialPartner
         fields = [
@@ -99,7 +101,7 @@ class CommercialPartnerForm(forms.ModelForm):
         }
 
 
-class LossReasonForm(forms.ModelForm):
+class LossReasonForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = LossReason
         fields = [
@@ -122,7 +124,7 @@ class LossReasonForm(forms.ModelForm):
         }
 
 
-class ServiceRegionForm(forms.ModelForm):
+class ServiceRegionForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = ServiceRegion
         fields = [
@@ -157,7 +159,7 @@ class ServiceRegionForm(forms.ModelForm):
         }
 
 
-class ContactChannelForm(forms.ModelForm):
+class ContactChannelForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = ContactChannel
         fields = [

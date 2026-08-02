@@ -1,6 +1,8 @@
 from decimal import Decimal
 
 from django import forms
+
+from hando.forms import BootstrapFormMixin
 from django.utils import timezone
 
 from commercial.models import CommercialPartner
@@ -15,17 +17,7 @@ from finance.models import PaymentTerm
 from salespeople.models import Salesperson
 
 
-class _Styled(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            if not isinstance(field.widget, forms.CheckboxInput):
-                field.widget.attrs["class"] = "form-control"
-            if isinstance(field.widget, forms.Select):
-                field.widget.attrs["class"] = "form-select"
-
-
-class CommissionPolicyForm(_Styled):
+class CommissionPolicyForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = CommissionPolicy
         fields = [
@@ -49,7 +41,7 @@ class CommissionPolicyForm(_Styled):
         }
 
 
-class TierForm(forms.Form):
+class TierForm(BootstrapFormMixin, forms.Form):
     sequence = forms.IntegerField(min_value=1, initial=1)
     minimum_value = forms.DecimalField(min_value=Decimal("0"), initial=Decimal("0"))
     maximum_value = forms.DecimalField(required=False, min_value=Decimal("0"))
@@ -64,7 +56,7 @@ class TierForm(forms.Form):
                 f.widget.attrs["class"] = "form-select"
 
 
-class AdjustmentForm(forms.Form):
+class AdjustmentForm(BootstrapFormMixin, forms.Form):
     beneficiary_type = forms.ChoiceField(
         choices=[("salesperson", "Vendedor"), ("commercial_partner", "Parceiro")],
     )
@@ -92,11 +84,11 @@ class AdjustmentForm(forms.Form):
                 field.widget.attrs["class"] = "form-select"
 
 
-class ReverseForm(forms.Form):
+class ReverseForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}))
 
 
-class SettlementForm(forms.Form):
+class SettlementForm(BootstrapFormMixin, forms.Form):
     beneficiary_type = forms.ChoiceField(
         choices=[("salesperson", "Vendedor"), ("commercial_partner", "Parceiro")],
     )
@@ -119,7 +111,7 @@ class SettlementForm(forms.Form):
                 field.widget.attrs["class"] = "form-select"
 
 
-class GeneratePayableForm(forms.Form):
+class GeneratePayableForm(BootstrapFormMixin, forms.Form):
     due_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}))
     payment_term = forms.ModelChoiceField(
         queryset=PaymentTerm.objects.filter(is_active=True),
@@ -128,7 +120,7 @@ class GeneratePayableForm(forms.Form):
     )
 
 
-class PaymentForm(forms.Form):
+class PaymentForm(BootstrapFormMixin, forms.Form):
     amount = forms.DecimalField(min_value=Decimal("0.01"))
     payment_date = forms.DateField(
         initial=timezone.localdate,
@@ -154,7 +146,7 @@ class PaymentForm(forms.Form):
                 field.widget.attrs["class"] = "form-select"
 
 
-class SimulatorForm(forms.Form):
+class SimulatorForm(BootstrapFormMixin, forms.Form):
     value = forms.DecimalField(min_value=Decimal("0.01"), label="Valor da venda")
     margin = forms.DecimalField(required=False, min_value=Decimal("0"), label="Margem %")
     discount = forms.DecimalField(required=False, min_value=Decimal("0"), label="Desconto R$")

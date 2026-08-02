@@ -1,0 +1,87 @@
+/* Padronização visual dos formulários do painel Hando (não institucional). */
+
+.erp-form .form-label {
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.erp-form .form-control,
+.erp-form .form-select {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Fallback para widgets Django sem classe Bootstrap. */
+.erp-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="image"]):not([type="reset"]),
+.erp-form select,
+.erp-form textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.47rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  background-clip: padding-box;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.erp-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):focus,
+.erp-form select:focus,
+.erp-form textarea:focus {
+  border-color: rgba(var(--bs-primary-rgb), 0.55);
+  outline: 0;
+  box-shadow: 0 0 0 0.15rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+.erp-form .form-check-input {
+  width: 1em;
+  height: 1em;
+  margin-top: 0.25em;
+}
+
+.erp-form .form-check-label {
+  margin-left: 0.25rem;
+}
+
+.erp-form .invalid-feedback {
+  font-size: 0.8125rem;
+}
+
+.erp-form .erp-form-actions {
+  border-top: 1px solid var(--bs-border-color);
+  padding-top: 1rem;
+}
+
+.erp-form p {
+  /* Mitiga resíduos de form.as_p em páginas ainda não migradas. */
+  margin-bottom: 1rem;
+}
+
+.erp-form p label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.erp-form p input:not([type="checkbox"]):not([type="radio"]),
+.erp-form p select,
+.erp-form p textarea {
+  width: 100%;
+}
+
+html[data-bs-theme="dark"] .erp-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+html[data-bs-theme="dark"] .erp-form select,
+html[data-bs-theme="dark"] .erp-form textarea,
+html[data-topbar-color="dark"] .erp-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+[data-bs-theme="dark"] .erp-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+[data-bs-theme="dark"] .erp-form select,
+[data-bs-theme="dark"] .erp-form textarea {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-color);
+}

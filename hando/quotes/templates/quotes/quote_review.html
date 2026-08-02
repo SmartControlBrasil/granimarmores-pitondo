@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 
 {% block title %}
   {{ page_title }}
@@ -11,8 +12,8 @@
     <div class="card">
       <div class="card-body">
         <p>Total: R$ {{ quote.grand_total }} | Margem: {{ quote.gross_margin_percentage }}%</p>
-        <form method="post">
-          {% csrf_token %}{{ form.as_p }}
+        <form method="post" class="erp-form">
+          {% csrf_token %}{% erp_form_fields form %}
           <button type="submit" class="btn btn-primary">Enviar para fluxo</button>
         </form>
       </div>

@@ -1,10 +1,11 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block page_content %}
 <div class="container-fluid py-3">
   <h4 class="mb-3">{{ page_title }}</h4>
   <div class="card"><div class="card-body">
-    <form method="post">{% csrf_token %}{{ form.as_p }}
+    <form method="post" class="erp-form">{% csrf_token %}{% erp_form_fields form %}
       <button class="btn btn-primary" type="submit">Salvar</button>
       <a class="btn btn-light" href="javascript:history.back()">Voltar</a>
     </form>

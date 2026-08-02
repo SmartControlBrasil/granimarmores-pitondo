@@ -1,11 +1,12 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block page_content %}
 <div class="container-fluid py-3">
   <h4 class="mb-2">{{ page_title }}</h4>
   <p class="text-muted">Simulação — nenhum evento será persistido.</p>
   <div class="row g-3">
-    <div class="col-md-5"><div class="card"><div class="card-body"><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn btn-primary" type="submit">Simular</button></form></div></div></div>
+    <div class="col-md-5"><div class="card"><div class="card-body"><form method="post" class="erp-form">{% csrf_token %}{% erp_form_fields form %}<button class="btn btn-primary" type="submit">Simular</button></form></div></div></div>
     <div class="col-md-7"><div class="card"><div class="card-header">Resultado</div><div class="card-body">
       {% if result %}
         {% if result.eligible %}

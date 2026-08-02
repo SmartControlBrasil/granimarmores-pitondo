@@ -1,5 +1,6 @@
 {% extends "vertical.html" %}
 {% load erp_permissions %}
+{% load erp_forms %}
 
 {% block title %}
   {{ page_title }}
@@ -114,13 +115,13 @@
           <div class="card mt-3">
             <div class="card-body">
               <h5 class="card-title">Aceite do cliente</h5>
-              <form method="post" action="{% url 'quotes:accept' quote.pk %}">{% csrf_token %}
-                {{ accept_form.as_p }}
+              <form method="post" class="erp-form" action="{% url 'quotes:accept' quote.pk %}">{% csrf_token %}
+                {% erp_form_fields accept_form %}
                 <button type="submit" class="btn btn-success">Aceitar orçamento</button>
               </form>
               <hr />
-              <form method="post" action="{% url 'quotes:refuse' quote.pk %}">{% csrf_token %}
-                {{ refuse_form.as_p }}
+              <form method="post" class="erp-form" action="{% url 'quotes:refuse' quote.pk %}">{% csrf_token %}
+                {% erp_form_fields refuse_form %}
                 <button type="submit" class="btn btn-outline-danger">Recusar orçamento</button>
               </form>
             </div>

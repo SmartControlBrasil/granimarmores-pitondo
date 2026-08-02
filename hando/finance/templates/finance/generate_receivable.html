@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 {% load formatters %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block page_content %}
@@ -11,8 +12,8 @@
     <p class="mb-0 text-muted">O aceite do orçamento não gera pagamento. As parcelas nascem abertas.</p>
   </div></div>
   <div class="card"><div class="card-body">
-    <form method="post">{% csrf_token %}
-      {{ form.as_p }}
+    <form method="post" class="erp-form">{% csrf_token %}
+      {% erp_form_fields form %}
       <button class="btn btn-primary" type="submit">Gerar contas a receber</button>
       <a class="btn btn-light" href="{% url 'operacao:order_detail' order.pk %}">Voltar</a>
     </form>

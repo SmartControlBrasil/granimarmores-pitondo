@@ -1,4 +1,6 @@
 from django import forms
+
+from hando.forms import BootstrapFormMixin
 from django.utils import timezone
 
 from commercial.lead_models import Lead
@@ -16,7 +18,7 @@ from commercial.lead_conversion import validate_lead_contact
 from salespeople.models import Salesperson
 
 
-class LeadForm(forms.ModelForm):
+class LeadForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Lead
         fields = [
@@ -77,7 +79,7 @@ class LeadForm(forms.ModelForm):
         return cleaned
 
 
-class LeadAssignForm(forms.Form):
+class LeadAssignForm(BootstrapFormMixin, forms.Form):
     assigned_salesperson = forms.ModelChoiceField(
         queryset=Salesperson.objects.filter(is_active=True),
         required=False,
@@ -85,7 +87,7 @@ class LeadAssignForm(forms.Form):
     )
 
 
-class LeadStatusForm(forms.Form):
+class LeadStatusForm(BootstrapFormMixin, forms.Form):
     new_status = forms.ChoiceField(choices=LeadStatus.choices, label="Novo status")
     override_reason = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
     loss_reason = forms.ModelChoiceField(
@@ -96,28 +98,28 @@ class LeadStatusForm(forms.Form):
     loss_notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
 
 
-class LeadActivityForm(forms.Form):
+class LeadActivityForm(BootstrapFormMixin, forms.Form):
     activity_type = forms.ChoiceField(choices=LeadActivityType.choices, label="Tipo")
     title = forms.CharField(max_length=180)
     description = forms.CharField(widget=forms.Textarea(attrs={"rows": 4}))
     next_action_at = forms.DateTimeField(required=False, widget=forms.DateTimeInput(attrs={"type": "datetime-local"}))
 
 
-class LeadTaskForm(forms.ModelForm):
+class LeadTaskForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = LeadTask
         fields = ["title", "description", "assigned_to", "due_at", "priority"]
         widgets = {"due_at": forms.DateTimeInput(attrs={"type": "datetime-local"})}
 
 
-class LeadConvertLinkForm(forms.Form):
+class LeadConvertLinkForm(BootstrapFormMixin, forms.Form):
     customer_id = forms.IntegerField(required=False)
 
 
-class LeadLossForm(forms.Form):
+class LeadLossForm(BootstrapFormMixin, forms.Form):
     loss_reason = forms.ModelChoiceField(queryset=LossReason.objects.filter(is_active=True))
     loss_notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
 
 
-class LeadReopenForm(forms.Form):
+class LeadReopenForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}))

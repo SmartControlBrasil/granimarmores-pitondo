@@ -1,5 +1,7 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from documents.models import AcceptanceType
 from documents.models import Confidentiality
 from documents.models import DocumentTemplate
@@ -10,7 +12,7 @@ from documents.models import SignatureType
 from documents.services.placeholders import PLACEHOLDER_WHITELIST
 
 
-class DocumentTypeForm(forms.ModelForm):
+class DocumentTypeForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = DocumentType
         fields = [
@@ -29,7 +31,7 @@ class DocumentTypeForm(forms.ModelForm):
         ]
 
 
-class DocumentTemplateForm(forms.ModelForm):
+class DocumentTemplateForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = DocumentTemplate
         fields = [
@@ -55,7 +57,7 @@ class DocumentTemplateForm(forms.ModelForm):
         self.fields["document_type"].queryset = DocumentType.objects.filter(is_active=True)
 
 
-class ManagedDocumentForm(forms.ModelForm):
+class ManagedDocumentForm(BootstrapFormMixin, forms.ModelForm):
     initial_content = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={"rows": 10}),
@@ -96,17 +98,17 @@ class ManagedDocumentForm(forms.ModelForm):
         self.fields["template"].required = False
 
 
-class VersionContentForm(forms.Form):
+class VersionContentForm(BootstrapFormMixin, forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={"rows": 14}), label="Conteúdo")
     change_summary = forms.CharField(required=False, max_length=255, label="Resumo da alteração")
 
 
-class ReviewDecisionForm(forms.Form):
+class ReviewDecisionForm(BootstrapFormMixin, forms.Form):
     comments = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
     reason = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 3}))
 
 
-class SendRecordForm(forms.Form):
+class SendRecordForm(BootstrapFormMixin, forms.Form):
     channel = forms.ChoiceField(choices=SendChannel.choices)
     recipient_name = forms.CharField(required=False, max_length=180)
     recipient_email = forms.EmailField(required=False)
@@ -115,13 +117,13 @@ class SendRecordForm(forms.Form):
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class ViewRecordForm(forms.Form):
+class ViewRecordForm(BootstrapFormMixin, forms.Form):
     viewer_name = forms.CharField(required=False, max_length=180)
     channel = forms.ChoiceField(choices=SendChannel.choices, initial=SendChannel.OTHER)
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class AcceptanceForm(forms.Form):
+class AcceptanceForm(BootstrapFormMixin, forms.Form):
     accepted = forms.BooleanField(required=False, initial=True, label="Aceito")
     acceptance_type = forms.ChoiceField(choices=AcceptanceType.choices)
     accepted_by_name = forms.CharField(max_length=180)
@@ -130,7 +132,7 @@ class AcceptanceForm(forms.Form):
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class SignatureForm(forms.Form):
+class SignatureForm(BootstrapFormMixin, forms.Form):
     signer_name = forms.CharField(max_length=180)
     signer_document = forms.CharField(required=False, max_length=40)
     signer_role = forms.CharField(required=False, max_length=120)
@@ -140,15 +142,15 @@ class SignatureForm(forms.Form):
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class ReasonForm(forms.Form):
+class ReasonForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}), label="Motivo")
 
 
-class RenewForm(forms.Form):
+class RenewForm(BootstrapFormMixin, forms.Form):
     expiration_date = forms.DateField(required=False, label="Novo vencimento")
 
 
-class FromTemplateForm(forms.Form):
+class FromTemplateForm(BootstrapFormMixin, forms.Form):
     template = forms.ModelChoiceField(queryset=DocumentTemplate.objects.none())
     title = forms.CharField(required=False, max_length=220)
 

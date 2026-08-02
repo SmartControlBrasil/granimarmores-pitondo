@@ -1,0 +1,35 @@
+{% for hidden in hidden_fields %}{{ hidden }}{% endfor %}
+{% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+      <div>{{ error }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="row g-3 erp-form-grid">
+  {% for item in items %}
+    {% with field=item.field %}
+      <div class="{{ item.col }}">
+        {% if field.field.widget.input_type == "checkbox" and field.field.widget.template_name|default:"" != "django/forms/widgets/checkbox_select.html" %}
+          <div class="form-check mt-2">
+            {{ field }}
+            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+          </div>
+        {% else %}
+          <label class="form-label" for="{{ field.id_for_label }}">
+            {{ field.label }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+          </label>
+          {{ field }}
+        {% endif %}
+        {% if field.help_text %}
+          <div class="form-text">{{ field.help_text }}</div>
+        {% endif %}
+        {% if field.errors %}
+          <div class="invalid-feedback d-block">
+            {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endwith %}
+  {% endfor %}
+</div>

@@ -1,12 +1,14 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from commercial.performance_models import GoalPeriodType
 from commercial.performance_models import SalesGoal
 from commercial.performance_models import SalesScorePolicy
 from salespeople.models import Salesperson
 
 
-class SalesGoalForm(forms.ModelForm):
+class SalesGoalForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = SalesGoal
         fields = [
@@ -61,7 +63,7 @@ class SalesGoalForm(forms.ModelForm):
         return cleaned
 
 
-class SalesScorePolicyForm(forms.ModelForm):
+class SalesScorePolicyForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = SalesScorePolicy
         fields = [
@@ -105,7 +107,7 @@ class SalesScorePolicyForm(forms.ModelForm):
         return cleaned
 
 
-class ManualScoreAdjustmentForm(forms.Form):
+class ManualScoreAdjustmentForm(BootstrapFormMixin, forms.Form):
     salesperson = forms.ModelChoiceField(
         queryset=Salesperson.objects.filter(is_active=True),
         label="Vendedor",

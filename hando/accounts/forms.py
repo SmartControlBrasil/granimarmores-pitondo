@@ -1,4 +1,6 @@
 from django import forms
+
+from hando.forms import BootstrapFormMixin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 
@@ -7,7 +9,7 @@ from access_control.models import UserAccess
 User = get_user_model()
 
 
-class UserCreateForm(forms.ModelForm):
+class UserCreateForm(BootstrapFormMixin, forms.ModelForm):
     password1 = forms.CharField(label="Senha", widget=forms.PasswordInput)
     password2 = forms.CharField(
         label="Confirmação da senha",
@@ -43,7 +45,7 @@ class UserCreateForm(forms.ModelForm):
         return cleaned
 
 
-class UserUpdateForm(forms.ModelForm):
+class UserUpdateForm(BootstrapFormMixin, forms.ModelForm):
     full_name = forms.CharField(label="Nome completo", max_length=180, required=False)
     phone = forms.CharField(label="Telefone", max_length=30, required=False)
     job_title = forms.CharField(label="Cargo interno", max_length=120, required=False)
@@ -88,7 +90,7 @@ class UserUpdateForm(forms.ModelForm):
             ].initial = self.profile.must_change_password
 
 
-class UserAccessForm(forms.ModelForm):
+class UserAccessForm(BootstrapFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["valid_from"].required = False
@@ -109,7 +111,7 @@ class UserAccessForm(forms.ModelForm):
         }
 
 
-class AdminPasswordResetForm(forms.Form):
+class AdminPasswordResetForm(BootstrapFormMixin, forms.Form):
     password1 = forms.CharField(label="Nova senha", widget=forms.PasswordInput)
     password2 = forms.CharField(
         label="Confirmação da senha",

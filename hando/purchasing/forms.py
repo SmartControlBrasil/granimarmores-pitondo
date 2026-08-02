@@ -5,6 +5,7 @@ from django import forms
 from finance.models import CostCenter
 from finance.models import PaymentMethod
 from finance.models import PaymentTerm
+from hando.forms import BootstrapFormMixin
 from materials.models import Material
 from materials.stock_models import MaterialSupplier
 from materials.stock_models import StockLocation
@@ -18,18 +19,7 @@ from purchasing.models import SourceType
 from purchasing.models import SupplierQuotation
 
 
-class _StyledModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            css = field.widget.attrs.get("class", "")
-            if not isinstance(field.widget, forms.CheckboxInput):
-                field.widget.attrs["class"] = (css + " form-control").strip()
-            if isinstance(field.widget, forms.Select):
-                field.widget.attrs["class"] = (css + " form-select").strip()
-
-
-class PurchaseRequestForm(_StyledModelForm):
+class PurchaseRequestForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = PurchaseRequest
         fields = [
@@ -50,7 +40,7 @@ class PurchaseRequestForm(_StyledModelForm):
         self.fields["notes"].required = False
 
 
-class PurchaseRequestItemForm(forms.Form):
+class PurchaseRequestItemForm(BootstrapFormMixin, forms.Form):
     item_type = forms.ChoiceField(choices=ItemType.choices, initial=ItemType.MATERIAL)
     material = forms.ModelChoiceField(
         queryset=Material.objects.filter(is_active=True),
@@ -81,15 +71,15 @@ class PurchaseRequestItemForm(forms.Form):
                 field.widget.attrs["class"] = "form-select"
 
 
-class RejectForm(forms.Form):
+class RejectForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}))
 
 
-class CancelForm(forms.Form):
+class CancelForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}))
 
 
-class QuotationForm(_StyledModelForm):
+class QuotationForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = SupplierQuotation
         fields = [
@@ -117,7 +107,7 @@ class QuotationForm(_StyledModelForm):
         self.fields["notes"].required = False
 
 
-class QuotationItemForm(forms.Form):
+class QuotationItemForm(BootstrapFormMixin, forms.Form):
     request_item_id = forms.IntegerField(required=False)
     description = forms.CharField(max_length=255)
     quantity = forms.DecimalField(min_value=Decimal("0.001"), max_digits=12, decimal_places=3)
@@ -131,7 +121,7 @@ class QuotationItemForm(forms.Form):
             field.widget.attrs["class"] = "form-control"
 
 
-class SelectionForm(forms.Form):
+class SelectionForm(BootstrapFormMixin, forms.Form):
     quotation_item_ids = forms.TypedMultipleChoiceField(
         coerce=int,
         required=True,
@@ -145,7 +135,7 @@ class SelectionForm(forms.Form):
             self.fields["quotation_item_ids"].choices = choices
 
 
-class ReceiptCreateForm(forms.Form):
+class ReceiptCreateForm(BootstrapFormMixin, forms.Form):
     delivery_document = forms.CharField(required=False, max_length=120)
     supplier_document = forms.CharField(required=False, max_length=120)
     stock_location = forms.ModelChoiceField(
@@ -165,7 +155,7 @@ class ReceiptCreateForm(forms.Form):
                 field.widget.attrs["class"] = "form-select"
 
 
-class ReceiptItemForm(forms.Form):
+class ReceiptItemForm(BootstrapFormMixin, forms.Form):
     purchase_order_item_id = forms.IntegerField(widget=forms.HiddenInput)
     received_quantity = forms.DecimalField(min_value=Decimal("0"), max_digits=12, decimal_places=3)
     accepted_quantity = forms.DecimalField(min_value=Decimal("0"), max_digits=12, decimal_places=3)
@@ -194,7 +184,7 @@ class ReceiptItemForm(forms.Form):
                 field.widget.attrs["class"] = "form-select"
 
 
-class GeneratePayableForm(forms.Form):
+class GeneratePayableForm(BootstrapFormMixin, forms.Form):
     due_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}))
     payment_term = forms.ModelChoiceField(
         queryset=PaymentTerm.objects.filter(is_active=True),
@@ -203,7 +193,7 @@ class GeneratePayableForm(forms.Form):
     )
 
 
-class PurchaseOrderEditForm(_StyledModelForm):
+class PurchaseOrderEditForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = PurchaseOrder
         fields = [
@@ -222,7 +212,7 @@ class PurchaseOrderEditForm(_StyledModelForm):
         self.fields["payment_method"].queryset = PaymentMethod.objects.filter(is_active=True)
 
 
-class ReturnForm(forms.Form):
+class ReturnForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}))
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2, "class": "form-control"}))
     receipt_item_id = forms.IntegerField()

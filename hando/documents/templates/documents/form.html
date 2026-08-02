@@ -1,14 +1,18 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block page_content %}
 <div class="container-fluid py-3">
   <h4 class="mb-3">{{ page_title }}</h4>
   {% if placeholder_help %}<p class="small text-muted">Placeholders: {{ placeholder_help }}</p>{% endif %}
   <div class="card"><div class="card-body">
-    <form method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <button class="btn btn-primary" type="submit">Salvar</button>
-      <a class="btn btn-light" href="javascript:history.back()">Voltar</a>
+    <form method="post" class="erp-form" novalidate {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+      {% csrf_token %}
+      {% erp_form_fields form %}
+      <div class="erp-form-actions mt-4 d-flex flex-wrap gap-2">
+        <button class="btn btn-primary" type="submit">{{ submit_label|default:"Salvar" }}</button>
+        <button class="btn btn-light" type="button" onclick="history.back()">Cancelar</button>
+      </div>
     </form>
   </div></div>
 </div>

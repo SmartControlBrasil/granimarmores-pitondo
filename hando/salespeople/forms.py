@@ -1,9 +1,10 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
 from salespeople.models import Salesperson
 
 
-class SalespersonForm(forms.ModelForm):
+class SalespersonForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Salesperson
         fields = [

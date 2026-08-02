@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 
 {% block title %}{{ page_title }}{% endblock title %}
 {% block page_content %}
@@ -13,10 +14,10 @@
     {% endif %}
     <div class="card">
       <div class="card-body">
-        <form method="post">
+        <form method="post" class="erp-form" novalidate>
           {% csrf_token %}
-          {{ form.as_p }}
-          <div class="d-flex gap-2">
+          {% erp_form_fields form %}
+          <div class="erp-form-actions mt-4 d-flex flex-wrap gap-2">
             <button type="submit" class="btn btn-primary">Salvar</button>
             {% if lead %}
               <a href="{% url 'leads:detail' lead.pk %}" class="btn btn-light">Cancelar</a>

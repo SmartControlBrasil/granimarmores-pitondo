@@ -10,24 +10,12 @@ from finance.models import FinancialAccount
 from finance.models import FinancialCategory
 from finance.models import PaymentMethod
 from finance.models import PaymentTerm
+from hando.forms import BootstrapFormMixin
 from materials.stock_models import MaterialSupplier
 from production.models import SalesOrder
 
 
-class _StyledModelForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            css = field.widget.attrs.get("class", "")
-            if isinstance(field.widget, forms.CheckboxInput):
-                field.widget.attrs["class"] = f"{css} form-check-input".strip()
-            elif isinstance(field.widget, forms.Select):
-                field.widget.attrs["class"] = f"{css} form-select".strip()
-            else:
-                field.widget.attrs["class"] = f"{css} form-control".strip()
-
-
-class FinancialCategoryForm(_StyledModelForm):
+class FinancialCategoryForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = FinancialCategory
         fields = [
@@ -41,13 +29,13 @@ class FinancialCategoryForm(_StyledModelForm):
         ]
 
 
-class CostCenterForm(_StyledModelForm):
+class CostCenterForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = CostCenter
         fields = ["name", "code", "description", "parent", "is_active"]
 
 
-class PaymentMethodForm(_StyledModelForm):
+class PaymentMethodForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = PaymentMethod
         fields = [
@@ -62,7 +50,7 @@ class PaymentMethodForm(_StyledModelForm):
         ]
 
 
-class PaymentTermForm(_StyledModelForm):
+class PaymentTermForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = PaymentTerm
         fields = [
@@ -77,7 +65,7 @@ class PaymentTermForm(_StyledModelForm):
         ]
 
 
-class FinancialAccountForm(_StyledModelForm):
+class FinancialAccountForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = FinancialAccount
         fields = [
@@ -97,7 +85,7 @@ class FinancialAccountForm(_StyledModelForm):
             self.fields["initial_balance"].disabled = True
 
 
-class ReceivableForm(_StyledModelForm):
+class ReceivableForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = AccountsReceivable
         fields = [
@@ -126,7 +114,7 @@ class ReceivableForm(_StyledModelForm):
         self.fields["payment_term"].queryset = PaymentTerm.objects.filter(is_active=True)
 
 
-class PayableForm(_StyledModelForm):
+class PayableForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = AccountsPayable
         fields = [
@@ -152,7 +140,7 @@ class PayableForm(_StyledModelForm):
         self.fields["cost_center"].queryset = CostCenter.objects.filter(is_active=True)
 
 
-class ReceivePaymentForm(forms.Form):
+class ReceivePaymentForm(BootstrapFormMixin, forms.Form):
     installment = forms.ModelChoiceField(queryset=None)
     payment_date = forms.DateField(initial=timezone.localdate)
     amount = forms.DecimalField(min_value=0.01, max_digits=14, decimal_places=2)
@@ -172,7 +160,7 @@ class ReceivePaymentForm(forms.Form):
                 field.widget.attrs["class"] = "form-control"
 
 
-class PayExpenseForm(forms.Form):
+class PayExpenseForm(BootstrapFormMixin, forms.Form):
     installment = forms.ModelChoiceField(queryset=None)
     payment_date = forms.DateField(initial=timezone.localdate)
     amount = forms.DecimalField(min_value=0.01, max_digits=14, decimal_places=2)
@@ -192,15 +180,15 @@ class PayExpenseForm(forms.Form):
                 field.widget.attrs["class"] = "form-control"
 
 
-class CancelForm(forms.Form):
+class CancelForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}))
 
 
-class ReversePaymentForm(forms.Form):
+class ReversePaymentForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}))
 
 
-class GenerateReceivableForm(forms.Form):
+class GenerateReceivableForm(BootstrapFormMixin, forms.Form):
     payment_term = forms.ModelChoiceField(
         queryset=PaymentTerm.objects.filter(is_active=True),
         widget=forms.Select(attrs={"class": "form-select"}),
@@ -221,7 +209,7 @@ class GenerateReceivableForm(forms.Form):
     )
 
 
-class TransferForm(forms.Form):
+class TransferForm(BootstrapFormMixin, forms.Form):
     source_account = forms.ModelChoiceField(queryset=FinancialAccount.objects.filter(is_active=True))
     destination_account = forms.ModelChoiceField(queryset=FinancialAccount.objects.filter(is_active=True))
     amount = forms.DecimalField(min_value=0.01, max_digits=14, decimal_places=2)
@@ -234,7 +222,7 @@ class TransferForm(forms.Form):
             field.widget.attrs["class"] = "form-control"
 
 
-class AdjustmentForm(forms.Form):
+class AdjustmentForm(BootstrapFormMixin, forms.Form):
     account = forms.ModelChoiceField(queryset=FinancialAccount.objects.filter(is_active=True))
     direction = forms.ChoiceField(choices=[("in", "Entrada"), ("out", "Saída")])
     amount = forms.DecimalField(min_value=0.01, max_digits=14, decimal_places=2)

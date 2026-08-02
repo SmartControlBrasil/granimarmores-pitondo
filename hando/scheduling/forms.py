@@ -1,4 +1,6 @@
 from django import forms
+
+from hando.forms import BootstrapFormMixin
 from django.contrib.auth import get_user_model
 
 from customers.models import Customer
@@ -13,7 +15,7 @@ from scheduling.models import OperationalEvent
 User = get_user_model()
 
 
-class OperationalEventForm(forms.ModelForm):
+class OperationalEventForm(BootstrapFormMixin, forms.ModelForm):
     override_conflicts = forms.BooleanField(required=False, label="Permitir conflito (override)")
     override_reason = forms.CharField(
         required=False,
@@ -74,18 +76,18 @@ class OperationalEventForm(forms.ModelForm):
         self.fields["event_type"].choices = EventType.choices
 
 
-class RescheduleForm(forms.Form):
+class RescheduleForm(BootstrapFormMixin, forms.Form):
     new_start_at = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"type": "datetime-local"}))
     new_end_at = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"type": "datetime-local"}))
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}))
     override_conflicts = forms.BooleanField(required=False, label="Override de conflito")
 
 
-class CancelEventForm(forms.Form):
+class CancelEventForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(label="Motivo", widget=forms.Textarea(attrs={"rows": 3}))
 
 
-class CompleteEventForm(forms.Form):
+class CompleteEventForm(BootstrapFormMixin, forms.Form):
     completion_notes = forms.CharField(
         required=False,
         label="Observações de conclusão",
@@ -93,12 +95,12 @@ class CompleteEventForm(forms.Form):
     )
 
 
-class ConfirmEventForm(forms.Form):
+class ConfirmEventForm(BootstrapFormMixin, forms.Form):
     channel = forms.ChoiceField(choices=ConfirmationChannel.choices)
     notes = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class LeadScheduleForm(forms.Form):
+class LeadScheduleForm(BootstrapFormMixin, forms.Form):
     event_type = forms.ChoiceField(
         choices=[
             (EventType.COMMERCIAL_FOLLOW_UP, "Agendar contato"),
@@ -119,7 +121,7 @@ class LeadScheduleForm(forms.Form):
     override_reason = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 2}))
 
 
-class OrderScheduleForm(forms.Form):
+class OrderScheduleForm(BootstrapFormMixin, forms.Form):
     event_type = forms.ChoiceField(
         choices=[
             (EventType.MEASUREMENT, "Agendar medição"),

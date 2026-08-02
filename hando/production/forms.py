@@ -1,5 +1,7 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from commercial.models import ContactChannel
 from commercial.models import LossReason
 from production.models import DeliverySchedule
@@ -9,7 +11,7 @@ from production.models import SalesOrder
 from production.models import SalesOrderStatus
 
 
-class AcceptQuoteForm(forms.Form):
+class AcceptQuoteForm(BootstrapFormMixin, forms.Form):
     customer_name = forms.CharField(max_length=160, label="Nome do cliente")
     customer_document = forms.CharField(max_length=40, required=False, label="Documento")
     acceptance_channel = forms.ModelChoiceField(
@@ -24,7 +26,7 @@ class AcceptQuoteForm(forms.Form):
     )
 
 
-class RefuseQuoteForm(forms.Form):
+class RefuseQuoteForm(BootstrapFormMixin, forms.Form):
     loss_reason = forms.ModelChoiceField(
         queryset=LossReason.objects.filter(is_active=True),
         label="Motivo de perda",
@@ -41,7 +43,7 @@ class RefuseQuoteForm(forms.Form):
     )
 
 
-class SalesOrderForm(forms.ModelForm):
+class SalesOrderForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = SalesOrder
         fields = [
@@ -59,7 +61,7 @@ class SalesOrderForm(forms.ModelForm):
         widgets = {"promised_date": forms.DateInput(attrs={"type": "date"})}
 
 
-class SalesOrderStatusForm(forms.Form):
+class SalesOrderStatusForm(BootstrapFormMixin, forms.Form):
     new_status = forms.ChoiceField(choices=SalesOrderStatus.choices, label="Novo status")
     reason = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 2}),
@@ -68,15 +70,15 @@ class SalesOrderStatusForm(forms.Form):
     )
 
 
-class SalesOrderHoldForm(forms.Form):
+class SalesOrderHoldForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}), label="Motivo da pausa")
 
 
-class SalesOrderCancelForm(forms.Form):
+class SalesOrderCancelForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}), label="Motivo do cancelamento")
 
 
-class ProductionOrderForm(forms.ModelForm):
+class ProductionOrderForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = ProductionOrder
         fields = [
@@ -93,7 +95,7 @@ class ProductionOrderForm(forms.ModelForm):
         }
 
 
-class ProductionActionForm(forms.Form):
+class ProductionActionForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 2}),
         required=False,
@@ -101,7 +103,7 @@ class ProductionActionForm(forms.Form):
     )
 
 
-class DeliveryScheduleForm(forms.ModelForm):
+class DeliveryScheduleForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = DeliverySchedule
         fields = [
@@ -123,7 +125,7 @@ class DeliveryScheduleForm(forms.ModelForm):
         }
 
 
-class InstallationScheduleForm(forms.ModelForm):
+class InstallationScheduleForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = InstallationSchedule
         fields = [
@@ -145,20 +147,20 @@ class InstallationScheduleForm(forms.ModelForm):
         }
 
 
-class InstallationCompleteForm(forms.Form):
+class InstallationCompleteForm(BootstrapFormMixin, forms.Form):
     result_notes = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}), label="Resultado")
     return_required = forms.BooleanField(required=False, label="Necessita retorno")
 
 
-class QualityInspectionForm(forms.Form):
+class QualityInspectionForm(BootstrapFormMixin, forms.Form):
     notes = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}), required=False, label="Observações")
 
 
-class StageSkipForm(forms.Form):
+class StageSkipForm(BootstrapFormMixin, forms.Form):
     reason = forms.CharField(widget=forms.Textarea(attrs={"rows": 2}), label="Justificativa")
 
 
-class AssignSlabForm(forms.Form):
+class AssignSlabForm(BootstrapFormMixin, forms.Form):
     slab = forms.ModelChoiceField(queryset=None, label="Chapa")
 
     def __init__(self, *args, material=None, **kwargs):

@@ -1,14 +1,17 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block page_content %}
-<div class="container-fluid">
-  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
-  {% if messages %}{% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>{% endfor %}{% endif %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
   <div class="card"><div class="card-body">
-    <form method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <button class="btn btn-primary" type="submit">Salvar</button>
-      <a class="btn btn-light" href="javascript:history.back()">Voltar</a>
+    <form method="post" class="erp-form" novalidate>
+      {% csrf_token %}
+      {% erp_form_fields form %}
+      <div class="erp-form-actions mt-4 d-flex flex-wrap gap-2">
+        <button class="btn btn-primary" type="submit">Salvar</button>
+        <a class="btn btn-light" href="javascript:history.back()">Voltar</a>
+      </div>
     </form>
   </div></div>
 </div>

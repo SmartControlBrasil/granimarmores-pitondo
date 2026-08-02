@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_forms %}
 
 {% block title %}{{ page_title }}{% endblock title %}
 {% block page_content %}
@@ -8,9 +9,9 @@
     </div>
     <div class="card">
       <div class="card-body">
-        <form method="post">
+        <form method="post" class="erp-form">
           {% csrf_token %}
-          {{ form.as_p }}
+          {% erp_form_fields form %}
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Salvar</button>
             {% if partner %}

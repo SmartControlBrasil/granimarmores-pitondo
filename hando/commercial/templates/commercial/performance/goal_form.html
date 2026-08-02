@@ -1,10 +1,5 @@
 {% extends "erp/form.html" %}
+{% load erp_forms %}
 {% block form_fields %}
-  {% for field in form %}
-    <div class="mb-3">
-      <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {{ field }}
-      {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
-    </div>
-  {% endfor %}
+  {% erp_form_fields form %}
 {% endblock %}

@@ -1,5 +1,7 @@
 from django import forms
 
+from hando.forms import BootstrapFormMixin
+
 from commercial.models import CommercialPartner
 from commercial.models import CommercialSource
 from commercial.models import ContactChannel
@@ -7,7 +9,7 @@ from commercial.models import ProjectType
 from customers.models import Customer
 
 
-class CustomerForm(forms.ModelForm):
+class CustomerForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Customer
         fields = [
