@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     "audit",
     "customers",
     "salespeople",
+    "commercial",
     "materials",
     "quotes",
     "assets",

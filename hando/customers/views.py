@@ -11,6 +11,8 @@ from access_control.services.authorization import can_access_object
 from access_control.services.authorization import get_user_scope
 from access_control.services.authorization import require_permission
 from audit.models import AuditEvent
+from commercial.models import CommercialPartner
+from commercial.models import CommercialSource
 from customers.forms import CustomerForm
 from customers.models import Customer
 from customers.services import create_customer
@@ -40,21 +42,46 @@ def _get_scoped_customer(user, pk):
 
 @require_permission("customers.view")
 def customer_list(request):
-    qs = scoped_customers(request.user).order_by("name")
+    qs = scoped_customers(request.user).select_related(
+        "assigned_salesperson",
+        "commercial_source",
+        "partner",
+    ).order_by("name")
     search = request.GET.get("q", "").strip()
+    source_id = request.GET.get("source", "").strip()
+    partner_id = request.GET.get("partner", "").strip()
     if search:
         qs = qs.filter(name__icontains=search)
+    if source_id.isdigit():
+        qs = qs.filter(commercial_source_id=int(source_id))
+    if partner_id.isdigit():
+        qs = qs.filter(partner_id=int(partner_id))
     page_obj = Paginator(qs, 20).get_page(request.GET.get("page"))
     return render(
         request,
         "customers/customer_list.html",
-        {"page_title": "Clientes", "page_obj": page_obj, "search": search},
+        {
+            "page_title": "Clientes",
+            "page_obj": page_obj,
+            "search": search,
+            "sources": CommercialSource.objects.filter(is_active=True).order_by("name"),
+            "partners": CommercialPartner.objects.filter(is_active=True).order_by("name"),
+            "selected_source": source_id,
+            "selected_partner": partner_id,
+        },
     )
 
 
 @require_permission("customers.view")
 def customer_detail(request, pk):
     customer = _get_scoped_customer(request.user, pk)
+    customer = Customer.objects.select_related(
+        "assigned_salesperson",
+        "commercial_source",
+        "partner",
+        "project_type_interest",
+        "preferred_contact_channel",
+    ).get(pk=customer.pk)
     recent_events = AuditEvent.objects.filter(
         object_type="Customer",
         object_id=str(customer.pk),

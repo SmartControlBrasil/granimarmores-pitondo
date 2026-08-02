@@ -17,6 +17,10 @@ def _snapshot(customer):
         "phone": customer.phone,
         "mobile_phone": customer.mobile_phone,
         "assigned_salesperson": customer.assigned_salesperson_id,
+        "commercial_source": customer.commercial_source_id,
+        "partner": customer.partner_id,
+        "project_type_interest": customer.project_type_interest_id,
+        "preferred_contact_channel": customer.preferred_contact_channel_id,
         "is_active": customer.is_active,
     }
 

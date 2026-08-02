@@ -29,6 +29,9 @@ class QuoteForm(forms.ModelForm):
         fields = [
             "customer",
             "salesperson",
+            "project_type",
+            "commercial_source",
+            "partner",
             "valid_until",
             "expected_delivery_days",
             "payment_terms",
@@ -41,7 +44,24 @@ class QuoteForm(forms.ModelForm):
             "other_value",
             "tax_percentage",
         ]
+        labels = {
+            "project_type": "Tipo de projeto",
+            "commercial_source": "Origem comercial",
+            "partner": "Parceiro comercial",
+        }
         widgets = {"valid_until": forms.DateInput(attrs={"type": "date"})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from commercial.models import CommercialPartner
+        from commercial.models import CommercialSource
+        from commercial.models import ProjectType
+
+        self.fields["commercial_source"].queryset = CommercialSource.objects.filter(
+            is_active=True,
+        )
+        self.fields["partner"].queryset = CommercialPartner.objects.filter(is_active=True)
+        self.fields["project_type"].queryset = ProjectType.objects.filter(is_active=True)
 
 
 class QuoteItemForm(forms.ModelForm):

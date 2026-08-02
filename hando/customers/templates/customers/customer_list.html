@@ -2,12 +2,24 @@
 
 {% block card_actions %}
   <div class="ms-auto d-flex gap-2">
-    <form method="get" class="d-flex gap-2">
+    <form method="get" class="d-flex gap-2 flex-wrap">
       <input type="search"
              name="q"
              value="{{ search }}"
              class="form-control form-control-sm"
              placeholder="Filtrar clientes" />
+      <select name="source" class="form-select form-select-sm">
+        <option value="">Origem</option>
+        {% for source in sources %}
+          <option value="{{ source.pk }}" {% if selected_source == source.pk|stringformat:"s" %}selected{% endif %}>{{ source.name }}</option>
+        {% endfor %}
+      </select>
+      <select name="partner" class="form-select form-select-sm">
+        <option value="">Parceiro</option>
+        {% for partner in partners %}
+          <option value="{{ partner.pk }}" {% if selected_partner == partner.pk|stringformat:"s" %}selected{% endif %}>{{ partner.name }}</option>
+        {% endfor %}
+      </select>
       <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
     </form>
     <a href="{% url 'customers:create' %}" class="btn btn-sm btn-success">Novo cliente</a>

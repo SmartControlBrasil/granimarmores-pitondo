@@ -196,4 +196,5 @@ python manage.py test
 | [docs/RBAC.md](docs/RBAC.md) | Cargos, permissões, diagnóstico |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Decisões arquiteturais |
 | [docs/SEO.md](docs/SEO.md) | SEO técnico institucional |
+| [docs/COMMERCIAL_MASTER_DATA.md](docs/COMMERCIAL_MASTER_DATA.md) | Cadastros mestres comerciais |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |

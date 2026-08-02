@@ -48,6 +48,34 @@ class Customer(TimeStampedModel, AuditableModel, SoftDeleteModel):
         on_delete=models.SET_NULL,
         related_name="customers",
     )
+    commercial_source = models.ForeignKey(
+        "commercial.CommercialSource",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="customers",
+    )
+    partner = models.ForeignKey(
+        "commercial.CommercialPartner",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="customers",
+    )
+    project_type_interest = models.ForeignKey(
+        "commercial.ProjectType",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="customer_interests",
+    )
+    preferred_contact_channel = models.ForeignKey(
+        "commercial.ContactChannel",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="customers",
+    )
 
     class Meta:
         ordering = ["name"]

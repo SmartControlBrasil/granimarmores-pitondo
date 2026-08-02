@@ -29,6 +29,18 @@
               <dd class="col-sm-8">
                 {{ quote.salesperson }}
               </dd>
+              <dt class="col-sm-4">Tipo de projeto</dt>
+              <dd class="col-sm-8">
+                {{ quote.project_type|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Origem comercial</dt>
+              <dd class="col-sm-8">
+                {{ quote.commercial_source|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Parceiro</dt>
+              <dd class="col-sm-8">
+                {{ quote.partner|default:"-" }}
+              </dd>
               <dt class="col-sm-4">Status</dt>
               <dd class="col-sm-8">
                 {{ quote.get_status_display }}

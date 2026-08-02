@@ -51,6 +51,14 @@ def save_quote(*, form, actor, request=None):
     if creating:
         quote.number = next_quote_number()
         quote.created_by = actor
+        if quote.customer_id:
+            customer = quote.customer
+            if not quote.commercial_source_id and customer.commercial_source_id:
+                quote.commercial_source_id = customer.commercial_source_id
+            if not quote.partner_id and customer.partner_id:
+                quote.partner_id = customer.partner_id
+            if not quote.project_type_id and customer.project_type_interest_id:
+                quote.project_type_id = customer.project_type_interest_id
     else:
         assert_quote_editable(quote)
     quote.updated_by = actor

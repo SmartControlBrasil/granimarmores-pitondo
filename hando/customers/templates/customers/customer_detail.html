@@ -41,6 +41,22 @@
               <dd class="col-sm-8">
                 {{ customer.assigned_salesperson|default:"-" }}
               </dd>
+              <dt class="col-sm-4">Origem comercial</dt>
+              <dd class="col-sm-8">
+                {{ customer.commercial_source|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Parceiro</dt>
+              <dd class="col-sm-8">
+                {{ customer.partner|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Interesse de projeto</dt>
+              <dd class="col-sm-8">
+                {{ customer.project_type_interest|default:"-" }}
+              </dd>
+              <dt class="col-sm-4">Canal preferido</dt>
+              <dd class="col-sm-8">
+                {{ customer.preferred_contact_channel|default:"-" }}
+              </dd>
               <dt class="col-sm-4">Status</dt>
               <dd class="col-sm-8">
                 {{ customer.is_active|yesno:"Ativo,Inativo" }}

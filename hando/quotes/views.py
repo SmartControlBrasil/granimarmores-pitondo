@@ -10,6 +10,9 @@ from django.shortcuts import render
 
 from access_control.services.authorization import require_permission
 from audit.models import AuditEvent
+from commercial.models import CommercialPartner
+from commercial.models import CommercialSource
+from commercial.models import ProjectType
 from quotes.forms import CommercialPolicyForm
 from quotes.forms import QuoteApprovalForm
 from quotes.forms import QuoteCancellationForm
@@ -58,13 +61,27 @@ def _quote_or_403(request, pk):
 
 @require_permission("quotes.view")
 def quote_list(request):
-    qs = quote_queryset_for_user(request.user).order_by("-created_at")
+    qs = quote_queryset_for_user(request.user).select_related(
+        "customer",
+        "project_type",
+        "commercial_source",
+        "partner",
+    ).order_by("-created_at")
     search = request.GET.get("q", "").strip()
     status = request.GET.get("status", "").strip()
+    source_id = request.GET.get("source", "").strip()
+    project_type_id = request.GET.get("project_type", "").strip()
+    partner_id = request.GET.get("partner", "").strip()
     if search:
         qs = qs.filter(number__icontains=search)
     if status:
         qs = qs.filter(status=status)
+    if source_id.isdigit():
+        qs = qs.filter(commercial_source_id=int(source_id))
+    if project_type_id.isdigit():
+        qs = qs.filter(project_type_id=int(project_type_id))
+    if partner_id.isdigit():
+        qs = qs.filter(partner_id=int(partner_id))
     page_obj = Paginator(qs, 20).get_page(request.GET.get("page"))
     return render(
         request,
@@ -75,6 +92,12 @@ def quote_list(request):
             "search": search,
             "status": status,
             "statuses": QuoteStatus.choices,
+            "sources": CommercialSource.objects.filter(is_active=True).order_by("name"),
+            "project_types": ProjectType.objects.filter(is_active=True).order_by("name"),
+            "partners": CommercialPartner.objects.filter(is_active=True).order_by("name"),
+            "selected_source": source_id,
+            "selected_project_type": project_type_id,
+            "selected_partner": partner_id,
         },
     )
 

@@ -27,6 +27,7 @@ urlpatterns = [
         include("salespeople.urls", namespace="salespeople"),
     ),
     path("painel/cadastros/", include("materials.urls", namespace="materials")),
+    path("painel/cadastros/", include("commercial.urls", namespace="commercial")),
     path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
     path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),
     path("painel/manutencao/", include("maintenance.urls", namespace="maintenance")),

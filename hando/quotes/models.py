@@ -101,6 +101,27 @@ class Quote(TimeStampedModel, AuditableModel):
         on_delete=models.PROTECT,
         related_name="quotes",
     )
+    project_type = models.ForeignKey(
+        "commercial.ProjectType",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="quotes",
+    )
+    commercial_source = models.ForeignKey(
+        "commercial.CommercialSource",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="quotes",
+    )
+    partner = models.ForeignKey(
+        "commercial.CommercialPartner",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="quotes",
+    )
     status = models.CharField(
         max_length=30,
         choices=QuoteStatus.choices,

@@ -1,0 +1,62 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <div class="ms-auto d-flex gap-2 flex-wrap">
+    <form method="get" class="d-flex gap-2 flex-wrap">
+      <input type="search" name="q" value="{{ search }}" class="form-control form-control-sm" placeholder="Buscar" />
+      <select name="partner_type" class="form-select form-select-sm">
+        <option value="">Todos os tipos</option>
+        {% for value, label in partner_types %}
+          <option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" name="city" value="{{ selected_city }}" class="form-control form-control-sm" placeholder="Cidade" />
+      <input type="text" name="state" value="{{ selected_state }}" class="form-control form-control-sm" placeholder="UF" maxlength="2" />
+      <select name="salesperson" class="form-select form-select-sm">
+        <option value="">Responsável</option>
+        {% for sp in salespeople %}
+          <option value="{{ sp.pk }}" {% if selected_salesperson == sp.pk|stringformat:"s" %}selected{% endif %}>{{ sp.display_name }}</option>
+        {% endfor %}
+      </select>
+      <select name="active" class="form-select form-select-sm">
+        <option value="">Todos</option>
+        <option value="1" {% if request.GET.active == "1" %}selected{% endif %}>Ativos</option>
+        <option value="0" {% if request.GET.active == "0" %}selected{% endif %}>Inativos</option>
+      </select>
+      <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+    </form>
+    <a href="{% url 'commercial:partner_create' %}" class="btn btn-sm btn-success">Novo parceiro</a>
+  </div>
+{% endblock card_actions %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Cidade/UF</th>
+          <th>Responsável</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for partner in page_obj %}
+          <tr>
+            <td><a href="{% url 'commercial:partner_detail' partner.pk %}">{{ partner.name }}</a></td>
+            <td>{{ partner.get_partner_type_display }}</td>
+            <td>{{ partner.city|default:"-" }}{% if partner.state %}/{{ partner.state }}{% endif %}</td>
+            <td>{{ partner.assigned_salesperson|default:"-" }}</td>
+            <td>{{ partner.is_active|yesno:"Ativo,Inativo" }}</td>
+            <td class="text-end">
+              <a href="{% url 'commercial:partner_update' partner.pk %}" class="btn btn-sm btn-light">Editar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-muted">Nenhum parceiro comercial.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

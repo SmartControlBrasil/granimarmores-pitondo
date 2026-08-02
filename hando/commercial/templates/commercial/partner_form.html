@@ -1,0 +1,26 @@
+{% extends "vertical.html" %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3">
+      <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            {% if partner %}
+              <a href="{% url 'commercial:partner_detail' partner.pk %}" class="btn btn-light">Cancelar</a>
+            {% else %}
+              <a href="{% url 'commercial:partners' %}" class="btn btn-light">Cancelar</a>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock page_content %}

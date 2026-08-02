@@ -1,0 +1,48 @@
+{% extends "vertical.html" %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3">
+      <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+      <p class="text-muted mb-0">Indicadores reais dos cadastros conforme suas permissões.</p>
+    </div>
+    <div class="row g-3">
+      {% for card in cards %}
+        <div class="col-md-4 col-xl-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                  <p class="text-muted mb-1">{{ card.label }}</p>
+                  <h4 class="mb-0">{{ card.value }}</h4>
+                </div>
+                <span class="avatar-sm rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center">
+                  <i data-feather="{{ card.icon }}"></i>
+                </span>
+              </div>
+              <a href="{% url card.url_name %}" class="stretched-link"></a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12"><div class="alert alert-info mb-0">Nenhum indicador disponível para seu perfil.</div></div>
+      {% endfor %}
+    </div>
+    {% if alerts %}
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">Alertas operacionais</h5>
+          <ul class="list-group list-group-flush">
+            {% for alert in alerts %}
+              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                <span>{{ alert.label }}</span>
+                <a href="{% url alert.url_name %}{% if alert.query %}?{{ alert.query }}{% endif %}" class="btn btn-sm btn-light">Ver listagem</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock page_content %}

@@ -1,0 +1,91 @@
+{% extends "vertical.html" %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3 d-flex align-items-center">
+      <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ partner.name }}</h4>
+      <a href="{% url 'commercial:partner_update' partner.pk %}" class="btn btn-sm btn-primary">Editar</a>
+    </div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    <div class="row g-3">
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Dados cadastrais</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Tipo</dt><dd class="col-sm-8">{{ partner.get_partner_type_display }}</dd>
+              <dt class="col-sm-4">Nome fantasia</dt><dd class="col-sm-8">{{ partner.trade_name|default:"-" }}</dd>
+              <dt class="col-sm-4">Documento</dt><dd class="col-sm-8">{{ partner.document|default:"-" }}</dd>
+              <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ partner.is_active|yesno:"Ativo,Inativo" }}</dd>
+              <dt class="col-sm-4">Criado em</dt><dd class="col-sm-8">{{ partner.created_at|date:"d/m/Y H:i" }}</dd>
+              <dt class="col-sm-4">Atualizado em</dt><dd class="col-sm-8">{{ partner.updated_at|date:"d/m/Y H:i" }}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Contato</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Contato</dt><dd class="col-sm-8">{{ partner.contact_name|default:"-" }}</dd>
+              <dt class="col-sm-4">E-mail</dt><dd class="col-sm-8">{{ partner.email|default:"-" }}</dd>
+              <dt class="col-sm-4">Telefone</dt><dd class="col-sm-8">{{ partner.phone|default:"-" }}</dd>
+              <dt class="col-sm-4">Celular</dt><dd class="col-sm-8">{{ partner.mobile_phone|default:"-" }}</dd>
+              <dt class="col-sm-4">Site</dt><dd class="col-sm-8">{{ partner.website|default:"-" }}</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Endereço</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">CEP</dt><dd class="col-sm-8">{{ partner.postal_code|default:"-" }}</dd>
+              <dt class="col-sm-4">Logradouro</dt><dd class="col-sm-8">{{ partner.street|default:"-" }}, {{ partner.number|default:"s/n" }}</dd>
+              <dt class="col-sm-4">Bairro</dt><dd class="col-sm-8">{{ partner.district|default:"-" }}</dd>
+              <dt class="col-sm-4">Cidade/UF</dt><dd class="col-sm-8">{{ partner.city|default:"-" }}{% if partner.state %}/{{ partner.state }}{% endif %}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Responsável comercial</h5>
+            <p class="mb-0">{{ partner.assigned_salesperson|default:"Não definido" }}</p>
+          </div>
+        </div>
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Indicações e vendas</h5>
+            <p class="text-muted mb-0">
+              Ainda não existem clientes indicados ou vendas geradas registradas para este parceiro.
+              Os vínculos comerciais serão exibidos nas próximas fases do CRM.
+            </p>
+          </div>
+        </div>
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Ações</h5>
+            <div class="d-flex flex-wrap gap-2">
+              {% if partner.is_active %}
+                <a href="{% url 'commercial:partner_deactivate' partner.pk %}" class="btn btn-danger">Desativar</a>
+              {% else %}
+                <a href="{% url 'commercial:partner_activate' partner.pk %}" class="btn btn-success">Reativar</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Histórico recente</h5>
+        {% include "audit/event_table.html" with events=recent_events %}
+      </div>
+    </div>
+  </div>
+{% endblock page_content %}

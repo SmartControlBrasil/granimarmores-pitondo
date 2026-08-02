@@ -2,16 +2,34 @@
 
 {% block card_actions %}
   <div class="ms-auto d-flex gap-2">
-    <form method="get" class="d-flex gap-2">
+    <form method="get" class="d-flex gap-2 flex-wrap">
       <input type="search"
              name="q"
              value="{{ search }}"
              class="form-control form-control-sm"
              placeholder="Buscar número" />
       <select name="status" class="form-select form-select-sm">
-        <option value="">Todos</option>
+        <option value="">Status</option>
         {% for value, label in statuses %}
           <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <select name="source" class="form-select form-select-sm">
+        <option value="">Origem</option>
+        {% for source in sources %}
+          <option value="{{ source.pk }}" {% if selected_source == source.pk|stringformat:"s" %}selected{% endif %}>{{ source.name }}</option>
+        {% endfor %}
+      </select>
+      <select name="project_type" class="form-select form-select-sm">
+        <option value="">Tipo de projeto</option>
+        {% for project_type in project_types %}
+          <option value="{{ project_type.pk }}" {% if selected_project_type == project_type.pk|stringformat:"s" %}selected{% endif %}>{{ project_type.name }}</option>
+        {% endfor %}
+      </select>
+      <select name="partner" class="form-select form-select-sm">
+        <option value="">Parceiro</option>
+        {% for partner in partners %}
+          <option value="{{ partner.pk }}" {% if selected_partner == partner.pk|stringformat:"s" %}selected{% endif %}>{{ partner.name }}</option>
         {% endfor %}
       </select>
       <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
