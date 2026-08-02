@@ -1,0 +1,449 @@
+{% extends "vertical.html" %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+  <div class="container-fluid">
+    <div class="py-3 d-flex align-items-center flex-wrap gap-2">
+      <div class="flex-grow-1">
+        <h4 class="fs-18 fw-semibold m-0">{{ lead.code }} — {{ lead.name }}</h4>
+        <span class="badge bg-secondary mt-1">{{ lead.get_status_display }}</span>
+        <span class="badge bg-light text-dark mt-1">{{ lead.get_priority_display }}</span>
+      </div>
+      <a href="{% url 'leads:update' lead.pk %}" class="btn btn-sm btn-primary">Editar</a>
+      <a href="{% url 'leads:list' %}" class="btn btn-sm btn-light">Voltar</a>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Ações</h5>
+        <div class="row g-3">
+          <div class="col-lg-4">
+            <form method="post" action="{% url 'leads:assign' lead.pk %}">
+              {% csrf_token %}
+              <label class="form-label small text-muted">Atribuir responsável</label>
+              {{ assign_form.as_p }}
+              <button type="submit" class="btn btn-sm btn-primary">Atribuir</button>
+            </form>
+          </div>
+          <div class="col-lg-4">
+            <form method="post" action="{% url 'leads:change_status' lead.pk %}">
+              {% csrf_token %}
+              <label class="form-label small text-muted">Alterar status</label>
+              {{ status_form.as_p }}
+              <button type="submit" class="btn btn-sm btn-primary">Atualizar status</button>
+            </form>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap gap-2">
+              {% if lead.status != "won" %}
+                <form method="post" action="{% url 'leads:mark_won' lead.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-success">Marcar ganho</button>
+                </form>
+              {% endif %}
+              {% if lead.status != "lost" and lead.status != "disqualified" %}
+                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="collapse" data-bs-target="#markLostForm">Marcar perdido</button>
+              {% endif %}
+              {% if not lead.converted_customer %}
+                <form method="post" action="{% url 'leads:convert_new' lead.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Converter em cliente</button>
+                </form>
+              {% endif %}
+              <form method="post" action="{% url 'leads:create_quote' lead.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-secondary">Criar orçamento</button>
+              </form>
+              {% if lead.status == "won" or lead.status == "lost" or lead.status == "disqualified" %}
+                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="collapse" data-bs-target="#reopenForm">Reabrir lead</button>
+              {% endif %}
+            </div>
+            {% if lead.status != "lost" and lead.status != "disqualified" %}
+              <div class="collapse mt-2" id="markLostForm">
+                <form method="post" action="{% url 'leads:mark_lost' lead.pk %}">
+                  {% csrf_token %}
+                  {{ loss_form.as_p }}
+                  <button type="submit" class="btn btn-sm btn-danger">Confirmar perda</button>
+                </form>
+              </div>
+            {% endif %}
+            {% if lead.status == "won" or lead.status == "lost" or lead.status == "disqualified" %}
+              <div class="collapse mt-2" id="reopenForm">
+                <form method="post" action="{% url 'leads:reopen' lead.pk %}">
+                  {% csrf_token %}
+                  {{ reopen_form.as_p }}
+                  <button type="submit" class="btn btn-sm btn-warning">Confirmar reabertura</button>
+                </form>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Contato</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Nome</dt>
+              <dd class="col-sm-8">{{ lead.name }}</dd>
+              <dt class="col-sm-4">Empresa</dt>
+              <dd class="col-sm-8">{{ lead.company_name|default:"-" }}</dd>
+              <dt class="col-sm-4">E-mail</dt>
+              <dd class="col-sm-8">{{ lead.email|default:"-" }}</dd>
+              <dt class="col-sm-4">Telefone</dt>
+              <dd class="col-sm-8">{{ lead.phone|default:"-" }}</dd>
+              <dt class="col-sm-4">WhatsApp</dt>
+              <dd class="col-sm-8">{{ lead.whatsapp|default:"-" }}</dd>
+              <dt class="col-sm-4">Cidade/UF</dt>
+              <dd class="col-sm-8">
+                {{ lead.city|default:"-" }}{% if lead.state %}/{{ lead.state }}{% endif %}
+              </dd>
+              <dt class="col-sm-4">Bairro</dt>
+              <dd class="col-sm-8">{{ lead.district|default:"-" }}</dd>
+              <dt class="col-sm-4">Canal de contato</dt>
+              <dd class="col-sm-8">{{ lead.contact_channel|default:"-" }}</dd>
+              <dt class="col-sm-4">Primeiro contato</dt>
+              <dd class="col-sm-8">{{ lead.first_contact_at|date:"d/m/Y H:i"|default:"-" }}</dd>
+              <dt class="col-sm-4">Último contato</dt>
+              <dd class="col-sm-8">{{ lead.last_contact_at|date:"d/m/Y H:i"|default:"-" }}</dd>
+              <dt class="col-sm-4">Próximo follow-up</dt>
+              <dd class="col-sm-8">{{ lead.next_follow_up_at|date:"d/m/Y H:i"|default:"-" }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Projeto</h5>
+            <dl class="row mb-0">
+              <dt class="col-sm-4">Tipo de projeto</dt>
+              <dd class="col-sm-8">{{ lead.project_type|default:"-" }}</dd>
+              <dt class="col-sm-4">Origem comercial</dt>
+              <dd class="col-sm-8">{{ lead.commercial_source|default:"-" }}</dd>
+              <dt class="col-sm-4">Parceiro</dt>
+              <dd class="col-sm-8">{{ lead.partner|default:"-" }}</dd>
+              <dt class="col-sm-4">Região de atendimento</dt>
+              <dd class="col-sm-8">{{ lead.service_region|default:"-" }}</dd>
+              <dt class="col-sm-4">Responsável</dt>
+              <dd class="col-sm-8">{{ lead.assigned_salesperson|default:"-" }}</dd>
+              <dt class="col-sm-4">Valor estimado</dt>
+              <dd class="col-sm-8">R$ {{ lead.estimated_value }}</dd>
+              <dt class="col-sm-4">Probabilidade</dt>
+              <dd class="col-sm-8">{{ lead.probability }}%</dd>
+              <dt class="col-sm-4">Descrição</dt>
+              <dd class="col-sm-8">{{ lead.project_description|default:"-"|linebreaksbr }}</dd>
+              <dt class="col-sm-4">Criado em</dt>
+              <dd class="col-sm-8">{{ lead.created_at|date:"d/m/Y H:i" }}</dd>
+              <dt class="col-sm-4">Atualizado em</dt>
+              <dd class="col-sm-8">{{ lead.updated_at|date:"d/m/Y H:i" }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Conversão em cliente</h5>
+        {% if lead.converted_customer %}
+          <p class="mb-0">
+            Cliente vinculado:
+            <a href="{% url 'customers:detail' lead.converted_customer.pk %}">{{ lead.converted_customer.name }}</a>
+          </p>
+        {% else %}
+          <p class="text-muted">Este lead ainda não foi convertido em cliente.</p>
+          {% if customer_matches %}
+            <p class="small text-muted">Possíveis correspondências encontradas:</p>
+            <ul class="list-group list-group-flush mb-3">
+              {% for customer in customer_matches %}
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <span>{{ customer.name }}{% if customer.email %} — {{ customer.email }}{% endif %}</span>
+                  <form method="post" action="{% url 'leads:convert_link' lead.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="customer_id" value="{{ customer.pk }}">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">Vincular</button>
+                  </form>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <form method="post" action="{% url 'leads:convert_new' lead.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-primary">Criar novo cliente</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Orçamentos</h5>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Número</th>
+                <th>Status</th>
+                <th>Versão</th>
+                <th>Valor</th>
+                <th>Validade</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for quote in quotes %}
+                <tr>
+                  <td>
+                    <a href="{% url 'quotes:detail' quote.pk %}">{{ quote.number }}</a>
+                  </td>
+                  <td>{{ quote.get_status_display }}</td>
+                  <td>{{ quote.current_version }}</td>
+                  <td>R$ {{ quote.grand_total }}</td>
+                  <td>{{ quote.valid_until|date:"d/m/Y" }}</td>
+                  <td class="text-end">
+                    <a href="{% url 'quotes:detail' quote.pk %}" class="btn btn-sm btn-light">Ver</a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="6" class="text-muted">Nenhum orçamento vinculado.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-0">
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Atividades</h5>
+            <div class="timeline">
+              {% for activity in activities %}
+                <div class="border-start border-2 ps-3 pb-3 ms-2">
+                  <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                      <strong>{{ activity.title }}</strong>
+                      <span class="badge bg-light text-dark ms-1">{{ activity.get_activity_type_display }}</span>
+                    </div>
+                    <small class="text-muted text-nowrap">{{ activity.occurred_at|date:"d/m/Y H:i" }}</small>
+                  </div>
+                  <p class="mb-1 small">{{ activity.description|linebreaksbr }}</p>
+                  <small class="text-muted">Por {{ activity.created_by }}</small>
+                  {% if activity.next_action_at %}
+                    <div class="small text-muted">Próxima ação: {{ activity.next_action_at|date:"d/m/Y H:i" }}</div>
+                  {% endif %}
+                </div>
+              {% empty %}
+                <p class="text-muted mb-0">Nenhuma atividade registrada.</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Registrar atividade</h5>
+            <form method="post" action="{% url 'leads:add_activity' lead.pk %}">
+              {% csrf_token %}
+              {{ activity_form.as_p }}
+              <button type="submit" class="btn btn-sm btn-primary">Registrar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Tarefas</h5>
+        {% if task_groups.overdue %}
+          <h6 class="text-danger">Vencidas</h6>
+          <div class="list-group list-group-flush mb-2">
+            {% for task in task_groups.overdue %}
+              <div class="list-group-item px-0">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div>
+                    <strong>{{ task.title }}</strong>
+                    <div class="small text-muted">
+                      {{ task.get_priority_display }} · Vence {{ task.due_at|date:"d/m/Y H:i" }}
+                      {% if task.assigned_to %} · {{ task.assigned_to }}{% endif %}
+                    </div>
+                    {% if task.description %}<div class="small">{{ task.description|linebreaksbr }}</div>{% endif %}
+                  </div>
+                  <div class="d-flex flex-wrap gap-1">
+                    <form method="post" action="{% url 'leads:complete_task' lead.pk task.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success">Concluir</button>
+                    </form>
+                    <form method="post" action="{% url 'leads:cancel_task' lead.pk task.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if task_groups.pending %}
+          <h6 class="mt-3">Pendentes</h6>
+          <div class="list-group list-group-flush mb-2">
+            {% for task in task_groups.pending %}
+              <div class="list-group-item px-0">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div>
+                    <strong>{{ task.title }}</strong>
+                    <div class="small text-muted">
+                      {{ task.get_priority_display }} · Vence {{ task.due_at|date:"d/m/Y H:i" }}
+                      {% if task.assigned_to %} · {{ task.assigned_to }}{% endif %}
+                    </div>
+                    {% if task.description %}<div class="small">{{ task.description|linebreaksbr }}</div>{% endif %}
+                  </div>
+                  <div class="d-flex flex-wrap gap-1">
+                    <form method="post" action="{% url 'leads:complete_task' lead.pk task.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success">Concluir</button>
+                    </form>
+                    <form method="post" action="{% url 'leads:cancel_task' lead.pk task.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if task_groups.in_progress %}
+          <h6 class="mt-3">Em andamento</h6>
+          <div class="list-group list-group-flush mb-2">
+            {% for task in task_groups.in_progress %}
+              <div class="list-group-item px-0">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div>
+                    <strong>{{ task.title }}</strong>
+                    <div class="small text-muted">
+                      {{ task.get_priority_display }} · Vence {{ task.due_at|date:"d/m/Y H:i" }}
+                      {% if task.assigned_to %} · {{ task.assigned_to }}{% endif %}
+                    </div>
+                    {% if task.description %}<div class="small">{{ task.description|linebreaksbr }}</div>{% endif %}
+                  </div>
+                  <div class="d-flex flex-wrap gap-1">
+                    <form method="post" action="{% url 'leads:complete_task' lead.pk task.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success">Concluir</button>
+                    </form>
+                    <form method="post" action="{% url 'leads:cancel_task' lead.pk task.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if task_groups.completed %}
+          <h6 class="mt-3">Concluídas</h6>
+          <div class="list-group list-group-flush mb-2">
+            {% for task in task_groups.completed %}
+              <div class="list-group-item px-0">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div>
+                    <strong>{{ task.title }}</strong>
+                    <div class="small text-muted">
+                      Concluída {{ task.completed_at|date:"d/m/Y H:i"|default:"-" }}
+                      {% if task.assigned_to %} · {{ task.assigned_to }}{% endif %}
+                    </div>
+                  </div>
+                  <form method="post" action="{% url 'leads:reopen_task' lead.pk task.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Reabrir</button>
+                  </form>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if task_groups.cancelled %}
+          <h6 class="mt-3">Canceladas</h6>
+          <div class="list-group list-group-flush mb-2">
+            {% for task in task_groups.cancelled %}
+              <div class="list-group-item px-0">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                  <div>
+                    <strong>{{ task.title }}</strong>
+                    <div class="small text-muted">
+                      Cancelada {{ task.cancelled_at|date:"d/m/Y H:i"|default:"-" }}
+                      {% if task.assigned_to %} · {{ task.assigned_to }}{% endif %}
+                    </div>
+                  </div>
+                  <form method="post" action="{% url 'leads:reopen_task' lead.pk task.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Reabrir</button>
+                  </form>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if not task_groups.overdue and not task_groups.pending and not task_groups.in_progress and not task_groups.completed and not task_groups.cancelled %}
+          <p class="text-muted mb-0">Nenhuma tarefa registrada.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Nova tarefa</h5>
+        <form method="post" action="{% url 'leads:add_task' lead.pk %}">
+          {% csrf_token %}
+          {{ task_form.as_p }}
+          <button type="submit" class="btn btn-sm btn-primary">Criar tarefa</button>
+        </form>
+      </div>
+    </div>
+
+    {% if lead.status == "lost" or lead.status == "disqualified" %}
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">Perda</h5>
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Motivo</dt>
+            <dd class="col-sm-9">{{ lead.loss_reason|default:"-" }}</dd>
+            <dt class="col-sm-3">Observações</dt>
+            <dd class="col-sm-9">{{ lead.loss_notes|default:"-"|linebreaksbr }}</dd>
+            <dt class="col-sm-3">Data da perda</dt>
+            <dd class="col-sm-9">{{ lead.lost_at|date:"d/m/Y H:i"|default:"-" }}</dd>
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if lead.status == "won" %}
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">Ganho</h5>
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Data do ganho</dt>
+            <dd class="col-sm-9">{{ lead.won_at|date:"d/m/Y H:i"|default:"-" }}</dd>
+          </dl>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock page_content %}

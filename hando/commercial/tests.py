@@ -285,3 +285,6 @@ class CustomerQuoteIntegrationTests(CommercialTestMixin, TestCase):
         )
         self.assertEqual(quote.commercial_source_id, self.source.pk)
         self.assertEqual(quote.project_type_id, self.project_type.pk)
+
+
+from commercial import tests_leads  # noqa: F401

@@ -230,3 +230,9 @@ class ContactChannel(TimeStampedModel, AuditableModel, SoftDeleteModel):
         if self.customers.exists():
             raise ValidationError("Canal de contato em uso não pode ser excluído.")
         return super().delete(*args, **kwargs)
+
+
+from commercial.lead_models import Lead  # noqa: E402,F401
+from commercial.lead_models import LeadActivity  # noqa: E402,F401
+from commercial.lead_models import LeadSequence  # noqa: E402,F401
+from commercial.lead_models import LeadTask  # noqa: E402,F401

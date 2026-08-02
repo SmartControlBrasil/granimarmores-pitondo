@@ -1,0 +1,102 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <div class="ms-auto d-flex flex-column gap-2 align-items-end">
+    <div class="d-flex flex-wrap gap-1">
+      <a href="?shortcut=mine" class="btn btn-sm btn-outline-primary">Meus leads</a>
+      <a href="?unassigned=1" class="btn btn-sm btn-outline-secondary">Sem responsável</a>
+      <a href="?overdue_followup=1" class="btn btn-sm btn-outline-warning">Follow-up vencido</a>
+      <a href="?won=1" class="btn btn-sm btn-outline-success">Ganhos</a>
+      <a href="?lost=1" class="btn btn-sm btn-outline-danger">Perdidos</a>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <form method="get" class="d-flex gap-2 flex-wrap">
+        <input type="search" name="q" value="{{ search }}" class="form-control form-control-sm" placeholder="Buscar código, nome, empresa..." />
+        <select name="status" class="form-select form-select-sm">
+          <option value="">Status</option>
+          {% for value, label in statuses %}
+            <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <select name="priority" class="form-select form-select-sm">
+          <option value="">Prioridade</option>
+          <option value="low" {% if request.GET.priority == "low" %}selected{% endif %}>Baixa</option>
+          <option value="normal" {% if request.GET.priority == "normal" %}selected{% endif %}>Normal</option>
+          <option value="high" {% if request.GET.priority == "high" %}selected{% endif %}>Alta</option>
+          <option value="urgent" {% if request.GET.priority == "urgent" %}selected{% endif %}>Urgente</option>
+        </select>
+        <select name="source" class="form-select form-select-sm">
+          <option value="">Origem</option>
+          {% for source in sources %}
+            <option value="{{ source.pk }}" {% if request.GET.source == source.pk|stringformat:"s" %}selected{% endif %}>{{ source.name }}</option>
+          {% endfor %}
+        </select>
+        <select name="salesperson" class="form-select form-select-sm">
+          <option value="">Responsável</option>
+          {% for sp in salespeople %}
+            <option value="{{ sp.pk }}" {% if request.GET.salesperson == sp.pk|stringformat:"s" %}selected{% endif %}>{{ sp.display_name }}</option>
+          {% endfor %}
+        </select>
+        <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+      </form>
+      <a href="{% url 'leads:create' %}" class="btn btn-sm btn-success">Novo lead</a>
+    </div>
+  </div>
+{% endblock card_actions %}
+
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Empresa</th>
+          <th>Tipo de projeto</th>
+          <th>Origem</th>
+          <th>Responsável</th>
+          <th>Status</th>
+          <th>Prioridade</th>
+          <th>Próximo follow-up</th>
+          <th>Valor estimado</th>
+          <th>Criado em</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lead in page_obj %}
+          <tr>
+            <td>
+              <a href="{% url 'leads:detail' lead.pk %}">{{ lead.code }}</a>
+            </td>
+            <td>{{ lead.name }}</td>
+            <td>{{ lead.company_name|default:"-" }}</td>
+            <td>{{ lead.project_type|default:"-" }}</td>
+            <td>{{ lead.commercial_source|default:"-" }}</td>
+            <td>{{ lead.assigned_salesperson|default:"-" }}</td>
+            <td>
+              <span class="badge bg-secondary">{{ lead.get_status_display }}</span>
+            </td>
+            <td>{{ lead.get_priority_display }}</td>
+            <td>
+              {% if lead.next_follow_up_at %}
+                {{ lead.next_follow_up_at|date:"d/m/Y H:i" }}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>R$ {{ lead.estimated_value }}</td>
+            <td>{{ lead.created_at|date:"d/m/Y H:i" }}</td>
+            <td class="text-end">
+              <a href="{% url 'leads:update' lead.pk %}" class="btn btn-sm btn-light">Editar</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="12" class="text-muted">Nenhum lead encontrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

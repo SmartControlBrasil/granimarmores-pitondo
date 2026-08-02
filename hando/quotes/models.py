@@ -122,6 +122,13 @@ class Quote(TimeStampedModel, AuditableModel):
         on_delete=models.SET_NULL,
         related_name="quotes",
     )
+    lead = models.ForeignKey(
+        "commercial.Lead",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="quotes",
+    )
     status = models.CharField(
         max_length=30,
         choices=QuoteStatus.choices,

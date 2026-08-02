@@ -50,7 +50,7 @@ from quotes.services.workflow import submit_for_approval
 
 def _quote_or_403(request, pk):
     quote = get_object_or_404(
-        Quote.objects.select_related("customer", "salesperson"),
+        Quote.objects.select_related("customer", "salesperson", "lead"),
         pk=pk,
     )
     if not can_access_quote(request.user, quote):

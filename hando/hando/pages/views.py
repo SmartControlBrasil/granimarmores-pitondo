@@ -2,11 +2,16 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist
+from django.utils import timezone
 
 from access_control.services.authorization import user_has_permission
 from assets.models import Asset
 from audit.models import AuditEvent
 from audit.models import UserSessionLog
+from commercial.lead_models import Lead
+from commercial.lead_models import LeadStatus
+from commercial.lead_models import TERMINAL_STATUSES
+from commercial.lead_queries import leads_queryset_for_user
 from customers.models import Customer
 from fleet.models import Vehicle
 from maintenance.models import MaintenanceOrder
@@ -113,11 +118,27 @@ def root_page_view(request):
             "dark",
         ),
     ]
+    open_leads = leads_queryset_for_user(user).exclude(status__in=TERMINAL_STATUSES)
+    now = timezone.now()
+    lead_specs = [
+        ("Leads novos", "leads.view", open_leads.filter(status=LeadStatus.NEW).count(), "inbox", "primary"),
+        ("Leads sem vendedor", "leads.view", open_leads.filter(assigned_salesperson__isnull=True).count(), "user-x", "warning"),
+        ("Follow-ups vencidos", "leads.view", open_leads.filter(next_follow_up_at__lt=now).count(), "clock", "danger"),
+        ("Negociações abertas", "leads.view", open_leads.filter(status=LeadStatus.NEGOTIATION).count(), "trending-up", "info"),
+    ]
+    card_specs.extend(lead_specs)
     for label, permission, value, icon, color in card_specs:
         if user_has_permission(user, permission):
             cards.append({"label": label, "value": value, "icon": icon, "color": color})
+    lead_links = []
+    if user_has_permission(user, "leads.view"):
+        lead_links = [
+            {"label": "Dashboard Comercial", "url_name": "leads:dashboard"},
+            {"label": "Funil Comercial", "url_name": "leads:funnel"},
+        ]
     context = {
         "cards": cards,
+        "lead_links": lead_links,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")
         else [],

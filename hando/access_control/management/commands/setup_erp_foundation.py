@@ -193,10 +193,38 @@ COMMERCIAL_MASTER_EDIT = [
     "contact_channels.deactivate",
 ]
 
+LEADS_SELLER = [
+    "leads.view",
+    "leads.create",
+    "leads.update",
+    "leads.change_status",
+    "leads.convert",
+    "leads.mark_won",
+    "leads.mark_lost",
+    "lead_activities.view",
+    "lead_activities.create",
+    "lead_tasks.view",
+    "lead_tasks.create",
+    "lead_tasks.complete",
+]
+
+LEADS_MANAGER = [
+    *LEADS_SELLER,
+    "leads.view_all",
+    "leads.view_unassigned",
+    "leads.assign",
+    "leads.override_status",
+    "leads.reopen",
+    "lead_tasks.update",
+    "lead_tasks.cancel",
+    "lead_tasks.reopen",
+    "lead_tasks.reassign",
+]
+
 SYSTEM_ROLE_PERMISSIONS = {
-    "Gestor Comercial": COMMERCIAL_MASTER_EDIT,
-    "Vendedor": COMMERCIAL_MASTER_VIEW,
-    "Operacional": ["project_types.view", "service_regions.view"],
+    "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER,
+    "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER,
+    "Operacional": ["project_types.view", "service_regions.view", "leads.view"],
 }
 
 

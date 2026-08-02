@@ -10,6 +10,8 @@ from access_control.models import UserAccess
 RESOURCE_SCOPE_FIELDS = {
     "customer": "customer_scope",
     "customers": "customer_scope",
+    "lead": "customer_scope",
+    "leads": "customer_scope",
     "quote": "quote_scope",
     "quotes": "quote_scope",
     "asset": "asset_scope",

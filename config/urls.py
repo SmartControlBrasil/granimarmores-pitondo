@@ -20,6 +20,7 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     path("users/", include("hando.users.urls", namespace="users")),
+    path("painel/comercial/", include("commercial.lead_urls", namespace="leads")),
     path("painel/comercial/orcamentos/", include("quotes.urls", namespace="quotes")),
     path("painel/clientes/", include("customers.urls", namespace="customers")),
     path(

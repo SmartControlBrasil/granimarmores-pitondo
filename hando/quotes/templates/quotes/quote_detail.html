@@ -41,6 +41,14 @@
               <dd class="col-sm-8">
                 {{ quote.partner|default:"-" }}
               </dd>
+              <dt class="col-sm-4">Lead de origem</dt>
+              <dd class="col-sm-8">
+                {% if quote.lead %}
+                  <a href="{% url 'leads:detail' quote.lead.pk %}">{{ quote.lead.code }}</a>
+                {% else %}
+                  -
+                {% endif %}
+              </dd>
               <dt class="col-sm-4">Status</dt>
               <dd class="col-sm-8">
                 {{ quote.get_status_display }}
