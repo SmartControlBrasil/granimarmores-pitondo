@@ -1,0 +1,45 @@
+{% extends "vertical.html" %}
+{% load formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex gap-2 align-items-center">
+    <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ receivable.number }}</h4>
+    <a class="btn btn-sm btn-primary" href="{% url 'finance:receivable_receive' receivable.pk %}">Receber</a>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'finance:receivable_update' receivable.pk %}">Editar</a>
+    <a class="btn btn-sm btn-outline-danger" href="{% url 'finance:receivable_cancel' receivable.pk %}">Cancelar</a>
+  </div>
+  {% if messages %}{% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>{% endfor %}{% endif %}
+  <div class="row g-3">
+    <div class="col-lg-6"><div class="card"><div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-4">Cliente</dt><dd class="col-8">{{ receivable.customer }}</dd>
+        <dt class="col-4">Pedido</dt><dd class="col-8">{{ receivable.sales_order.number|default:"—" }}</dd>
+        <dt class="col-4">Valor</dt><dd class="col-8">{{ receivable.original_amount|format_brl }}</dd>
+        <dt class="col-4">Recebido</dt><dd class="col-8">{{ receivable.paid_amount|format_brl }}</dd>
+        <dt class="col-4">Saldo</dt><dd class="col-8">{{ receivable.outstanding_amount|format_brl }}</dd>
+        <dt class="col-4">Status</dt><dd class="col-8">{{ receivable.get_status_display }}</dd>
+        <dt class="col-4">Vencimento</dt><dd class="col-8">{{ receivable.due_date|date:"d/m/Y" }}</dd>
+      </dl>
+    </div></div></div>
+    <div class="col-lg-6"><div class="card"><div class="card-header">Parcelas</div><div class="card-body table-responsive">
+      <table class="table table-sm mb-0"><thead><tr><th>#</th><th>Venc.</th><th>Valor</th><th>Pago</th><th>Saldo</th><th>Status</th></tr></thead>
+        <tbody>{% for i in installments %}<tr><td>{{ i.sequence }}</td><td>{{ i.due_date|date:"d/m/Y" }}</td><td>{{ i.original_amount|format_brl }}</td><td>{{ i.paid_amount|format_brl }}</td><td>{{ i.outstanding_amount|format_brl }}</td><td>{{ i.get_status_display }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </div></div></div>
+  </div>
+  <div class="card mt-3"><div class="card-header">Recebimentos</div><div class="card-body table-responsive">
+    <table class="table table-sm mb-0"><thead><tr><th>Número</th><th>Data</th><th>Parcela</th><th>Valor</th><th>Forma</th><th>Conta</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for p in payments %}
+          <tr>
+            <td>{{ p.number }}</td><td>{{ p.payment_date|date:"d/m/Y" }}</td><td>{{ p.installment.sequence }}</td>
+            <td>{{ p.amount|format_brl }}</td><td>{{ p.payment_method }}</td><td>{{ p.financial_account }}</td><td>{{ p.get_status_display }}</td>
+            <td>{% if p.status == 'confirmed' %}<a href="{% url 'finance:receivable_payment_reverse' p.pk %}">Estornar</a>{% endif %}</td>
+          </tr>
+        {% empty %}<tr><td colspan="8" class="text-muted">Sem recebimentos.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div></div>
+</div>
+{% endblock %}

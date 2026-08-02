@@ -1,0 +1,21 @@
+{% extends "vertical.html" %}
+{% load formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
+  {% if messages %}{% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }}">{{ m }}</div>{% endfor %}{% endif %}
+  <div class="card mb-3"><div class="card-body">
+    <p class="mb-1"><strong>Cliente:</strong> {{ order.customer }}</p>
+    <p class="mb-1"><strong>Total congelado:</strong> {{ order.total|format_brl }}</p>
+    <p class="mb-0 text-muted">O aceite do orçamento não gera pagamento. As parcelas nascem abertas.</p>
+  </div></div>
+  <div class="card"><div class="card-body">
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Gerar contas a receber</button>
+      <a class="btn btn-light" href="{% url 'operacao:order_detail' order.pk %}">Voltar</a>
+    </form>
+  </div></div>
+</div>
+{% endblock %}

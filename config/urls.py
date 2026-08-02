@@ -38,6 +38,7 @@ urlpatterns = [
         "painel/diretoria/",
         include("executive_dashboard.urls", namespace="executive_dashboard"),
     ),
+    path("painel/financeiro/", include("finance.urls", namespace="finance")),
     path("painel/cadastros/", include("commercial.urls", namespace="commercial")),
     path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
     path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),

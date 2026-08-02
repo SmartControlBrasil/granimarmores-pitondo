@@ -262,6 +262,10 @@ def root_page_view(request):
     after_sales_summary = main_dashboard_after_sales_summary(user)
     media_summary = main_dashboard_media_summary(user)
 
+    from finance.selectors import main_dashboard_finance_summary
+
+    finance_summary = main_dashboard_finance_summary(user)
+
     executive_link = None
     from executive_dashboard.views import can_access_executive
 
@@ -279,6 +283,7 @@ def root_page_view(request):
         "schedule_summary": schedule_summary,
         "after_sales_summary": after_sales_summary,
         "media_summary": media_summary,
+        "finance_summary": finance_summary,
         "executive_link": executive_link,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")

@@ -1,0 +1,41 @@
+{% extends "vertical.html" %}
+{% load formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex justify-content-between">
+    <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-2">
+      <a class="btn btn-sm btn-outline-secondary" href="?{{ querystring }}&export=1">CSV</a>
+      <a class="btn btn-sm btn-primary" href="{% url 'finance:receivable_create' %}">Novo</a>
+    </div>
+  </div>
+  <form class="row g-2 mb-3" method="get">
+    <div class="col-md-3"><input class="form-control form-control-sm" name="q" value="{{ request.GET.q }}" placeholder="Buscar"></div>
+    <div class="col-md-2"><select class="form-select form-select-sm" name="status"><option value="">Status</option>{% for v,l in statuses %}<option value="{{ v }}" {% if request.GET.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+    <div class="col-md-2"><select class="form-select form-select-sm" name="overdue"><option value="">Todas</option><option value="1" {% if request.GET.overdue == '1' %}selected{% endif %}>Vencidas</option></select></div>
+    <div class="col-md-2"><button class="btn btn-sm btn-secondary">Filtrar</button></div>
+  </form>
+  <div class="card"><div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Número</th><th>Cliente</th><th>Pedido</th><th>Vencimento</th><th>Valor</th><th>Recebido</th><th>Saldo</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for r in page_obj %}
+          <tr>
+            <td><a href="{% url 'finance:receivable_detail' r.pk %}">{{ r.number }}</a></td>
+            <td>{{ r.customer }}</td>
+            <td>{{ r.sales_order.number|default:"—" }}</td>
+            <td>{{ r.due_date|date:"d/m/Y" }}</td>
+            <td>{{ r.original_amount|format_brl }}</td>
+            <td>{{ r.paid_amount|format_brl }}</td>
+            <td>{{ r.outstanding_amount|format_brl }}</td>
+            <td>{{ r.get_status_display }}</td>
+            <td><a class="btn btn-sm btn-light" href="{% url 'finance:receivable_receive' r.pk %}">Receber</a></td>
+          </tr>
+        {% empty %}<tr><td colspan="9" class="text-muted">Nenhum título.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div></div>
+  {% if page_obj.has_other_pages %}<div class="mt-2">{% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %} {{ page_obj.number }} {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Próxima</a>{% endif %}</div>{% endif %}
+</div>
+{% endblock %}

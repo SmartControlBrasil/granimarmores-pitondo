@@ -557,6 +557,7 @@ EXECUTIVE_FULL = [
     "executive_dashboard.view_after_sales",
     "executive_dashboard.view_quality",
     "executive_dashboard.view_audit",
+    "executive_dashboard.view_finance",
     "executive_dashboard.export",
     "executive_dashboard.print",
 ]
@@ -567,8 +568,61 @@ EXECUTIVE_COMMERCIAL = [
     "executive_dashboard.view_production",
     "executive_dashboard.view_schedule",
     "executive_dashboard.view_after_sales",
+    "executive_dashboard.view_finance",
     "executive_dashboard.export",
     "executive_dashboard.print",
+]
+
+FINANCE_FULL = [
+    "finance_dashboard.view",
+    "accounts_receivable.view",
+    "accounts_receivable.create",
+    "accounts_receivable.update",
+    "accounts_receivable.cancel",
+    "accounts_receivable.receive",
+    "accounts_receivable.reverse_payment",
+    "accounts_receivable.renegotiate",
+    "accounts_payable.view",
+    "accounts_payable.create",
+    "accounts_payable.update",
+    "accounts_payable.cancel",
+    "accounts_payable.pay",
+    "accounts_payable.reverse_payment",
+    "financial_movements.view",
+    "financial_movements.adjust",
+    "financial_movements.transfer",
+    "financial_accounts.view",
+    "financial_accounts.create",
+    "financial_accounts.update",
+    "financial_categories.view",
+    "financial_categories.create",
+    "financial_categories.update",
+    "cost_centers.view",
+    "cost_centers.create",
+    "cost_centers.update",
+    "payment_methods.view",
+    "payment_methods.create",
+    "payment_methods.update",
+    "payment_terms.view",
+    "payment_terms.create",
+    "payment_terms.update",
+    "finance_cash_flow.view",
+    "finance_overdue.view",
+    "finance_values.view",
+    "finance_export",
+]
+
+FINANCE_COMMERCIAL = [
+    "finance_dashboard.view",
+    "accounts_receivable.view",
+    "accounts_receivable.create",
+    "finance_overdue.view",
+    "payment_terms.view",
+    "payment_methods.view",
+]
+
+FINANCE_SELLER = [
+    "accounts_receivable.view",
 ]
 
 EXECUTIVE_OPERATIONS = [
@@ -584,13 +638,69 @@ SYSTEM_ROLE_PERMISSIONS = {
     + LEADS_MANAGER
     + PERFORMANCE_MANAGER
     + ORDERS_MANAGER
-    + EXECUTIVE_COMMERCIAL,
-    "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER + PERFORMANCE_SELLER + ORDERS_SELLER,
+    + EXECUTIVE_COMMERCIAL
+    + FINANCE_COMMERCIAL,
+    "Vendedor": COMMERCIAL_MASTER_VIEW
+    + LEADS_SELLER
+    + PERFORMANCE_SELLER
+    + ORDERS_SELLER
+    + FINANCE_SELLER,
     "Operacional": ["project_types.view", "service_regions.view", "leads.view"]
     + PRODUCTION_OPERATIONS
     + STOCK_OPERATIONS
     + EXECUTIVE_OPERATIONS,
 }
+
+FINANCE_CATEGORY_SEEDS = [
+    ("Venda de peças", "venda-de-pecas", "income", 10),
+    ("Instalação", "instalacao", "income", 20),
+    ("Medição técnica", "medicao-tecnica", "income", 30),
+    ("Transporte", "transporte-receita", "income", 40),
+    ("Manutenção", "manutencao-receita", "income", 50),
+    ("Restauração", "restauracao", "income", 60),
+    ("Outras receitas", "outras-receitas", "income", 70),
+    ("Compra de material", "compra-de-material", "expense", 110),
+    ("Frete", "frete", "expense", 120),
+    ("Combustível", "combustivel", "expense", 130),
+    ("Ferramentas", "ferramentas", "expense", 140),
+    ("Manutenção", "manutencao-despesa", "expense", 150),
+    ("Terceiros", "terceiros", "expense", 160),
+    ("Aluguel", "aluguel", "expense", 170),
+    ("Energia", "energia", "expense", 180),
+    ("Marketing", "marketing-despesa", "expense", 190),
+    ("Despesas administrativas", "despesas-administrativas", "expense", 200),
+    ("Outras despesas", "outras-despesas", "expense", 210),
+]
+
+COST_CENTER_SEEDS = [
+    ("Comercial", "comercial"),
+    ("Produção", "producao"),
+    ("Instalação", "instalacao"),
+    ("Entrega", "entrega"),
+    ("Administrativo", "administrativo"),
+    ("Marketing", "marketing"),
+    ("Manutenção", "manutencao"),
+]
+
+PAYMENT_METHOD_SEEDS = [
+    ("Dinheiro", "dinheiro", "cash", False, False, 1),
+    ("PIX", "pix", "pix", True, False, 1),
+    ("Transferência bancária", "transferencia", "bank_transfer", True, False, 1),
+    ("Cartão de crédito", "cartao-credito", "credit_card", True, True, 12),
+    ("Cartão de débito", "cartao-debito", "debit_card", True, False, 1),
+    ("Cheque", "cheque", "check", True, False, 1),
+    ("Boleto (manual)", "boleto-manual", "boleto_manual", True, True, 12),
+    ("Outro", "outro", "other", False, False, 1),
+]
+
+PAYMENT_TERM_SEEDS = [
+    ("À vista", "Pagamento integral na emissão", 1, "0", 0, 0, False),
+    ("50% entrada + 50% na entrega", "Metade na emissão e metade na entrega", 2, "50", 0, 30, False),
+    ("30% entrada + 70% na instalação", "Entrada e saldo na instalação", 2, "30", 0, 45, False),
+    ("2 parcelas", "Duas parcelas iguais", 2, "0", 0, 30, False),
+    ("3 parcelas", "Três parcelas iguais", 3, "0", 0, 30, False),
+    ("Personalizada", "Condição sob medida", 1, "0", 0, 0, True),
+]
 
 
 def _assign_role_permissions(role, codes):
@@ -734,6 +844,72 @@ def _seed_media_categories():
     return created, updated
 
 
+def _seed_finance_masters():
+    from decimal import Decimal
+
+    from finance.models import CostCenter
+    from finance.models import FinancialCategory
+    from finance.models import PaymentMethod
+    from finance.models import PaymentTerm
+
+    cat_c = cat_u = 0
+    for name, code, ctype, order in FINANCE_CATEGORY_SEEDS:
+        _, created = FinancialCategory.objects.update_or_create(
+            code=code,
+            defaults={
+                "name": name,
+                "category_type": ctype,
+                "display_order": order,
+                "is_active": True,
+            },
+        )
+        cat_c += int(created)
+        cat_u += int(not created)
+
+    cc_c = cc_u = 0
+    for name, code in COST_CENTER_SEEDS:
+        _, created = CostCenter.objects.update_or_create(
+            code=code,
+            defaults={"name": name, "is_active": True},
+        )
+        cc_c += int(created)
+        cc_u += int(not created)
+
+    pm_c = pm_u = 0
+    for name, code, mtype, req_ref, allows, max_inst in PAYMENT_METHOD_SEEDS:
+        _, created = PaymentMethod.objects.update_or_create(
+            code=code,
+            defaults={
+                "name": name,
+                "method_type": mtype,
+                "requires_reference": req_ref,
+                "allows_installments": allows,
+                "maximum_installments": max_inst,
+                "is_active": True,
+            },
+        )
+        pm_c += int(created)
+        pm_u += int(not created)
+
+    pt_c = pt_u = 0
+    for name, desc, count, down, first, interval, custom in PAYMENT_TERM_SEEDS:
+        _, created = PaymentTerm.objects.update_or_create(
+            name=name,
+            defaults={
+                "description": desc,
+                "installment_count": count,
+                "down_payment_percent": Decimal(down),
+                "first_due_days": first,
+                "interval_days": interval,
+                "is_custom": custom,
+                "is_active": True,
+            },
+        )
+        pt_c += int(created)
+        pt_u += int(not created)
+    return (cat_c, cat_u, cc_c, cc_u, pm_c, pm_u, pt_c, pt_u)
+
+
 class Command(BaseCommand):
     help = "Cria cargos, permissões e dados iniciais da fundação ERP."
 
@@ -800,6 +976,16 @@ class Command(BaseCommand):
         stage_created, stage_updated = _seed_production_stages()
         quality_items = _seed_quality_checklist()
         media_cat_created, media_cat_updated = _seed_media_categories()
+        (
+            fin_cat_c,
+            fin_cat_u,
+            fin_cc_c,
+            fin_cc_u,
+            fin_pm_c,
+            fin_pm_u,
+            fin_pt_c,
+            fin_pt_u,
+        ) = _seed_finance_masters()
 
         user_model = get_user_model()
         admin_username = options.get("admin_username")
@@ -829,7 +1015,11 @@ class Command(BaseCommand):
                 f"Motivos: +{loss_created}/~{loss_updated}. "
                 f"Etapas produção: +{stage_created}/~{stage_updated}. "
                 f"Itens checklist qualidade novos: {quality_items}. "
-                f"Categorias mídia: +{media_cat_created}/~{media_cat_updated}."
+                f"Categorias mídia: +{media_cat_created}/~{media_cat_updated}. "
+                f"Financeiro cat:+{fin_cat_c}/~{fin_cat_u} "
+                f"centros:+{fin_cc_c}/~{fin_cc_u} "
+                f"formas:+{fin_pm_c}/~{fin_pm_u} "
+                f"condições:+{fin_pt_c}/~{fin_pt_u}."
                 f"{policy_note}"
             ),
         )

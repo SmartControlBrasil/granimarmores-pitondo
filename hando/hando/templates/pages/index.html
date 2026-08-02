@@ -167,6 +167,25 @@
     </div>
   {% endif %}
 
+  {% if finance_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Financeiro</h5>
+            <a href="{% url 'finance:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard Financeiro</a>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-3"><p class="text-muted mb-1">Contas vencidas</p><h4>{{ finance_summary.overdue_count }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Valor a receber</p><h4>{{ finance_summary.open_receivable_amount }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Valor a pagar</p><h4>{{ finance_summary.open_payable_amount }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Saldo projetado</p><h4>{{ finance_summary.projected_balance }}</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

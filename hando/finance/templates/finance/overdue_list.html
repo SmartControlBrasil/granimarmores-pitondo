@@ -1,0 +1,33 @@
+{% extends "vertical.html" %}
+{% load formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex justify-content-between">
+    <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    <a class="btn btn-sm btn-outline-primary" href="?export=1">CSV</a>
+  </div>
+  <div class="row g-2 mb-3">
+    {% for b in buckets %}
+      <div class="col-md-2"><div class="border rounded p-2"><small>{{ b.label }} dias</small><div>{{ b.count }} · {{ b.amount|format_brl }}</div></div></div>
+    {% endfor %}
+  </div>
+  <div class="card table-responsive">
+    <table class="table table-sm mb-0">
+      <thead><tr><th>Título</th><th>Cliente</th><th>Parcela</th><th>Vencimento</th><th>Saldo</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for i in installments %}
+          <tr>
+            <td><a href="{% url 'finance:receivable_detail' i.receivable_id %}">{{ i.receivable.number }}</a></td>
+            <td>{{ i.receivable.customer }}</td>
+            <td>{{ i.sequence }}</td>
+            <td>{{ i.due_date|date:"d/m/Y" }}</td>
+            <td>{{ i.outstanding_amount|format_brl }}</td>
+            <td>{{ i.get_status_display }}</td>
+          </tr>
+        {% empty %}<tr><td colspan="6" class="text-muted">Nenhuma parcela vencida.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

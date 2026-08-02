@@ -21,6 +21,7 @@ from executive_dashboard.selectors.production import quality_metrics
 from executive_dashboard.selectors.risks import build_executive_alerts
 from executive_dashboard.selectors.risks import orders_at_risk
 from executive_dashboard.selectors.stock import stock_metrics
+from finance.selectors import executive_finance_metrics
 
 
 def _dec(value):
@@ -224,6 +225,11 @@ def build_executive_dashboard(*, user, start, end, previous_period, filters=None
     else:
         data["governance"] = {}
 
+    if "finance" in domains:
+        data["finance"] = executive_finance_metrics(user=user, start=start, end=end)
+    else:
+        data["finance"] = {}
+
     data["risks"] = orders_at_risk(filters=filters) if "production" in domains or "commercial" in domains else []
     data["alerts"] = build_executive_alerts(user=user, domains=data)
 
@@ -231,6 +237,7 @@ def build_executive_dashboard(*, user, start, end, previous_period, filters=None
     c = data.get("commercial") or {}
     p = data.get("production") or {}
     a = data.get("after_sales") or {}
+    f = data.get("finance") or {}
     data["summary"] = {
         "leads_received": c.get("leads_received", 0),
         "open_opportunities": c.get("open_opportunities", 0),
@@ -244,6 +251,13 @@ def build_executive_dashboard(*, user, start, end, previous_period, filters=None
         "orders_overdue": p.get("orders_overdue") or p.get("overdue_orders") or 0,
         "critical_after_sales": a.get("critical", 0),
         "avg_satisfaction": a.get("avg_satisfaction"),
+        "open_receivable_amount": f.get("open_receivable_amount"),
+        "received_period": f.get("received_period"),
+        "overdue_amount": f.get("overdue_amount"),
+        "open_payable_amount": f.get("open_payable_amount"),
+        "paid_period": f.get("paid_period"),
+        "realized_balance": f.get("realized_balance"),
+        "projected_balance": f.get("projected_balance"),
     }
 
     if ttl > 0:
@@ -264,6 +278,7 @@ def _allowed_domains(user):
                 "media",
                 "audit",
                 "quality",
+                "finance",
             },
         )
     if user_has_permission(user, "executive_dashboard.view_commercial"):
@@ -280,6 +295,11 @@ def _allowed_domains(user):
         domains.add("quality")
     if user_has_permission(user, "executive_dashboard.view_audit"):
         domains.add("audit")
+    if user_has_permission(user, "executive_dashboard.view_finance") or user_has_permission(
+        user,
+        "finance_values.view",
+    ):
+        domains.add("finance")
     if user_has_permission(user, "media_dashboard.view") or user_has_permission(user, "media_assets.view"):
         if "commercial" in domains or "production" in domains or user_has_permission(
             user,

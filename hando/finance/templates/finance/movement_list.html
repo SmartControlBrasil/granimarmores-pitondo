@@ -1,0 +1,34 @@
+{% extends "vertical.html" %}
+{% load formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex justify-content-between">
+    <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-2">
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'finance:transfer' %}">Transferir</a>
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'finance:adjustment' %}">Ajuste</a>
+      <a class="btn btn-sm btn-outline-primary" href="?export=1">CSV</a>
+    </div>
+  </div>
+  <div class="card table-responsive">
+    <table class="table table-sm mb-0">
+      <thead><tr><th>Número</th><th>Data</th><th>Tipo</th><th>Conta</th><th>Categoria</th><th>Descrição</th><th>Valor</th><th>Usuário</th></tr></thead>
+      <tbody>
+        {% for m in page_obj %}
+          <tr>
+            <td>{{ m.number }}</td>
+            <td>{{ m.movement_date|date:"d/m/Y" }}</td>
+            <td>{{ m.get_movement_type_display }}</td>
+            <td>{{ m.financial_account }}</td>
+            <td>{{ m.category|default:"—" }}</td>
+            <td>{{ m.description }}</td>
+            <td>{{ m.amount|format_brl }}</td>
+            <td>{{ m.created_by|default:"—" }}</td>
+          </tr>
+        {% empty %}<tr><td colspan="8" class="text-muted">Sem movimentações.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

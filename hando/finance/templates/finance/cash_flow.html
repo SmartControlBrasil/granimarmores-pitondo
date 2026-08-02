@@ -1,0 +1,60 @@
+{% extends "vertical.html" %}
+{% load static formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-1 flex-wrap">
+      {% for key, label in period_choices %}
+        <a class="btn btn-sm btn-outline-secondary{% if period == key %} active{% endif %}" href="?period={{ key }}">{{ label }}</a>
+      {% endfor %}
+      <a class="btn btn-sm btn-outline-primary" href="?{{ querystring }}&export=1">CSV</a>
+    </div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Saldo inicial</small><div class="fs-18">{{ summary.opening_balance|format_brl }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Realizado</small><div class="fs-18">{{ summary.realized_balance|format_brl }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Projetado</small><div class="fs-18">{{ summary.projected_balance|format_brl }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Vencido a receber</small><div class="fs-18">{{ summary.overdue_receivable|format_brl }}</div></div></div></div>
+  </div>
+  <div class="card mb-3"><div class="card-body"><div id="chart-cash" style="min-height:280px"></div></div></div>
+  <div class="card table-responsive">
+    <table class="table table-sm mb-0">
+      <thead><tr><th>Data</th><th>Saldo inicial</th><th>Ent. prev.</th><th>Saí. prev.</th><th>Ent. real.</th><th>Saí. real.</th><th>Saldo real.</th><th>Projetado</th></tr></thead>
+      <tbody>
+        {% for r in rows %}
+          <tr>
+            <td>{{ r.date|date:"d/m/Y" }}</td>
+            <td>{{ r.opening|format_brl }}</td>
+            <td>{{ r.forecast_in|format_brl }}</td>
+            <td>{{ r.forecast_out|format_brl }}</td>
+            <td>{{ r.realized_in|format_brl }}</td>
+            <td>{{ r.realized_out|format_brl }}</td>
+            <td>{{ r.realized_balance|format_brl }}</td>
+            <td>{{ r.projected_balance|format_brl }}</td>
+          </tr>
+        {% empty %}<tr><td colspan="8" class="text-muted">Sem dados no período.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block javascript %}
+{{ block.super }}
+<script src="{% static '/libs/apexcharts/apexcharts.min.js' %}"></script>
+<script>
+(function(){
+  const c = {{ charts_json|safe }};
+  const node = document.querySelector('#chart-cash');
+  if(!node) return;
+  if(!c.labels || !c.labels.length){ node.innerHTML='<p class="text-muted">Sem dados para gráfico.</p>'; return; }
+  new ApexCharts(node,{
+    chart:{type:'line',height:280,toolbar:{show:false}},
+    series:[{name:'Realizado',data:c.realized},{name:'Projetado',data:c.projected}],
+    xaxis:{categories:c.labels},
+    stroke:{curve:'smooth',width:2}
+  }).render();
+})();
+</script>
+{% endblock %}

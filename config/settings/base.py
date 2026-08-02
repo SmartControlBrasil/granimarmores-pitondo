@@ -105,6 +105,7 @@ INSTALLED_APPS = [
     "after_sales",
     "media_library",
     "executive_dashboard",
+    "finance",
 ]
 
 # Painel executivo: cache curto por usuário/filtros (0 desativa)

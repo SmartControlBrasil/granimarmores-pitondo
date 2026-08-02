@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_permissions %}
 
 {% block title %}{{ page_title }}{% endblock title %}
 
@@ -60,6 +61,10 @@
           <a href="{% url 'scheduling:order_schedule' order.pk %}" class="btn btn-outline-primary w-100 mb-2">Agenda operacional</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}?type=measurement" class="btn btn-outline-info w-100 mb-2">Agendar medição</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}?type=return" class="btn btn-outline-info w-100 mb-2">Agendar retorno técnico</a>
+          {% has_permission "accounts_receivable.create" as can_gen_ar %}
+          {% if can_gen_ar %}
+            <a href="{% url 'finance:generate_from_order' order.pk %}" class="btn btn-outline-success w-100 mb-2">Gerar contas a receber</a>
+          {% endif %}
         </div>
       </div>
       <div class="card mt-3">

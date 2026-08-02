@@ -334,6 +334,21 @@
     </div>
   {% endif %}
 
+  {% if "finance" in domains and finance %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Financeiro</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">A receber</small><div>{{ finance.open_receivable_amount|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Recebido</small><div>{{ finance.received_period|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Vencido</small><div>{{ finance.overdue_amount|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">A pagar</small><div>{{ finance.open_payable_amount|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Pago</small><div>{{ finance.paid_period|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Saldo realizado</small><div>{{ finance.realized_balance|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Saldo projetado</small><div>{{ finance.projected_balance|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if "audit" in domains %}
     <div class="card mb-4">
       <div class="card-header"><h5 class="mb-0">Governança e auditoria</h5></div>
