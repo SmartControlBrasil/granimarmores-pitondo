@@ -17,197 +17,389 @@
       </div>
       <ul id="side-menu">
         <li class="menu-title">Menu</li>
-        <li>
-          <a href="{% url 'pages:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'pages' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="home"></i><span>Dashboard</span></a>
-        </li>
-        {% has_permission "executive_dashboard.view" as can_exec %}{% has_permission "executive_dashboard.view_commercial" as can_exec_com %}{% has_permission "executive_dashboard.view_production" as can_exec_prod %}{% has_permission "executive_dashboard.view_stock" as can_exec_stock %}{% has_permission "executive_dashboard.view_schedule" as can_exec_sch %}{% has_permission "executive_dashboard.view_after_sales" as can_exec_as %}{% has_permission "executive_dashboard.view_quality" as can_exec_q %}{% has_permission "executive_dashboard.view_audit" as can_exec_audit %}
+
+        {% has_permission "executive_dashboard.view" as can_exec %}
+        {% has_permission "executive_dashboard.view_commercial" as can_exec_com %}
+        {% has_permission "executive_dashboard.view_production" as can_exec_prod %}
+        {% has_permission "executive_dashboard.view_stock" as can_exec_stock %}
+        {% has_permission "executive_dashboard.view_schedule" as can_exec_sch %}
+        {% has_permission "executive_dashboard.view_after_sales" as can_exec_as %}
+        {% has_permission "executive_dashboard.view_quality" as can_exec_q %}
+        {% has_permission "executive_dashboard.view_audit" as can_exec_audit %}
         {% if can_exec or can_exec_com or can_exec_prod or can_exec_stock or can_exec_sch or can_exec_as or can_exec_q or can_exec_audit %}
-          <li>
-            <a href="{% url 'executive_dashboard:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'executive_dashboard' %} active{% endif %}"><i data-feather="briefcase"></i><span>Painel da Diretoria</span></a>
+          {% nav_active "pages:dashboard" "executive_dashboard" as home_open %}
+        {% else %}
+          {% nav_active "pages:dashboard" as home_open %}
+        {% endif %}
+        <li class="{% if home_open %}menuitem-active{% endif %}">
+          <a href="#sidebarHome" data-bs-toggle="collapse" role="button" aria-expanded="{% if home_open %}true{% else %}false{% endif %}" aria-controls="sidebarHome" class="tp-link">
+            <i data-feather="home"></i><span>Início</span><span class="menu-arrow"></span>
+          </a>
+          <div class="collapse{% if home_open %} show{% endif %}" id="sidebarHome">
+            <ul class="nav-second-level">
+              {% nav_active "pages:dashboard" as dash_active %}
+              <li class="{% if dash_active %}menuitem-active{% endif %}">
+                <a href="{% url 'pages:dashboard' %}" class="tp-link{% if dash_active %} active{% endif %}"><span>Dashboard</span></a>
+              </li>
+              {% if can_exec or can_exec_com or can_exec_prod or can_exec_stock or can_exec_sch or can_exec_as or can_exec_q or can_exec_audit %}
+                {% nav_active "executive_dashboard" as exec_active %}
+                <li class="{% if exec_active %}menuitem-active{% endif %}">
+                  <a href="{% url 'executive_dashboard:dashboard' %}" class="tp-link{% if exec_active %} active{% endif %}"><span>Painel da Diretoria</span></a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </li>
+
+        {% has_permission "leads.view" as can_leads %}
+        {% has_permission "quotes.view" as can_quotes %}
+        {% has_permission "customers.view" as can_customers %}
+        {% has_permission "salespeople.view" as can_salespeople %}
+        {% has_permission "quotes.manage_policy" as can_policy %}
+        {% has_permission "sales_performance.view_own" as can_perf_own %}
+        {% has_permission "sales_performance.view_all" as can_perf_all %}
+        {% has_permission "sales_ranking.view" as can_ranking %}
+        {% has_permission "sales_goals.view" as can_goals %}
+        {% has_permission "commission_events.view_own" as can_my_comm %}
+        {% if can_leads or can_quotes or can_customers or can_salespeople or can_policy or can_perf_own or can_perf_all or can_ranking or can_goals or can_my_comm %}
+          {% nav_active "leads" "quotes" "customers" "salespeople" ":my_commissions" as commercial_open %}
+          <li class="{% if commercial_open %}menuitem-active{% endif %}">
+            <a href="#sidebarCommercial" data-bs-toggle="collapse" role="button" aria-expanded="{% if commercial_open %}true{% else %}false{% endif %}" aria-controls="sidebarCommercial" class="tp-link">
+              <i data-feather="trending-up"></i><span>Comercial</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if commercial_open %} show{% endif %}" id="sidebarCommercial">
+              <ul class="nav-second-level">
+                {% if can_leads %}
+                  {% nav_active "leads:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard Comercial</span></a></li>
+                  {% nav_active "leads:list" "leads:lead*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Leads</span></a></li>
+                  {% nav_active "leads:funnel" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:funnel' %}" class="tp-link{% if a %} active{% endif %}"><span>Funil Comercial</span></a></li>
+                {% endif %}
+                {% if can_quotes %}
+                  {% nav_active "quotes:policy" as quotes_policy_active %}
+                  {% nav_active "quotes" as quotes_ns_active %}
+                  <li class="{% if quotes_ns_active and not quotes_policy_active %}menuitem-active{% endif %}">
+                    <a href="{% url 'quotes:list' %}" class="tp-link{% if quotes_ns_active and not quotes_policy_active %} active{% endif %}"><span>Orçamentos</span></a>
+                  </li>
+                {% endif %}
+                {% if can_customers %}{% nav_active "customers" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'customers:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Clientes</span></a></li>{% endif %}
+                {% if can_salespeople %}{% nav_active "salespeople" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'salespeople:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Vendedores</span></a></li>{% endif %}
+                {% if can_perf_own %}{% nav_active "leads:my_performance" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:my_performance' %}" class="tp-link{% if a %} active{% endif %}"><span>Meu Desempenho</span></a></li>{% endif %}
+                {% if can_perf_all %}{% nav_active "leads:team_performance" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:team_performance' %}" class="tp-link{% if a %} active{% endif %}"><span>Desempenho da Equipe</span></a></li>{% endif %}
+                {% if can_ranking %}{% nav_active "leads:ranking" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:ranking' %}" class="tp-link{% if a %} active{% endif %}"><span>Ranking</span></a></li>{% endif %}
+                {% if can_goals %}{% nav_active "leads:*goal*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'leads:goal_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Metas</span></a></li>{% endif %}
+                {% if can_my_comm %}{% nav_active ":my_commissions" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'my_commissions' %}" class="tp-link{% if a %} active{% endif %}"><span>Minhas Comissões</span></a></li>{% endif %}
+                {% if can_policy %}{% nav_active "quotes:policy" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'quotes:policy' %}" class="tp-link{% if a %} active{% endif %}"><span>Política Comercial</span></a></li>{% endif %}
+              </ul>
+            </div>
           </li>
         {% endif %}
 
-        {% has_permission "leads.view" as can_leads %}{% has_permission "quotes.view" as can_quotes %}{% has_permission "customers.view" as can_customers %}{% has_permission "salespeople.view" as can_salespeople %}{% has_permission "materials.view" as can_materials %}{% has_permission "quotes.manage_policy" as can_policy %}{% has_permission "sales_performance.view_own" as can_perf_own %}{% has_permission "sales_performance.view_all" as can_perf_all %}{% has_permission "sales_ranking.view" as can_ranking %}{% has_permission "sales_goals.view" as can_goals %}{% has_permission "commission_events.view_own" as can_my_comm %}{% has_permission "commission_dashboard.view" as can_comm_dash %}{% has_permission "commission_events.view" as can_comm_events %}{% has_permission "commission_settlements.view" as can_comm_set %}{% has_permission "commission_policies.view" as can_comm_pol %}{% has_permission "commission_partner_values.view" as can_comm_partner %}
-        {% if can_leads or can_quotes or can_customers or can_salespeople or can_materials or can_policy or can_perf_own or can_perf_all or can_ranking or can_goals or can_my_comm or can_comm_dash %}
-          <li class="menu-title mt-2">Comercial</li>
-          {% if can_leads %}
-            <li><a href="{% url 'leads:dashboard' %}" class="tp-link{% if request.resolver_match.url_name == 'dashboard' and request.resolver_match.namespace == 'leads' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard Comercial</span></a></li>
-            <li><a href="{% url 'leads:list' %}" class="tp-link{% if request.resolver_match.namespace == 'leads' and 'lead' in request.resolver_match.url_name|default:'' or request.resolver_match.url_name == 'list' and request.resolver_match.namespace == 'leads' %} active{% endif %}"><i data-feather="inbox"></i><span>Leads</span></a></li>
-            <li><a href="{% url 'leads:funnel' %}" class="tp-link{% if request.resolver_match.url_name == 'funnel' %} active{% endif %}"><i data-feather="columns"></i><span>Funil Comercial</span></a></li>
-          {% endif %}
-          {% if can_perf_own %}<li><a href="{% url 'leads:my_performance' %}" class="tp-link{% if request.resolver_match.url_name == 'my_performance' %} active{% endif %}"><i data-feather="user"></i><span>Meu Desempenho</span></a></li>{% endif %}
-          {% if can_perf_all %}<li><a href="{% url 'leads:team_performance' %}" class="tp-link{% if request.resolver_match.url_name == 'team_performance' %} active{% endif %}"><i data-feather="trending-up"></i><span>Desempenho da Equipe</span></a></li>{% endif %}
-          {% if can_ranking %}<li><a href="{% url 'leads:ranking' %}" class="tp-link{% if request.resolver_match.url_name == 'ranking' %} active{% endif %}"><i data-feather="award"></i><span>Ranking</span></a></li>{% endif %}
-          {% if can_goals %}<li><a href="{% url 'leads:goal_list' %}" class="tp-link{% if 'goal' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="target"></i><span>Metas</span></a></li>{% endif %}
-          {% if can_quotes %}
-            <li><a href="{% url 'quotes:list' %}" class="tp-link{% if request.resolver_match.namespace == 'quotes' %} active{% endif %}"><i data-feather="file-text"></i><span>Orçamentos</span></a></li>
-          {% endif %}
-          {% if can_customers %}
-            <li><a href="{% url 'customers:list' %}" class="tp-link{% if request.resolver_match.namespace == 'customers' %} active{% endif %}"><i data-feather="users"></i><span>Clientes</span></a></li>
-          {% endif %}
-          {% if can_salespeople %}
-            <li><a href="{% url 'salespeople:list' %}" class="tp-link{% if request.resolver_match.namespace == 'salespeople' %} active{% endif %}"><i data-feather="user-check"></i><span>Vendedores</span></a></li>
-          {% endif %}
-          {% if can_policy %}
-            <li><a href="{% url 'quotes:policy' %}" class="tp-link{% if request.resolver_match.url_name == 'policy' %} active{% endif %}"><i data-feather="sliders"></i><span>Política Comercial</span></a></li>
-          {% endif %}
-          {% if can_my_comm %}<li><a href="{% url 'my_commissions' %}" class="tp-link{% if request.resolver_match.url_name == 'my_commissions' %} active{% endif %}"><i data-feather="percent"></i><span>Minhas Comissões</span></a></li>{% endif %}
-        {% endif %}
-
-        {% if can_comm_dash or can_comm_events or can_comm_set or can_comm_pol or can_comm_partner %}
-          <li class="menu-title mt-2">Comissões</li>
-          {% if can_comm_dash %}<li><a href="{% url 'commissions:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'commissions' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_comm_events %}<li><a href="{% url 'commissions:event_list' %}" class="tp-link{% if request.resolver_match.url_name == 'event_list' %} active{% endif %}"><i data-feather="list"></i><span>Eventos</span></a></li>{% endif %}
-          {% if can_comm_set %}<li><a href="{% url 'commissions:settlement_list' %}" class="tp-link{% if 'settlement' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="check-square"></i><span>Fechamentos</span></a></li>{% endif %}
-          {% if can_comm_pol %}<li><a href="{% url 'commissions:policy_list' %}" class="tp-link{% if 'policy' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'commissions' %} active{% endif %}"><i data-feather="sliders"></i><span>Políticas</span></a></li>{% endif %}
-          {% if can_comm_events %}<li><a href="{% url 'commissions:salesperson_list' %}" class="tp-link{% if request.resolver_match.url_name == 'salesperson_list' %} active{% endif %}"><i data-feather="user-check"></i><span>Vendedores</span></a></li>{% endif %}
-          {% if can_comm_partner %}<li><a href="{% url 'commissions:partner_list' %}" class="tp-link{% if 'partner' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'commissions' %} active{% endif %}"><i data-feather="briefcase"></i><span>Parceiros</span></a></li>{% endif %}
-          {% if can_comm_pol %}<li><a href="{% url 'commissions:simulator' %}" class="tp-link{% if request.resolver_match.url_name == 'simulator' %} active{% endif %}"><i data-feather="cpu"></i><span>Simulador</span></a></li>{% endif %}
-        {% endif %}
-
-        {% has_permission "sales_orders.view" as can_orders %}{% has_permission "deliveries.view" as can_deliveries %}{% has_permission "installations.view" as can_installations %}
+        {% has_permission "sales_orders.view" as can_orders %}
+        {% has_permission "deliveries.view" as can_deliveries %}
+        {% has_permission "installations.view" as can_installations %}
         {% if can_orders or can_deliveries or can_installations %}
-          <li class="menu-title mt-2">Operação</li>
-          {% if can_orders %}<li><a href="{% url 'operacao:order_list' %}" class="tp-link{% if request.resolver_match.namespace == 'operacao' %} active{% endif %}"><i data-feather="shopping-cart"></i><span>Pedidos</span></a></li>{% endif %}
+          {% nav_active "operacao" as operations_open %}
+          <li class="{% if operations_open %}menuitem-active{% endif %}">
+            <a href="#sidebarOperations" data-bs-toggle="collapse" role="button" aria-expanded="{% if operations_open %}true{% else %}false{% endif %}" aria-controls="sidebarOperations" class="tp-link">
+              <i data-feather="clipboard"></i><span>Operação</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if operations_open %} show{% endif %}" id="sidebarOperations">
+              <ul class="nav-second-level">
+                {% if can_orders %}{% nav_active "operacao:order*" "operacao:order_list" "operacao:order_detail" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'operacao:order_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Pedidos</span></a></li>{% endif %}
+                {% if can_deliveries %}{% nav_active "operacao:delivery*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'operacao:delivery_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Entregas</span></a></li>{% endif %}
+                {% if can_installations %}{% nav_active "operacao:installation*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'operacao:installation_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Instalações</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
 
-        {% has_permission "schedule_dashboard.view" as can_agenda_dash %}{% has_permission "schedule_calendar.view" as can_agenda_cal %}{% has_permission "operational_events.view" as can_agenda_events %}{% has_permission "schedule_measurements.view" as can_measurements %}
-        {% if can_agenda_dash or can_agenda_cal or can_agenda_events or can_measurements or can_deliveries or can_installations %}
-          <li class="menu-title mt-2">Agenda</li>
-          {% if can_agenda_dash %}<li><a href="{% url 'scheduling:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'scheduling' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_agenda_cal %}<li><a href="{% url 'scheduling:today' %}" class="tp-link{% if request.resolver_match.url_name == 'today' %} active{% endif %}"><i data-feather="sun"></i><span>Hoje</span></a></li>{% endif %}
-          {% if can_agenda_cal %}<li><a href="{% url 'scheduling:week' %}" class="tp-link{% if request.resolver_match.url_name == 'week' %} active{% endif %}"><i data-feather="calendar"></i><span>Semana</span></a></li>{% endif %}
-          {% if can_agenda_cal %}<li><a href="{% url 'scheduling:month' %}" class="tp-link{% if request.resolver_match.url_name == 'month' or request.resolver_match.url_name == 'calendar' %} active{% endif %}"><i data-feather="calendar"></i><span>Mês</span></a></li>{% endif %}
-          {% if can_agenda_events %}<li><a href="{% url 'scheduling:event_list' %}" class="tp-link{% if 'event' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="list"></i><span>Eventos</span></a></li>{% endif %}
-          {% if can_measurements %}<li><a href="{% url 'scheduling:measurement_list' %}" class="tp-link{% if request.resolver_match.url_name == 'measurement_list' %} active{% endif %}"><i data-feather="ruler"></i><span>Medições</span></a></li>{% endif %}
-          {% if can_deliveries %}<li><a href="{% url 'operacao:delivery_list' %}" class="tp-link{% if request.resolver_match.url_name == 'delivery_list' %} active{% endif %}"><i data-feather="package"></i><span>Entregas</span></a></li>{% endif %}
-          {% if can_installations %}<li><a href="{% url 'operacao:installation_list' %}" class="tp-link{% if request.resolver_match.url_name == 'installation_list' %} active{% endif %}"><i data-feather="tool"></i><span>Instalações</span></a></li>{% endif %}
-        {% endif %}
-
-        {% has_permission "production_dashboard.view" as can_prod_dash %}{% has_permission "production_orders.view" as can_prod_orders %}{% has_permission "production_pieces.view" as can_prod_pieces %}{% has_permission "quality_inspections.view" as can_quality %}{% has_permission "production_stages.view" as can_prod_stages %}
+        {% has_permission "production_dashboard.view" as can_prod_dash %}
+        {% has_permission "production_orders.view" as can_prod_orders %}
+        {% has_permission "production_pieces.view" as can_prod_pieces %}
+        {% has_permission "quality_inspections.view" as can_quality %}
+        {% has_permission "production_stages.view" as can_prod_stages %}
         {% if can_prod_dash or can_prod_orders or can_prod_pieces or can_quality or can_prod_stages %}
-          <li class="menu-title mt-2">Produção</li>
-          {% if can_prod_dash %}<li><a href="{% url 'producao:dashboard' %}" class="tp-link{% if request.resolver_match.url_name == 'dashboard' and request.resolver_match.namespace == 'producao' %} active{% endif %}"><i data-feather="bar-chart"></i><span>Dashboard de Produção</span></a></li>{% endif %}
-          {% if can_prod_orders %}<li><a href="{% url 'producao:production_list' %}" class="tp-link{% if 'production' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'producao' %} active{% endif %}"><i data-feather="cpu"></i><span>Ordens de Produção</span></a></li>{% endif %}
-          {% if can_prod_orders %}<li><a href="{% url 'producao:board' %}" class="tp-link{% if request.resolver_match.url_name == 'board' %} active{% endif %}"><i data-feather="columns"></i><span>Quadro de Produção</span></a></li>{% endif %}
-          {% if can_prod_pieces %}<li><a href="{% url 'producao:piece_list' %}" class="tp-link{% if request.resolver_match.url_name == 'piece_list' %} active{% endif %}"><i data-feather="grid"></i><span>Peças</span></a></li>{% endif %}
-          {% if can_quality %}<li><a href="{% url 'producao:production_list' %}?status=quality_control" class="tp-link"><i data-feather="check-square"></i><span>Qualidade</span></a></li>{% endif %}
-          {% if can_prod_stages %}<li><a href="{% url 'producao:stage_list' %}" class="tp-link{% if request.resolver_match.url_name == 'stage_list' %} active{% endif %}"><i data-feather="list"></i><span>Etapas Produtivas</span></a></li>{% endif %}
+          {% nav_active "producao" as production_open %}
+          <li class="{% if production_open %}menuitem-active{% endif %}">
+            <a href="#sidebarProduction" data-bs-toggle="collapse" role="button" aria-expanded="{% if production_open %}true{% else %}false{% endif %}" aria-controls="sidebarProduction" class="tp-link">
+              <i data-feather="cpu"></i><span>Produção</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if production_open %} show{% endif %}" id="sidebarProduction">
+              <ul class="nav-second-level">
+                {% if can_prod_dash %}{% nav_active "producao:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'producao:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard de Produção</span></a></li>{% endif %}
+                {% if can_prod_orders %}{% nav_active "producao:production*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'producao:production_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Ordens de Produção</span></a></li>{% endif %}
+                {% if can_prod_orders %}{% nav_active "producao:board" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'producao:board' %}" class="tp-link{% if a %} active{% endif %}"><span>Quadro de Produção</span></a></li>{% endif %}
+                {% if can_prod_pieces %}{% nav_active "producao:piece*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'producao:piece_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Peças</span></a></li>{% endif %}
+                {% if can_quality %}<li><a href="{% url 'producao:production_list' %}?status=quality_control" class="tp-link"><span>Qualidade</span></a></li>{% endif %}
+                {% if can_prod_stages %}{% nav_active "producao:stage*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'producao:stage_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Etapas Produtivas</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
 
-        {% has_permission "media_dashboard.view" as can_media_dash %}{% has_permission "media_assets.view" as can_media %}{% has_permission "media_assets.upload" as can_media_upload %}{% has_permission "media_assets.review" as can_media_review %}{% has_permission "media_collections.view" as can_media_collections %}{% has_permission "media_portfolio.view" as can_media_portfolio %}{% has_permission "media_publication_candidates.view" as can_media_pub %}
-        {% if can_media_dash or can_media or can_media_upload or can_media_review or can_media_collections or can_media_portfolio or can_media_pub %}
-          <li class="menu-title mt-2">Mídia</li>
-          {% if can_media_dash %}<li><a href="{% url 'media_library:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'media_library' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_media %}<li><a href="{% url 'media_library:library' %}" class="tp-link{% if request.resolver_match.url_name == 'library' %} active{% endif %}"><i data-feather="image"></i><span>Biblioteca</span></a></li>{% endif %}
-          {% if can_media_upload %}<li><a href="{% url 'media_library:upload' %}" class="tp-link{% if request.resolver_match.url_name == 'upload' or request.resolver_match.url_name == 'upload_multiple' %} active{% endif %}"><i data-feather="upload"></i><span>Upload</span></a></li>{% endif %}
-          {% if can_media_review %}<li><a href="{% url 'media_library:review_queue' %}" class="tp-link{% if request.resolver_match.url_name == 'review_queue' %} active{% endif %}"><i data-feather="check-circle"></i><span>Revisão</span></a></li>{% endif %}
-          {% if can_media_collections %}<li><a href="{% url 'media_library:collection_list' %}" class="tp-link{% if 'collection' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="folder"></i><span>Coleções</span></a></li>{% endif %}
-          {% if can_media_collections %}<li><a href="{% url 'media_library:before_after_list' %}" class="tp-link{% if 'before_after' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="columns"></i><span>Antes e Depois</span></a></li>{% endif %}
-          {% if can_media %}<li><a href="{% url 'media_library:materials_gallery' %}" class="tp-link{% if request.resolver_match.url_name == 'materials_gallery' %} active{% endif %}"><i data-feather="layers"></i><span>Materiais</span></a></li>{% endif %}
-          {% if can_media_portfolio %}<li><a href="{% url 'media_library:portfolio' %}" class="tp-link{% if request.resolver_match.url_name == 'portfolio' %} active{% endif %}"><i data-feather="award"></i><span>Portfólio</span></a></li>{% endif %}
-          {% if can_media_pub %}<li><a href="{% url 'media_library:publication_list' %}" class="tp-link{% if 'publication' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="send"></i><span>Publicação Futura</span></a></li>{% endif %}
-        {% endif %}
-
-        {% has_permission "after_sales_dashboard.view" as can_as_dash %}{% has_permission "after_sales_cases.view" as can_as_cases %}{% has_permission "installation_pending_items.view" as can_as_pending %}{% has_permission "warranties.view" as can_as_warranties %}{% has_permission "customer_satisfaction.view" as can_as_surveys %}{% has_permission "review_requests.view" as can_as_reviews %}{% has_permission "media_usage_consents.view" as can_as_consents %}{% has_permission "customer_referrals.view" as can_as_referrals %}
-        {% if can_as_dash or can_as_cases or can_as_pending or can_as_warranties or can_as_surveys or can_as_reviews or can_as_consents or can_as_referrals %}
-          <li class="menu-title mt-2">Pós-venda</li>
-          {% if can_as_dash %}<li><a href="{% url 'after_sales:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'after_sales' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_as_cases %}<li><a href="{% url 'after_sales:case_list' %}" class="tp-link{% if 'case' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'after_sales' %} active{% endif %}"><i data-feather="life-buoy"></i><span>Casos</span></a></li>{% endif %}
-          {% if can_as_pending %}<li><a href="{% url 'after_sales:pending_list' %}" class="tp-link{% if 'pending' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="alert-circle"></i><span>Pendências</span></a></li>{% endif %}
-          {% if can_as_warranties %}<li><a href="{% url 'after_sales:warranty_list' %}" class="tp-link{% if 'warranty' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="shield"></i><span>Garantias</span></a></li>{% endif %}
-          {% if can_as_surveys %}<li><a href="{% url 'after_sales:survey_list' %}" class="tp-link{% if 'survey' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="smile"></i><span>Pesquisas</span></a></li>{% endif %}
-          {% if can_as_reviews %}<li><a href="{% url 'after_sales:review_list' %}" class="tp-link{% if 'review' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="star"></i><span>Avaliações</span></a></li>{% endif %}
-          {% if can_as_consents %}<li><a href="{% url 'after_sales:consent_list' %}" class="tp-link{% if 'consent' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="image"></i><span>Autorizações de Imagem</span></a></li>{% endif %}
-          {% if can_as_referrals %}<li><a href="{% url 'after_sales:referral_list' %}" class="tp-link{% if 'referral' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="users"></i><span>Indicações</span></a></li>{% endif %}
-        {% endif %}
-
-        {% has_permission "purchasing_dashboard.view" as can_pur_dash %}{% has_permission "purchase_requests.view" as can_pur_req %}{% has_permission "supplier_quotations.view" as can_pur_quote %}{% has_permission "purchase_orders.view" as can_pur_po %}{% has_permission "purchase_receipts.view" as can_pur_rec %}{% has_permission "purchase_divergences.view" as can_pur_div %}{% has_permission "purchase_returns.view" as can_pur_ret %}{% has_permission "material_suppliers.view" as can_pur_sup %}
-        {% if can_pur_dash or can_pur_req or can_pur_quote or can_pur_po or can_pur_rec or can_pur_div or can_pur_ret or can_pur_sup %}
-          <li class="menu-title mt-2">Compras</li>
-          {% if can_pur_dash %}<li><a href="{% url 'purchasing:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'purchasing' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_pur_req %}<li><a href="{% url 'purchasing:request_list' %}" class="tp-link{% if 'request' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'purchasing' %} active{% endif %}"><i data-feather="file-plus"></i><span>Solicitações</span></a></li>{% endif %}
-          {% if can_pur_quote %}<li><a href="{% url 'purchasing:quotation_list' %}" class="tp-link{% if 'quotation' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="file-text"></i><span>Cotações</span></a></li>{% endif %}
-          {% if can_pur_quote %}<li><a href="{% url 'purchasing:comparison_hub' %}" class="tp-link{% if request.resolver_match.url_name == 'comparison_hub' or request.resolver_match.url_name == 'request_compare' %} active{% endif %}"><i data-feather="columns"></i><span>Comparação</span></a></li>{% endif %}
-          {% if can_pur_po %}<li><a href="{% url 'purchasing:order_list' %}" class="tp-link{% if 'order' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'purchasing' %} active{% endif %}"><i data-feather="shopping-cart"></i><span>Pedidos de Compra</span></a></li>{% endif %}
-          {% if can_pur_rec %}<li><a href="{% url 'purchasing:receipt_list' %}" class="tp-link{% if 'receipt' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="package"></i><span>Recebimentos</span></a></li>{% endif %}
-          {% if can_pur_div %}<li><a href="{% url 'purchasing:divergence_list' %}" class="tp-link{% if 'divergence' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="alert-triangle"></i><span>Divergências</span></a></li>{% endif %}
-          {% if can_pur_ret %}<li><a href="{% url 'purchasing:return_list' %}" class="tp-link{% if 'return' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'purchasing' %} active{% endif %}"><i data-feather="corner-up-left"></i><span>Devoluções</span></a></li>{% endif %}
-          {% if can_pur_sup %}<li><a href="{% url 'purchasing:supplier_list' %}" class="tp-link{% if 'supplier' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'purchasing' %} active{% endif %}"><i data-feather="truck"></i><span>Fornecedores</span></a></li>{% endif %}
-        {% endif %}
-
-        {% has_permission "stock_dashboard.view" as can_stock_dash %}{% has_permission "slabs.view" as can_slabs %}{% has_permission "slab_reservations.view" as can_reservations %}{% has_permission "slab_remnants.view" as can_remnants %}{% has_permission "stock_movements.view" as can_movements %}{% has_permission "stock_inventory.view" as can_inventory %}{% has_permission "stock_locations.view" as can_locations %}
+        {% has_permission "stock_dashboard.view" as can_stock_dash %}
+        {% has_permission "slabs.view" as can_slabs %}
+        {% has_permission "slab_reservations.view" as can_reservations %}
+        {% has_permission "slab_remnants.view" as can_remnants %}
+        {% has_permission "stock_movements.view" as can_movements %}
+        {% has_permission "stock_inventory.view" as can_inventory %}
+        {% has_permission "stock_locations.view" as can_locations %}
         {% if can_stock_dash or can_slabs or can_reservations or can_remnants or can_movements or can_inventory or can_locations %}
-          <li class="menu-title mt-2">Estoque</li>
-          {% if can_stock_dash %}<li><a href="{% url 'stock:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'stock' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_slabs %}<li><a href="{% url 'stock:slab_list' %}" class="tp-link{% if 'slab' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'stock' %} active{% endif %}"><i data-feather="copy"></i><span>Chapas</span></a></li>{% endif %}
-          {% if can_slabs %}<li><a href="{% url 'stock:slab_receive' %}" class="tp-link{% if request.resolver_match.url_name == 'slab_receive' %} active{% endif %}"><i data-feather="log-in"></i><span>Entradas</span></a></li>{% endif %}
-          {% if can_reservations %}<li><a href="{% url 'stock:reservation_list' %}" class="tp-link{% if 'reservation' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="bookmark"></i><span>Reservas</span></a></li>{% endif %}
-          {% if can_remnants %}<li><a href="{% url 'stock:remnant_list' %}" class="tp-link{% if 'remnant' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="scissors"></i><span>Sobras</span></a></li>{% endif %}
-          {% if can_movements %}<li><a href="{% url 'stock:movement_list' %}" class="tp-link{% if request.resolver_match.url_name == 'movement_list' %} active{% endif %}"><i data-feather="activity"></i><span>Movimentações</span></a></li>{% endif %}
-          {% if can_inventory %}<li><a href="{% url 'stock:inventory_list' %}" class="tp-link{% if 'inventory' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="clipboard"></i><span>Inventários</span></a></li>{% endif %}
-          {% if can_locations %}<li><a href="{% url 'stock:location_list' %}" class="tp-link{% if 'location' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="map-pin"></i><span>Localizações</span></a></li>{% endif %}
+          {% nav_active "stock" as stock_open %}
+          <li class="{% if stock_open %}menuitem-active{% endif %}">
+            <a href="#sidebarStock" data-bs-toggle="collapse" role="button" aria-expanded="{% if stock_open %}true{% else %}false{% endif %}" aria-controls="sidebarStock" class="tp-link">
+              <i data-feather="layers"></i><span>Estoque</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if stock_open %} show{% endif %}" id="sidebarStock">
+              <ul class="nav-second-level">
+                {% if can_stock_dash %}{% nav_active "stock:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_slabs %}{% nav_active "stock:slab_list" "stock:slab_detail" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:slab_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Chapas</span></a></li>{% endif %}
+                {% if can_slabs %}{% nav_active "stock:slab_receive" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:slab_receive' %}" class="tp-link{% if a %} active{% endif %}"><span>Entradas</span></a></li>{% endif %}
+                {% if can_reservations %}{% nav_active "stock:*reservation*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:reservation_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Reservas</span></a></li>{% endif %}
+                {% if can_remnants %}{% nav_active "stock:*remnant*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:remnant_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Sobras</span></a></li>{% endif %}
+                {% if can_movements %}{% nav_active "stock:movement*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:movement_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Movimentações</span></a></li>{% endif %}
+                {% if can_inventory %}{% nav_active "stock:*inventory*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:inventory_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Inventários</span></a></li>{% endif %}
+                {% if can_locations %}{% nav_active "stock:*location*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'stock:location_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Localizações</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
 
-        {% has_permission "finance_dashboard.view" as can_fin_dash %}{% has_permission "accounts_receivable.view" as can_ar %}{% has_permission "accounts_payable.view" as can_ap %}{% has_permission "finance_cash_flow.view" as can_cf %}{% has_permission "financial_movements.view" as can_mov %}{% has_permission "finance_overdue.view" as can_od %}{% has_permission "financial_accounts.view" as can_fa %}{% has_permission "financial_categories.view" as can_fc %}{% has_permission "cost_centers.view" as can_cc %}{% has_permission "payment_methods.view" as can_pm %}{% has_permission "payment_terms.view" as can_pt %}
+        {% has_permission "schedule_dashboard.view" as can_agenda_dash %}
+        {% has_permission "schedule_calendar.view" as can_agenda_cal %}
+        {% has_permission "operational_events.view" as can_agenda_events %}
+        {% has_permission "schedule_measurements.view" as can_measurements %}
+        {% if can_agenda_dash or can_agenda_cal or can_agenda_events or can_measurements %}
+          {% nav_active "scheduling" as schedule_open %}
+          <li class="{% if schedule_open %}menuitem-active{% endif %}">
+            <a href="#sidebarSchedule" data-bs-toggle="collapse" role="button" aria-expanded="{% if schedule_open %}true{% else %}false{% endif %}" aria-controls="sidebarSchedule" class="tp-link">
+              <i data-feather="calendar"></i><span>Agenda</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if schedule_open %} show{% endif %}" id="sidebarSchedule">
+              <ul class="nav-second-level">
+                {% if can_agenda_dash %}{% nav_active "scheduling:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'scheduling:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_agenda_cal %}{% nav_active "scheduling:today" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'scheduling:today' %}" class="tp-link{% if a %} active{% endif %}"><span>Hoje</span></a></li>{% endif %}
+                {% if can_agenda_cal %}{% nav_active "scheduling:week" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'scheduling:week' %}" class="tp-link{% if a %} active{% endif %}"><span>Semana</span></a></li>{% endif %}
+                {% if can_agenda_cal %}{% nav_active "scheduling:month" "scheduling:calendar" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'scheduling:month' %}" class="tp-link{% if a %} active{% endif %}"><span>Mês</span></a></li>{% endif %}
+                {% if can_agenda_events %}{% nav_active "scheduling:*event*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'scheduling:event_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Eventos</span></a></li>{% endif %}
+                {% if can_measurements %}{% nav_active "scheduling:*measurement*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'scheduling:measurement_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Medições</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
+        {% endif %}
+
+        {% has_permission "after_sales_dashboard.view" as can_as_dash %}
+        {% has_permission "after_sales_cases.view" as can_as_cases %}
+        {% has_permission "installation_pending_items.view" as can_as_pending %}
+        {% has_permission "warranties.view" as can_as_warranties %}
+        {% has_permission "customer_satisfaction.view" as can_as_surveys %}
+        {% has_permission "review_requests.view" as can_as_reviews %}
+        {% has_permission "media_usage_consents.view" as can_as_consents %}
+        {% has_permission "customer_referrals.view" as can_as_referrals %}
+        {% if can_as_dash or can_as_cases or can_as_pending or can_as_warranties or can_as_surveys or can_as_reviews or can_as_consents or can_as_referrals %}
+          {% nav_active "after_sales" as after_sales_open %}
+          <li class="{% if after_sales_open %}menuitem-active{% endif %}">
+            <a href="#sidebarAfterSales" data-bs-toggle="collapse" role="button" aria-expanded="{% if after_sales_open %}true{% else %}false{% endif %}" aria-controls="sidebarAfterSales" class="tp-link">
+              <i data-feather="life-buoy"></i><span>Pós-venda</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if after_sales_open %} show{% endif %}" id="sidebarAfterSales">
+              <ul class="nav-second-level">
+                {% if can_as_dash %}{% nav_active "after_sales:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_as_cases %}{% nav_active "after_sales:*case*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:case_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Casos</span></a></li>{% endif %}
+                {% if can_as_pending %}{% nav_active "after_sales:*pending*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:pending_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Pendências</span></a></li>{% endif %}
+                {% if can_as_warranties %}{% nav_active "after_sales:*warranty*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:warranty_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Garantias</span></a></li>{% endif %}
+                {% if can_as_surveys %}{% nav_active "after_sales:*survey*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:survey_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Pesquisas</span></a></li>{% endif %}
+                {% if can_as_reviews %}{% nav_active "after_sales:*review*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:review_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Avaliações</span></a></li>{% endif %}
+                {% if can_as_consents %}{% nav_active "after_sales:*consent*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:consent_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Autorizações de Imagem</span></a></li>{% endif %}
+                {% if can_as_referrals %}{% nav_active "after_sales:*referral*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'after_sales:referral_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Indicações</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
+        {% endif %}
+
+        {% has_permission "media_dashboard.view" as can_media_dash %}
+        {% has_permission "media_assets.view" as can_media %}
+        {% has_permission "media_assets.upload" as can_media_upload %}
+        {% has_permission "media_assets.review" as can_media_review %}
+        {% has_permission "media_collections.view" as can_media_collections %}
+        {% has_permission "media_portfolio.view" as can_media_portfolio %}
+        {% has_permission "media_publication_candidates.view" as can_media_pub %}
+        {% if can_media_dash or can_media or can_media_upload or can_media_review or can_media_collections or can_media_portfolio or can_media_pub %}
+          {% nav_active "media_library" as media_open %}
+          <li class="{% if media_open %}menuitem-active{% endif %}">
+            <a href="#sidebarMedia" data-bs-toggle="collapse" role="button" aria-expanded="{% if media_open %}true{% else %}false{% endif %}" aria-controls="sidebarMedia" class="tp-link">
+              <i data-feather="image"></i><span>Mídia</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if media_open %} show{% endif %}" id="sidebarMedia">
+              <ul class="nav-second-level">
+                {% if can_media_dash %}{% nav_active "media_library:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_media %}{% nav_active "media_library:library" "media_library:asset*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:library' %}" class="tp-link{% if a %} active{% endif %}"><span>Biblioteca</span></a></li>{% endif %}
+                {% if can_media_upload %}{% nav_active "media_library:upload*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:upload' %}" class="tp-link{% if a %} active{% endif %}"><span>Upload</span></a></li>{% endif %}
+                {% if can_media_review %}{% nav_active "media_library:review*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:review_queue' %}" class="tp-link{% if a %} active{% endif %}"><span>Revisão</span></a></li>{% endif %}
+                {% if can_media_collections %}{% nav_active "media_library:*collection*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:collection_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Coleções</span></a></li>{% endif %}
+                {% if can_media_collections %}{% nav_active "media_library:*before_after*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:before_after_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Antes e Depois</span></a></li>{% endif %}
+                {% if can_media %}{% nav_active "media_library:materials_gallery" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:materials_gallery' %}" class="tp-link{% if a %} active{% endif %}"><span>Materiais</span></a></li>{% endif %}
+                {% if can_media_portfolio %}{% nav_active "media_library:portfolio" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:portfolio' %}" class="tp-link{% if a %} active{% endif %}"><span>Portfólio</span></a></li>{% endif %}
+                {% if can_media_pub %}{% nav_active "media_library:*publication*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'media_library:publication_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Publicação Futura</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
+        {% endif %}
+
+        {% has_permission "finance_dashboard.view" as can_fin_dash %}
+        {% has_permission "accounts_receivable.view" as can_ar %}
+        {% has_permission "accounts_payable.view" as can_ap %}
+        {% has_permission "finance_cash_flow.view" as can_cf %}
+        {% has_permission "financial_movements.view" as can_mov %}
+        {% has_permission "finance_overdue.view" as can_od %}
+        {% has_permission "financial_accounts.view" as can_fa %}
+        {% has_permission "financial_categories.view" as can_fc %}
+        {% has_permission "cost_centers.view" as can_cc %}
+        {% has_permission "payment_methods.view" as can_pm %}
+        {% has_permission "payment_terms.view" as can_pt %}
         {% if can_fin_dash or can_ar or can_ap or can_cf or can_mov or can_od or can_fa or can_fc or can_cc or can_pm or can_pt %}
-          <li class="menu-title mt-2">Financeiro</li>
-          {% if can_fin_dash %}<li><a href="{% url 'finance:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'finance' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
-          {% if can_ar %}<li><a href="{% url 'finance:receivable_list' %}" class="tp-link{% if 'receivable' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="download"></i><span>Contas a Receber</span></a></li>{% endif %}
-          {% if can_ap %}<li><a href="{% url 'finance:payable_list' %}" class="tp-link{% if 'payable' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="upload"></i><span>Contas a Pagar</span></a></li>{% endif %}
-          {% if can_cf %}<li><a href="{% url 'finance:cash_flow' %}" class="tp-link{% if request.resolver_match.url_name == 'cash_flow' %} active{% endif %}"><i data-feather="trending-up"></i><span>Fluxo de Caixa</span></a></li>{% endif %}
-          {% if can_mov %}<li><a href="{% url 'finance:movement_list' %}" class="tp-link{% if request.resolver_match.url_name == 'movement_list' and request.resolver_match.namespace == 'finance' %} active{% endif %}"><i data-feather="activity"></i><span>Movimentações</span></a></li>{% endif %}
-          {% if can_od %}<li><a href="{% url 'finance:overdue_list' %}" class="tp-link{% if request.resolver_match.url_name == 'overdue_list' %} active{% endif %}"><i data-feather="alert-triangle"></i><span>Inadimplência</span></a></li>{% endif %}
-          {% if can_fa %}<li><a href="{% url 'finance:account_list' %}" class="tp-link{% if 'account' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'finance' %} active{% endif %}"><i data-feather="credit-card"></i><span>Contas Financeiras</span></a></li>{% endif %}
-          {% if can_fc %}<li><a href="{% url 'finance:category_list' %}" class="tp-link{% if request.resolver_match.url_name == 'category_list' and request.resolver_match.namespace == 'finance' %} active{% endif %}"><i data-feather="folder"></i><span>Categorias</span></a></li>{% endif %}
-          {% if can_cc %}<li><a href="{% url 'finance:cost_center_list' %}" class="tp-link{% if 'cost_center' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="map"></i><span>Centros de Custo</span></a></li>{% endif %}
-          {% if can_pm %}<li><a href="{% url 'finance:payment_method_list' %}" class="tp-link{% if 'payment_method' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="dollar-sign"></i><span>Formas de Pagamento</span></a></li>{% endif %}
-          {% if can_pt %}<li><a href="{% url 'finance:payment_term_list' %}" class="tp-link{% if 'payment_term' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="calendar"></i><span>Condições de Pagamento</span></a></li>{% endif %}
+          {% nav_active "finance" as finance_open %}
+          <li class="{% if finance_open %}menuitem-active{% endif %}">
+            <a href="#sidebarFinance" data-bs-toggle="collapse" role="button" aria-expanded="{% if finance_open %}true{% else %}false{% endif %}" aria-controls="sidebarFinance" class="tp-link">
+              <i data-feather="dollar-sign"></i><span>Financeiro</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if finance_open %} show{% endif %}" id="sidebarFinance">
+              <ul class="nav-second-level">
+                {% if can_fin_dash or can_ar or can_ap or can_cf or can_mov or can_od %}<li class="menu-title">Operação</li>{% endif %}
+                {% if can_fin_dash %}{% nav_active "finance:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_ar %}{% nav_active "finance:*receivable*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:receivable_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Contas a Receber</span></a></li>{% endif %}
+                {% if can_ap %}{% nav_active "finance:*payable*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:payable_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Contas a Pagar</span></a></li>{% endif %}
+                {% if can_cf %}{% nav_active "finance:cash_flow" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:cash_flow' %}" class="tp-link{% if a %} active{% endif %}"><span>Fluxo de Caixa</span></a></li>{% endif %}
+                {% if can_mov %}{% nav_active "finance:movement*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:movement_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Movimentações</span></a></li>{% endif %}
+                {% if can_od %}{% nav_active "finance:overdue*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:overdue_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Inadimplência</span></a></li>{% endif %}
+                {% if can_fa or can_fc or can_cc or can_pm or can_pt %}<li class="menu-title">Cadastros</li>{% endif %}
+                {% if can_fa %}{% nav_active "finance:*account*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:account_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Contas Financeiras</span></a></li>{% endif %}
+                {% if can_fc %}{% nav_active "finance:category*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:category_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Categorias</span></a></li>{% endif %}
+                {% if can_cc %}{% nav_active "finance:*cost_center*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:cost_center_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Centros de Custo</span></a></li>{% endif %}
+                {% if can_pm %}{% nav_active "finance:*payment_method*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:payment_method_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Formas de Pagamento</span></a></li>{% endif %}
+                {% if can_pt %}{% nav_active "finance:*payment_term*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'finance:payment_term_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Condições de Pagamento</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
 
-        {% has_permission "customers.view" as can_customers_c %}{% has_permission "salespeople.view" as can_salespeople_c %}{% has_permission "users.view" as can_users %}{% has_permission "commercial_partners.view" as can_partners %}{% has_permission "commercial_sources.view" as can_sources %}{% has_permission "project_types.view" as can_project_types %}{% has_permission "contact_channels.view" as can_channels %}{% has_permission "loss_reasons.view" as can_loss_reasons %}{% has_permission "service_regions.view" as can_regions %}
-        {% if can_customers_c or can_salespeople_c or can_users or can_partners or can_sources or can_project_types or can_channels or can_loss_reasons or can_regions or can_materials %}
-          <li class="menu-title mt-2">Cadastros</li>
-          <li><a href="{% url 'commercial:summary' %}" class="tp-link{% if request.resolver_match.url_name == 'summary' %} active{% endif %}"><i data-feather="pie-chart"></i><span>Resumo de Cadastros</span></a></li>
-          {% if can_partners %}<li><a href="{% url 'commercial:partners' %}" class="tp-link{% if 'partner' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="briefcase"></i><span>Parceiros comerciais</span></a></li>{% endif %}
-          {% if can_sources %}<li><a href="{% url 'commercial:sources' %}" class="tp-link{% if 'source' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="compass"></i><span>Origens comerciais</span></a></li>{% endif %}
-          {% if can_project_types %}<li><a href="{% url 'commercial:project_types' %}" class="tp-link{% if 'project_type' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="grid"></i><span>Tipos de projeto</span></a></li>{% endif %}
-          {% if can_channels %}<li><a href="{% url 'commercial:channels' %}" class="tp-link{% if 'channel' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="message-circle"></i><span>Canais de contato</span></a></li>{% endif %}
-          {% if can_loss_reasons %}<li><a href="{% url 'commercial:loss_reasons' %}" class="tp-link{% if 'loss_reason' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="x-circle"></i><span>Motivos de perda</span></a></li>{% endif %}
-          {% if can_regions %}<li><a href="{% url 'commercial:regions' %}" class="tp-link{% if 'region' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="map-pin"></i><span>Regiões de atendimento</span></a></li>{% endif %}
-          {% if can_materials %}
-            <li><a href="{% url 'materials:list' %}" class="tp-link{% if request.resolver_match.url_name == 'list' and request.resolver_match.namespace == 'materials' %} active{% endif %}"><i data-feather="layers"></i><span>Materiais</span></a></li>
-            <li><a href="{% url 'materials:categories' %}" class="tp-link{% if 'category' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="grid"></i><span>Categorias</span></a></li>
-            <li><a href="{% url 'materials:finishes' %}" class="tp-link{% if 'finish' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="tool"></i><span>Acabamentos</span></a></li>
-            <li><a href="{% url 'materials:services' %}" class="tp-link{% if 'service' in request.resolver_match.url_name and request.resolver_match.namespace == 'materials' %} active{% endif %}"><i data-feather="settings"></i><span>Serviços</span></a></li>
-          {% endif %}
-          {% if can_users %}<li><a href="{% url 'accounts:users' %}" class="tp-link{% if request.resolver_match.url_name == 'users' %} active{% endif %}"><i data-feather="user"></i><span>Usuários</span></a></li>{% endif %}
+        {% has_permission "purchasing_dashboard.view" as can_pur_dash %}
+        {% has_permission "purchase_requests.view" as can_pur_req %}
+        {% has_permission "supplier_quotations.view" as can_pur_quote %}
+        {% has_permission "purchase_orders.view" as can_pur_po %}
+        {% has_permission "purchase_receipts.view" as can_pur_rec %}
+        {% has_permission "purchase_divergences.view" as can_pur_div %}
+        {% has_permission "purchase_returns.view" as can_pur_ret %}
+        {% has_permission "material_suppliers.view" as can_pur_sup %}
+        {% if can_pur_dash or can_pur_req or can_pur_quote or can_pur_po or can_pur_rec or can_pur_div or can_pur_ret or can_pur_sup %}
+          {% nav_active "purchasing" as purchasing_open %}
+          <li class="{% if purchasing_open %}menuitem-active{% endif %}">
+            <a href="#sidebarPurchasing" data-bs-toggle="collapse" role="button" aria-expanded="{% if purchasing_open %}true{% else %}false{% endif %}" aria-controls="sidebarPurchasing" class="tp-link">
+              <i data-feather="shopping-cart"></i><span>Compras</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if purchasing_open %} show{% endif %}" id="sidebarPurchasing">
+              <ul class="nav-second-level">
+                {% if can_pur_dash %}{% nav_active "purchasing:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_pur_req %}{% nav_active "purchasing:*request*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:request_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Solicitações</span></a></li>{% endif %}
+                {% if can_pur_quote %}{% nav_active "purchasing:*quotation*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:quotation_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Cotações</span></a></li>{% endif %}
+                {% if can_pur_quote %}{% nav_active "purchasing:comparison*" "purchasing:request_compare" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:comparison_hub' %}" class="tp-link{% if a %} active{% endif %}"><span>Comparação</span></a></li>{% endif %}
+                {% if can_pur_po %}{% nav_active "purchasing:*order*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:order_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Pedidos de Compra</span></a></li>{% endif %}
+                {% if can_pur_rec %}{% nav_active "purchasing:*receipt*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:receipt_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Recebimentos</span></a></li>{% endif %}
+                {% if can_pur_div %}{% nav_active "purchasing:*divergence*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:divergence_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Divergências</span></a></li>{% endif %}
+                {% if can_pur_ret %}{% nav_active "purchasing:*return*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:return_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Devoluções</span></a></li>{% endif %}
+                {% if can_pur_sup %}{% nav_active "purchasing:*supplier*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'purchasing:supplier_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Fornecedores</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
 
-        {% has_permission "assets.view" as can_assets %}{% has_permission "vehicles.view" as can_vehicles %}
-        {% if can_assets or can_vehicles %}
-          <li class="menu-title mt-2">Patrimônio</li>
-          {% if can_assets %}<li><a href="{% url 'assets:list' %}" class="tp-link{% if request.resolver_match.namespace == 'assets' %} active{% endif %}"><i data-feather="package"></i><span>Ativos</span></a></li>{% endif %}
-          {% if can_vehicles %}<li><a href="{% url 'fleet:list' %}" class="tp-link{% if request.resolver_match.namespace == 'fleet' %} active{% endif %}"><i data-feather="truck"></i><span>Veículos</span></a></li>{% endif %}
+        {% has_permission "commission_dashboard.view" as can_comm_dash %}
+        {% has_permission "commission_events.view" as can_comm_events %}
+        {% has_permission "commission_settlements.view" as can_comm_set %}
+        {% has_permission "commission_policies.view" as can_comm_pol %}
+        {% has_permission "commission_partner_values.view" as can_comm_partner %}
+        {% if can_comm_dash or can_comm_events or can_comm_set or can_comm_pol or can_comm_partner %}
+          {% nav_active "commissions" as commissions_open %}
+          <li class="{% if commissions_open %}menuitem-active{% endif %}">
+            <a href="#sidebarCommissions" data-bs-toggle="collapse" role="button" aria-expanded="{% if commissions_open %}true{% else %}false{% endif %}" aria-controls="sidebarCommissions" class="tp-link">
+              <i data-feather="percent"></i><span>Comissões</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if commissions_open %} show{% endif %}" id="sidebarCommissions">
+              <ul class="nav-second-level">
+                {% if can_comm_dash %}{% nav_active "commissions:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_comm_events %}{% nav_active "commissions:event*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:event_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Eventos</span></a></li>{% endif %}
+                {% if can_comm_set %}{% nav_active "commissions:*settlement*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:settlement_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Fechamentos</span></a></li>{% endif %}
+                {% if can_comm_pol %}{% nav_active "commissions:*policy*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:policy_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Políticas</span></a></li>{% endif %}
+                {% if can_comm_events %}{% nav_active "commissions:salesperson*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:salesperson_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Vendedores</span></a></li>{% endif %}
+                {% if can_comm_partner %}{% nav_active "commissions:*partner*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:partner_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Parceiros</span></a></li>{% endif %}
+                {% if can_comm_pol %}{% nav_active "commissions:simulator" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commissions:simulator' %}" class="tp-link{% if a %} active{% endif %}"><span>Simulador</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
 
+        {% has_permission "users.view" as can_users %}
+        {% has_permission "roles.view" as can_roles %}
+        {% has_permission "audit.view" as can_audit %}
+        {% has_permission "settings.view" as can_settings %}
+        {% has_permission "sales_score_policy.view" as can_score_policy %}
+        {% has_permission "materials.view" as can_materials %}
+        {% has_permission "commercial_partners.view" as can_partners %}
+        {% has_permission "commercial_sources.view" as can_sources %}
+        {% has_permission "project_types.view" as can_project_types %}
+        {% has_permission "contact_channels.view" as can_channels %}
+        {% has_permission "loss_reasons.view" as can_loss_reasons %}
+        {% has_permission "service_regions.view" as can_regions %}
+        {% has_permission "assets.view" as can_assets %}
+        {% has_permission "vehicles.view" as can_vehicles %}
         {% has_permission "maintenance.view" as can_maintenance %}
-        {% if can_maintenance %}
-          <li class="menu-title mt-2">Manutenção</li>
-          <li><a href="{% url 'maintenance:orders' %}" class="tp-link"><i data-feather="tool"></i><span>Ordens de manutenção</span></a></li>
-          <li><a href="{% url 'maintenance:plans' %}" class="tp-link"><i data-feather="calendar"></i><span>Planos preventivos</span></a></li>
-        {% endif %}
+        {% if can_users or can_roles or can_audit or can_settings or can_score_policy or can_materials or can_partners or can_sources or can_project_types or can_channels or can_loss_reasons or can_regions or can_assets or can_vehicles or can_maintenance %}
+          {% nav_active "accounts" "access_control" "audit" "performance_admin" "commercial" "materials" "assets" "fleet" "maintenance" as admin_open %}
+          <li class="{% if admin_open %}menuitem-active{% endif %}">
+            <a href="#sidebarAdministration" data-bs-toggle="collapse" role="button" aria-expanded="{% if admin_open %}true{% else %}false{% endif %}" aria-controls="sidebarAdministration" class="tp-link">
+              <i data-feather="settings"></i><span>Administração</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if admin_open %} show{% endif %}" id="sidebarAdministration">
+              <ul class="nav-second-level">
+                {% if can_users or can_roles or can_audit %}
+                  <li class="menu-title">Acesso e Segurança</li>
+                  {% if can_users %}{% nav_active "accounts:users" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'accounts:users' %}" class="tp-link{% if a %} active{% endif %}"><span>Usuários</span></a></li>{% endif %}
+                  {% if can_roles %}{% nav_active "access_control:*role*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'access_control:roles' %}" class="tp-link{% if a %} active{% endif %}"><span>Cargos</span></a></li>{% endif %}
+                  {% if can_roles %}{% nav_active "access_control:*permission*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'access_control:permissions' %}" class="tp-link{% if a %} active{% endif %}"><span>Permissões</span></a></li>{% endif %}
+                  {% if can_users %}{% nav_active "accounts:sessions" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'accounts:sessions' %}" class="tp-link{% if a %} active{% endif %}"><span>Sessões</span></a></li>{% endif %}
+                  {% if can_audit %}{% nav_active "audit" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'audit:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Auditoria</span></a></li>{% endif %}
+                {% endif %}
 
-        {% has_permission "roles.view" as can_roles %}{% has_permission "audit.view" as can_audit %}{% has_permission "settings.view" as can_settings %}{% has_permission "sales_score_policy.view" as can_score_policy %}
-        {% if can_roles or can_audit or can_settings or can_score_policy %}
-          <li class="menu-title mt-2">Administração</li>
-          {% if can_roles %}
-            <li><a href="{% url 'access_control:roles' %}" class="tp-link"><i data-feather="shield"></i><span>Cargos e níveis de acesso</span></a></li>
-            <li><a href="{% url 'access_control:permissions' %}" class="tp-link"><i data-feather="lock"></i><span>Permissões</span></a></li>
-          {% endif %}
-          {% if can_score_policy %}<li><a href="{% url 'performance_admin:score_policy_list' %}" class="tp-link{% if request.resolver_match.namespace == 'performance_admin' %} active{% endif %}"><i data-feather="percent"></i><span>Política de Score</span></a></li>{% endif %}
-          {% if can_users %}<li><a href="{% url 'accounts:sessions' %}" class="tp-link"><i data-feather="activity"></i><span>Sessões de usuários</span></a></li>{% endif %}
-          {% if can_audit %}<li><a href="{% url 'audit:list' %}" class="tp-link"><i data-feather="file-text"></i><span>Auditoria</span></a></li>{% endif %}
+                {% if can_partners or can_sources or can_project_types or can_channels or can_loss_reasons or can_regions or can_score_policy %}
+                  <li class="menu-title">Cadastros Comerciais</li>
+                  <li>{% nav_active "commercial:summary" as a %}<a href="{% url 'commercial:summary' %}" class="tp-link{% if a %} active{% endif %}"><span>Resumo de Cadastros</span></a></li>
+                  {% if can_score_policy %}{% nav_active "performance_admin" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'performance_admin:score_policy_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Política de Score</span></a></li>{% endif %}
+                  {% if can_project_types %}{% nav_active "commercial:*project_type*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commercial:project_types' %}" class="tp-link{% if a %} active{% endif %}"><span>Tipos de Projeto</span></a></li>{% endif %}
+                  {% if can_sources %}{% nav_active "commercial:*source*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commercial:sources' %}" class="tp-link{% if a %} active{% endif %}"><span>Origens comerciais</span></a></li>{% endif %}
+                  {% if can_partners %}{% nav_active "commercial:*partner*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commercial:partners' %}" class="tp-link{% if a %} active{% endif %}"><span>Parceiros comerciais</span></a></li>{% endif %}
+                  {% if can_loss_reasons %}{% nav_active "commercial:*loss_reason*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commercial:loss_reasons' %}" class="tp-link{% if a %} active{% endif %}"><span>Motivos de Perda</span></a></li>{% endif %}
+                  {% if can_regions %}{% nav_active "commercial:*region*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commercial:regions' %}" class="tp-link{% if a %} active{% endif %}"><span>Regiões</span></a></li>{% endif %}
+                  {% if can_channels %}{% nav_active "commercial:*channel*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'commercial:channels' %}" class="tp-link{% if a %} active{% endif %}"><span>Canais</span></a></li>{% endif %}
+                {% endif %}
+
+                {% if can_materials %}
+                  <li class="menu-title">Cadastros Técnicos</li>
+                  {% nav_active "materials:list" "materials:detail" "materials:create" "materials:update" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'materials:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Materiais</span></a></li>
+                  {% nav_active "materials:*categor*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'materials:categories' %}" class="tp-link{% if a %} active{% endif %}"><span>Categorias de Materiais</span></a></li>
+                  {% nav_active "materials:*finish*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'materials:finishes' %}" class="tp-link{% if a %} active{% endif %}"><span>Acabamentos</span></a></li>
+                  {% nav_active "materials:*service*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'materials:services' %}" class="tp-link{% if a %} active{% endif %}"><span>Serviços</span></a></li>
+                {% endif %}
+
+                {% if can_assets or can_vehicles or can_maintenance %}
+                  <li class="menu-title">Patrimônio e Manutenção</li>
+                  {% if can_assets %}{% nav_active "assets" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'assets:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Ativos</span></a></li>{% endif %}
+                  {% if can_vehicles %}{% nav_active "fleet" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'fleet:list' %}" class="tp-link{% if a %} active{% endif %}"><span>Veículos</span></a></li>{% endif %}
+                  {% if can_maintenance %}{% nav_active "maintenance:orders" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'maintenance:orders' %}" class="tp-link{% if a %} active{% endif %}"><span>Ordens de manutenção</span></a></li>{% endif %}
+                  {% if can_maintenance %}{% nav_active "maintenance:plans" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'maintenance:plans' %}" class="tp-link{% if a %} active{% endif %}"><span>Planos preventivos</span></a></li>{% endif %}
+                {% endif %}
+              </ul>
+            </div>
+          </li>
         {% endif %}
       </ul>
     </div>
