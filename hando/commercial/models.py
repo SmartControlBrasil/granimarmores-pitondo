@@ -236,3 +236,6 @@ from commercial.lead_models import Lead  # noqa: E402,F401
 from commercial.lead_models import LeadActivity  # noqa: E402,F401
 from commercial.lead_models import LeadSequence  # noqa: E402,F401
 from commercial.lead_models import LeadTask  # noqa: E402,F401
+from commercial.performance_models import SalesGoal  # noqa: E402,F401
+from commercial.performance_models import SalesScoreEvent  # noqa: E402,F401
+from commercial.performance_models import SalesScorePolicy  # noqa: E402,F401

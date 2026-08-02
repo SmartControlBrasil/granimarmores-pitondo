@@ -1,0 +1,26 @@
+{% extends "vertical.html" %}
+{% load formatters %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex justify-content-between"><h4 class="fs-18 fw-semibold m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-2">
+      <a href="{% url 'leads:goal_update' goal.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+      {% if goal.is_active %}<form method="post" action="{% url 'leads:goal_deactivate' goal.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-danger" type="submit">Desativar</button></form>{% endif %}
+    </div>
+  </div>
+  <div class="card"><div class="card-body">
+    <p><strong>Período:</strong> {{ goal.get_period_type_display }} ({{ goal.start_date|date:"d/m/Y" }} — {{ goal.end_date|date:"d/m/Y" }})</p>
+    <p><strong>Situação:</strong> {{ progress.situation_label }}</p>
+    <div class="table-responsive"><table class="table table-sm"><thead><tr><th>Indicador</th><th>Meta</th><th>Realizado</th><th>%</th></tr></thead><tbody>
+      <tr><td>Leads</td><td>{{ goal.lead_goal }}</td><td>{{ progress.metrics.leads_received }}</td><td>{{ progress.progress.lead_goal|default:"-" }}</td></tr>
+      <tr><td>Contatos</td><td>{{ goal.contact_goal }}</td><td>{{ progress.metrics.leads_attended }}</td><td>{{ progress.progress.contact_goal|default:"-" }}</td></tr>
+      <tr><td>Orçamentos enviados</td><td>{{ goal.quote_goal }}</td><td>{{ progress.metrics.quotes_sent }}</td><td>{{ progress.progress.quote_goal|default:"-" }}</td></tr>
+      <tr><td>Leads ganhos</td><td>{{ goal.won_lead_goal }}</td><td>{{ progress.metrics.leads_won }}</td><td>{{ progress.progress.won_lead_goal|default:"-" }}</td></tr>
+      <tr><td>Valor aprovado</td><td>{{ goal.sales_value_goal|format_brl }}</td><td>{{ progress.metrics.approved_value|format_brl }}</td><td>{{ progress.progress.sales_value_goal|default:"-" }}</td></tr>
+      <tr><td>Conversão (%)</td><td>{{ goal.conversion_goal }}</td><td>{{ progress.metrics.conversion_rate }}</td><td>{{ progress.progress.conversion_goal|default:"-" }}</td></tr>
+    </tbody></table></div>
+    <p class="text-muted small mt-3">Projeção linear: leads {{ progress.projection.leads }}, ganhos {{ progress.projection.won }}, valor {{ progress.projection.approved_value|format_brl }}</p>
+  </div></div>
+</div>
+{% endblock %}

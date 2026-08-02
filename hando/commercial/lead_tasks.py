@@ -51,6 +51,9 @@ def complete_lead_task(*, task, actor, request=None):
     task.completed_at = timezone.now()
     task.completed_by = actor
     task.save()
+    from commercial.performance_score_hooks import score_follow_up_completed
+
+    score_follow_up_completed(task=task, actor=actor, request=request)
     record_audit_event(
         request=request,
         user=actor,

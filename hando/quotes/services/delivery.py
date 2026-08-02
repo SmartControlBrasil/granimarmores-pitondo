@@ -76,6 +76,9 @@ def send_quote(
                 "recipient": recipient,
             },
         )
+        from commercial.performance_score_hooks import score_quote_sent
+
+        score_quote_sent(quote=quote, actor=actor, request=request)
     except Exception as exc:
         delivery.status = QuoteDelivery.Status.FAILED
         delivery.error_message = str(exc)[:500]

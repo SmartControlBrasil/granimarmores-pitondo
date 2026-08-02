@@ -1,0 +1,46 @@
+{% extends "erp/list_base.html" %}
+{% load formatters %}
+{% block card_actions %}
+  <div class="ms-auto d-flex gap-2 flex-wrap">
+    {% for key, label in period_choices %}
+      <a href="?period={{ key }}" class="btn btn-sm btn-outline-secondary{% if period == key %} active{% endif %}">{{ label }}</a>
+    {% endfor %}
+    <form method="get" class="d-flex gap-2">
+      <select name="salesperson" class="form-select form-select-sm">
+        <option value="">Todos</option>
+        {% for sp in salespeople %}
+          <option value="{{ sp.pk }}" {% if selected_salesperson.pk == sp.pk %}selected{% endif %}>{{ sp.display_name }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+    </form>
+  </div>
+{% endblock %}
+{% block table_content %}
+  <div class="row mb-3">
+    <div class="col-md-3"><div class="border rounded p-3"><small>Score da equipe</small><h4>{{ summary.total_score }}</h4></div></div>
+    <div class="col-md-3"><div class="border rounded p-3"><small>Leads recebidos</small><h4>{{ summary.total_received }}</h4></div></div>
+    <div class="col-md-3"><div class="border rounded p-3"><small>Ganhos</small><h4>{{ summary.total_won }}</h4></div></div>
+    <div class="col-md-3"><div class="border rounded p-3"><small>Metas em risco</small><h4>{{ summary.goals_at_risk }}</h4></div></div>
+  </div>
+  <h6>Ranking resumido</h6>
+  <ul>{% for row in ranking_top %}<li>#{{ row.position }} {{ row.salesperson.display_name }} — {{ row.total_score }} pts</li>{% empty %}<li class="text-muted">Sem dados</li>{% endfor %}</ul>
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Vendedor</th><th>Score</th><th>Recebidos</th><th>Ganhos</th><th>Conversão</th><th>Valor aprovado</th><th>Follow-up</th></tr></thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.salesperson.display_name }}</td>
+            <td>{{ row.total_score }}</td>
+            <td>{{ row.leads_received }}</td>
+            <td>{{ row.leads_won }}</td>
+            <td>{{ row.conversion_rate }}%</td>
+            <td>{{ row.approved_value|format_brl }}</td>
+            <td>{{ row.follow_up_compliance }}%</td>
+          </tr>
+        {% empty %}<tr><td colspan="7" class="text-muted">Sem dados.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -21,14 +21,18 @@
           <a href="{% url 'pages:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'pages' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="home"></i><span>Dashboard</span></a>
         </li>
 
-        {% has_permission "leads.view" as can_leads %}{% has_permission "quotes.view" as can_quotes %}{% has_permission "customers.view" as can_customers %}{% has_permission "salespeople.view" as can_salespeople %}{% has_permission "materials.view" as can_materials %}{% has_permission "quotes.manage_policy" as can_policy %}
-        {% if can_leads or can_quotes or can_customers or can_salespeople or can_materials or can_policy %}
+        {% has_permission "leads.view" as can_leads %}{% has_permission "quotes.view" as can_quotes %}{% has_permission "customers.view" as can_customers %}{% has_permission "salespeople.view" as can_salespeople %}{% has_permission "materials.view" as can_materials %}{% has_permission "quotes.manage_policy" as can_policy %}{% has_permission "sales_performance.view_own" as can_perf_own %}{% has_permission "sales_performance.view_all" as can_perf_all %}{% has_permission "sales_ranking.view" as can_ranking %}{% has_permission "sales_goals.view" as can_goals %}
+        {% if can_leads or can_quotes or can_customers or can_salespeople or can_materials or can_policy or can_perf_own or can_perf_all or can_ranking or can_goals %}
           <li class="menu-title mt-2">Comercial</li>
           {% if can_leads %}
             <li><a href="{% url 'leads:dashboard' %}" class="tp-link{% if request.resolver_match.url_name == 'dashboard' and request.resolver_match.namespace == 'leads' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard Comercial</span></a></li>
             <li><a href="{% url 'leads:list' %}" class="tp-link{% if request.resolver_match.namespace == 'leads' and 'lead' in request.resolver_match.url_name|default:'' or request.resolver_match.url_name == 'list' and request.resolver_match.namespace == 'leads' %} active{% endif %}"><i data-feather="inbox"></i><span>Leads</span></a></li>
             <li><a href="{% url 'leads:funnel' %}" class="tp-link{% if request.resolver_match.url_name == 'funnel' %} active{% endif %}"><i data-feather="columns"></i><span>Funil Comercial</span></a></li>
           {% endif %}
+          {% if can_perf_own %}<li><a href="{% url 'leads:my_performance' %}" class="tp-link{% if request.resolver_match.url_name == 'my_performance' %} active{% endif %}"><i data-feather="user"></i><span>Meu Desempenho</span></a></li>{% endif %}
+          {% if can_perf_all %}<li><a href="{% url 'leads:team_performance' %}" class="tp-link{% if request.resolver_match.url_name == 'team_performance' %} active{% endif %}"><i data-feather="trending-up"></i><span>Desempenho da Equipe</span></a></li>{% endif %}
+          {% if can_ranking %}<li><a href="{% url 'leads:ranking' %}" class="tp-link{% if request.resolver_match.url_name == 'ranking' %} active{% endif %}"><i data-feather="award"></i><span>Ranking</span></a></li>{% endif %}
+          {% if can_goals %}<li><a href="{% url 'leads:goal_list' %}" class="tp-link{% if 'goal' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="target"></i><span>Metas</span></a></li>{% endif %}
           {% if can_quotes %}
             <li><a href="{% url 'quotes:list' %}" class="tp-link{% if request.resolver_match.namespace == 'quotes' %} active{% endif %}"><i data-feather="file-text"></i><span>Orçamentos</span></a></li>
           {% endif %}
@@ -77,13 +81,14 @@
           <li><a href="{% url 'maintenance:plans' %}" class="tp-link"><i data-feather="calendar"></i><span>Planos preventivos</span></a></li>
         {% endif %}
 
-        {% has_permission "roles.view" as can_roles %}{% has_permission "audit.view" as can_audit %}{% has_permission "settings.view" as can_settings %}
-        {% if can_roles or can_audit or can_settings %}
+        {% has_permission "roles.view" as can_roles %}{% has_permission "audit.view" as can_audit %}{% has_permission "settings.view" as can_settings %}{% has_permission "sales_score_policy.view" as can_score_policy %}
+        {% if can_roles or can_audit or can_settings or can_score_policy %}
           <li class="menu-title mt-2">Administração</li>
           {% if can_roles %}
             <li><a href="{% url 'access_control:roles' %}" class="tp-link"><i data-feather="shield"></i><span>Cargos e níveis de acesso</span></a></li>
             <li><a href="{% url 'access_control:permissions' %}" class="tp-link"><i data-feather="lock"></i><span>Permissões</span></a></li>
           {% endif %}
+          {% if can_score_policy %}<li><a href="{% url 'performance_admin:score_policy_list' %}" class="tp-link{% if request.resolver_match.namespace == 'performance_admin' %} active{% endif %}"><i data-feather="percent"></i><span>Política de Score</span></a></li>{% endif %}
           {% if can_users %}<li><a href="{% url 'accounts:sessions' %}" class="tp-link"><i data-feather="activity"></i><span>Sessões de usuários</span></a></li>{% endif %}
           {% if can_audit %}<li><a href="{% url 'audit:list' %}" class="tp-link"><i data-feather="file-text"></i><span>Auditoria</span></a></li>{% endif %}
         {% endif %}

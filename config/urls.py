@@ -41,6 +41,10 @@ urlpatterns = [
         "painel/administracao/auditoria/",
         include("audit.urls", namespace="audit"),
     ),
+    path(
+        "painel/administracao/",
+        include("commercial.performance_admin_urls", namespace="performance_admin"),
+    ),
     path("painel/", include("hando.pages.urls", namespace="pages")),
     path("", include("src.institutional.presentation.urls")),
 ]

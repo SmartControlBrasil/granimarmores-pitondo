@@ -61,6 +61,9 @@ def create_lead(*, form, actor, request=None):
         description=f"Lead {lead.code} registrado no CRM.",
         request=request,
     )
+    from commercial.performance_score_hooks import score_lead_created
+
+    score_lead_created(lead=lead, actor=actor, request=request)
     record_audit_event(
         request=request,
         user=actor,
@@ -231,4 +234,7 @@ def create_quote_from_lead(*, lead, actor, request=None):
         description=f"Orçamento {quote.number} vinculado ao lead.",
         request=request,
     )
+    from commercial.performance_score_hooks import score_quote_created
+
+    score_quote_created(quote=quote, actor=actor, request=request)
     return quote

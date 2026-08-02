@@ -37,6 +37,55 @@
     {% endfor %}
   </div>
 
+  {% if performance_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Desempenho Comercial</h5>
+            <div class="d-flex gap-2">
+              {% for link in performance_summary.links %}
+                <a href="{% url link.url_name %}" class="btn btn-sm btn-outline-primary">{{ link.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              {% if performance_summary.seller %}
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Meu score (mês)</p>
+                  <h4 class="mb-0">{{ performance_summary.seller.score }}</h4>
+                </div>
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Meta do período</p>
+                  <h4 class="mb-0">{{ performance_summary.seller.goal_label }}</h4>
+                </div>
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Follow-ups vencidos</p>
+                  <h4 class="mb-0">{{ performance_summary.seller.overdue_followups }}</h4>
+                </div>
+              {% endif %}
+              {% if performance_summary.manager %}
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Score da equipe</p>
+                  <h4 class="mb-0">{{ performance_summary.manager.team_score }}</h4>
+                </div>
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Metas em risco</p>
+                  <h4 class="mb-0">{{ performance_summary.manager.goals_at_risk }}</h4>
+                </div>
+                <div class="col-md-4">
+                  <p class="text-muted mb-1">Melhor vendedor</p>
+                  <h4 class="mb-0">{{ performance_summary.manager.top_seller }}</h4>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

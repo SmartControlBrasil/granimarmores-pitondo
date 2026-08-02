@@ -288,3 +288,4 @@ class CustomerQuoteIntegrationTests(CommercialTestMixin, TestCase):
 
 
 from commercial import tests_leads  # noqa: F401
+from commercial import tests_performance  # noqa: F401

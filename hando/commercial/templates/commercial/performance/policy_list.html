@@ -1,0 +1,31 @@
+{% extends "erp/list_base.html" %}
+{% load erp_permissions %}
+{% block card_actions %}
+  <div class="ms-auto d-flex gap-2">
+    <a href="{% url 'performance_admin:score_policy_create' %}" class="btn btn-sm btn-success">Nova política</a>
+    {% has_permission "sales_score_events.adjust" as can_adjust %}{% if can_adjust %}
+      <a href="{% url 'performance_admin:score_adjust' %}" class="btn btn-sm btn-outline-primary">Ajustar pontuação</a>
+    {% endif %}
+  </div>
+{% endblock %}
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Nome</th><th>Vigência</th><th>Ativa</th><th>Primeiro contato</th><th>Orç. enviado</th><th>Follow-up</th><th>Lead ganho</th><th></th></tr></thead>
+      <tbody>
+        {% for policy in policies %}
+          <tr>
+            <td>{{ policy.name }}</td>
+            <td>{{ policy.valid_from|date:"d/m/Y" }}{% if policy.valid_until %} — {{ policy.valid_until|date:"d/m/Y" }}{% endif %}</td>
+            <td>{% if policy.is_active %}Sim{% else %}Não{% endif %}</td>
+            <td>+{{ policy.points_first_contact }}</td>
+            <td>+{{ policy.points_quote_sent }}</td>
+            <td>+{{ policy.points_follow_up_completed }}</td>
+            <td>+{{ policy.points_lead_won }}</td>
+            <td><a href="{% url 'performance_admin:score_policy_update' policy.pk %}">Editar</a></td>
+          </tr>
+        {% empty %}<tr><td colspan="8" class="text-muted">Nenhuma política cadastrada.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

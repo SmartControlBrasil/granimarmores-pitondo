@@ -12,6 +12,11 @@ from commercial.lead_models import Lead
 from commercial.lead_models import LeadStatus
 from commercial.lead_models import TERMINAL_STATUSES
 from commercial.lead_queries import leads_queryset_for_user
+from commercial.performance_metrics import active_goal_for_salesperson
+from commercial.performance_metrics import compute_salesperson_metrics
+from commercial.performance_metrics import team_summary
+from commercial.performance_period import parse_performance_period
+from commercial.performance_ranking import build_ranking
 from customers.models import Customer
 from fleet.models import Vehicle
 from maintenance.models import MaintenanceOrder
@@ -136,9 +141,55 @@ def root_page_view(request):
             {"label": "Dashboard Comercial", "url_name": "leads:dashboard"},
             {"label": "Funil Comercial", "url_name": "leads:funnel"},
         ]
+
+    performance_summary = None
+    if user_has_permission(user, "sales_performance.view_own") or user_has_permission(
+        user,
+        "sales_performance.view_all",
+    ):
+        class _Req:
+            GET = {"period": "month"}
+
+        start, end, _ = parse_performance_period(_Req())
+        performance_summary = {"links": []}
+        if user_has_permission(user, "sales_performance.view_own"):
+            salesperson = getattr(user, "salesperson", None)
+            if salesperson:
+                metrics = compute_salesperson_metrics(
+                    salesperson=salesperson,
+                    start=start,
+                    end=end,
+                )
+                goal = active_goal_for_salesperson(salesperson=salesperson)
+                performance_summary["seller"] = {
+                    "score": metrics["total_score"],
+                    "goal_label": goal.period_type if goal else "Sem meta",
+                    "overdue_followups": metrics["followups_overdue"],
+                }
+                performance_summary["links"].append(
+                    {"label": "Meu Desempenho", "url_name": "leads:my_performance"},
+                )
+        if user_has_permission(user, "sales_performance.view_all"):
+            summary = team_summary(user=user, start=start, end=end)
+            ranking = build_ranking(user=user, start=start, end=end)
+            top = ranking["rows"][0] if ranking["rows"] else None
+            performance_summary["manager"] = {
+                "team_score": summary["total_score"],
+                "goals_at_risk": summary["goals_at_risk"],
+                "top_seller": top["salesperson"].display_name if top else "-",
+            }
+            performance_summary["links"].append(
+                {"label": "Desempenho da Equipe", "url_name": "leads:team_performance"},
+            )
+        if user_has_permission(user, "sales_ranking.view"):
+            performance_summary["links"].append(
+                {"label": "Ranking", "url_name": "leads:ranking"},
+            )
+
     context = {
         "cards": cards,
         "lead_links": lead_links,
+        "performance_summary": performance_summary,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")
         else [],

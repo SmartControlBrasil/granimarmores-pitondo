@@ -1,6 +1,7 @@
 from django.urls import path
 
 from commercial import lead_views
+from commercial.performance_urls import performance_urlpatterns
 
 app_name = "leads"
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path("leads/<int:pk>/ganho/", lead_views.lead_mark_won, name="mark_won"),
     path("leads/<int:pk>/perda/", lead_views.lead_mark_lost, name="mark_lost"),
     path("leads/<int:pk>/reabrir/", lead_views.lead_reopen_view, name="reopen"),
+    *performance_urlpatterns,
 ]

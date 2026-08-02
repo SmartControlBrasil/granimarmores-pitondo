@@ -1,0 +1,66 @@
+{% extends "erp/list_base.html" %}
+{% load formatters %}
+
+{% block card_actions %}
+  <div class="ms-auto d-flex flex-wrap gap-2 align-items-center">
+    <form method="get" class="d-flex flex-wrap gap-2">
+      {% for key, label in period_choices %}
+        <a href="?period={{ key }}&metric={{ metric }}" class="btn btn-sm btn-outline-secondary{% if period == key %} active{% endif %}">{{ label }}</a>
+      {% endfor %}
+      <select name="metric" class="form-select form-select-sm" onchange="this.form.submit()">
+        {% for key, label in metrics %}
+          <option value="{{ key }}" {% if metric == key %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <label class="form-check-label ms-2">
+        <input type="checkbox" name="include_inactive" value="1" {% if include_inactive %}checked{% endif %} onchange="this.form.submit()" /> Inativos
+      </label>
+    </form>
+  </div>
+{% endblock %}
+
+{% block table_content %}
+  <p class="text-muted small">Período: {{ period_start }} — {{ period_end }} · Critério: {{ metric_label }}</p>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Vendedor</th>
+          <th>Score</th>
+          <th>Recebidos</th>
+          <th>Atendidos</th>
+          <th>Ganhos</th>
+          <th>Perdidos</th>
+          <th>Conversão</th>
+          <th>Orçamentos</th>
+          <th>Valor aprovado</th>
+          <th>Ticket médio</th>
+          <th>Resp. (min)</th>
+          <th>Follow-up</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.position }}</td>
+            <td>{{ row.salesperson.display_name }}</td>
+            <td><strong>{{ row.total_score }}</strong></td>
+            <td>{{ row.leads_received }}</td>
+            <td>{{ row.leads_attended }}</td>
+            <td>{{ row.leads_won }}</td>
+            <td>{{ row.leads_lost }}</td>
+            <td>{{ row.conversion_rate }}%</td>
+            <td>{{ row.quotes_sent }}</td>
+            <td>{{ row.approved_value|format_brl }}</td>
+            <td>{{ row.ticket_average|format_brl }}</td>
+            <td>{{ row.response_minutes|default:"-" }}</td>
+            <td>{{ row.follow_up_compliance }}%</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="13" class="text-muted">Sem dados no período.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

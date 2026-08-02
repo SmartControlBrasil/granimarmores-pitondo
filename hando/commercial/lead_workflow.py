@@ -121,6 +121,15 @@ def change_lead_status(
     lead.status = new_status
     lead.updated_by = actor
     lead.save()
+    from commercial.performance_score_hooks import on_lead_status_changed
+
+    on_lead_status_changed(
+        lead=lead,
+        old_status=old_status,
+        new_status=new_status,
+        actor=actor,
+        request=request,
+    )
     activity = _create_activity(
         lead=lead,
         actor=actor,
@@ -246,6 +255,7 @@ def register_lead_activity(
         raise PermissionDenied("Sem permissão para registrar atividade.")
 
     now = timezone.now()
+    had_contact = bool(lead.first_contact_at)
     activity = _create_activity(
         lead=lead,
         actor=actor,
@@ -269,6 +279,16 @@ def register_lead_activity(
         lead.next_follow_up_at = next_action_at
     lead.updated_by = actor
     lead.save()
+    if activity_type in {
+        LeadActivityType.CALL,
+        LeadActivityType.WHATSAPP,
+        LeadActivityType.EMAIL,
+        LeadActivityType.MEETING,
+        LeadActivityType.SITE_VISIT,
+    } and not had_contact:
+        from commercial.performance_score_hooks import on_lead_activity_contact
+
+        on_lead_activity_contact(lead=lead, actor=actor, request=request, occurred_at=now)
     record_audit_event(
         request=request,
         user=actor,

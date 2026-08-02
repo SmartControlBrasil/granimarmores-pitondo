@@ -221,9 +221,25 @@ LEADS_MANAGER = [
     "lead_tasks.reassign",
 ]
 
+PERFORMANCE_SELLER = [
+    "sales_performance.view_own",
+    "sales_ranking.view",
+    "sales_score_events.view",
+]
+
+PERFORMANCE_MANAGER = [
+    *PERFORMANCE_SELLER,
+    "sales_performance.view_all",
+    "sales_goals.view",
+    "sales_goals.create",
+    "sales_goals.update",
+    "sales_goals.deactivate",
+    "sales_score_events.view",
+]
+
 SYSTEM_ROLE_PERMISSIONS = {
-    "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER,
-    "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER,
+    "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER + PERFORMANCE_MANAGER,
+    "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER + PERFORMANCE_SELLER,
     "Operacional": ["project_types.view", "service_regions.view", "leads.view"],
 }
 
@@ -384,6 +400,11 @@ class Command(BaseCommand):
                 defaults={"role": admin_role, "valid_from": timezone.now()},
             )
 
+        from commercial.performance_score import create_default_score_policy
+
+        _, policy_created = create_default_score_policy(actor=user)
+
+        policy_note = f" Política score: {'criada' if policy_created else 'existente'}."
         self.stdout.write(
             self.style.SUCCESS(
                 "Fundação ERP pronta. "
@@ -391,6 +412,7 @@ class Command(BaseCommand):
                 f"Origens: +{source_created}/~{source_updated}. "
                 f"Canais: +{channel_created}/~{channel_updated}. "
                 f"Tipos: +{project_created}/~{project_updated}. "
-                f"Motivos: +{loss_created}/~{loss_updated}.",
+                f"Motivos: +{loss_created}/~{loss_updated}."
+                f"{policy_note}"
             ),
         )
