@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     "assets",
     "fleet",
     "maintenance",
+    "production",
 ]
 
 

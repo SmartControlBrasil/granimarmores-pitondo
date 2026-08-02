@@ -626,3 +626,55 @@ class QuoteDelivery(models.Model):
 
     def __str__(self):
         return f"{self.quote} - {self.channel} - {self.status}"
+
+
+class QuoteAcceptanceStatus(models.TextChoices):
+    ACCEPTED = "accepted", "Aceito"
+    REFUSED = "refused", "Recusado"
+
+
+class QuoteAcceptance(TimeStampedModel):
+    quote = models.ForeignKey(
+        Quote,
+        on_delete=models.CASCADE,
+        related_name="acceptances",
+    )
+    status = models.CharField(max_length=20, choices=QuoteAcceptanceStatus.choices)
+    accepted_at = models.DateTimeField(null=True, blank=True)
+    rejected_at = models.DateTimeField(null=True, blank=True)
+    customer_name = models.CharField(max_length=160, blank=True)
+    customer_document = models.CharField(max_length=40, blank=True)
+    contact_channel = models.ForeignKey(
+        "commercial.ContactChannel",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+    notes = models.TextField(blank=True)
+    loss_reason = models.ForeignKey(
+        "commercial.LossReason",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+    recorded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="recorded_quote_acceptances",
+    )
+    is_current = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["quote"],
+                condition=models.Q(is_current=True, status=QuoteAcceptanceStatus.ACCEPTED),
+                name="unique_current_quote_acceptance",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.quote.number} - {self.get_status_display()}"

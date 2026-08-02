@@ -21,6 +21,15 @@ from customers.models import Customer
 from fleet.models import Vehicle
 from maintenance.models import MaintenanceOrder
 from maintenance.models import MaintenancePlan
+from production.models import DeliverySchedule
+from production.models import InstallationSchedule
+from production.models import ProductionOrder
+from production.models import ProductionOrderStatus
+from production.models import ProductionPieceStatus
+from production.models import SalesOrder
+from production.models import SalesOrderStatus
+from production.selectors import overdue_production_orders
+from production.selectors import sales_orders_queryset_for_user
 from quotes.models import Quote
 from salespeople.models import Salesperson
 
@@ -131,7 +140,56 @@ def root_page_view(request):
         ("Follow-ups vencidos", "leads.view", open_leads.filter(next_follow_up_at__lt=now).count(), "clock", "danger"),
         ("Negociações abertas", "leads.view", open_leads.filter(status=LeadStatus.NEGOTIATION).count(), "trending-up", "info"),
     ]
+    production_specs = [
+        (
+            "Pedidos aguardando produção",
+            "sales_orders.view",
+            sales_orders_queryset_for_user(user).filter(
+                status=SalesOrderStatus.READY_FOR_PRODUCTION,
+            ).count(),
+            "shopping-cart",
+            "warning",
+        ),
+        (
+            "Ordens em andamento",
+            "production_orders.view",
+            ProductionOrder.objects.filter(status=ProductionOrderStatus.IN_PROGRESS).count(),
+            "cpu",
+            "info",
+        ),
+        (
+            "Ordens atrasadas",
+            "production_orders.view",
+            overdue_production_orders(user=user).count(),
+            "alert-circle",
+            "danger",
+        ),
+        (
+            "Peças aguardando qualidade",
+            "quality_inspections.view",
+            ProductionOrder.objects.filter(
+                pieces__status=ProductionPieceStatus.QUALITY_CONTROL,
+            ).distinct().count(),
+            "check-square",
+            "warning",
+        ),
+        (
+            "Entregas de hoje",
+            "deliveries.view",
+            DeliverySchedule.objects.filter(scheduled_date=timezone.localdate()).count(),
+            "truck",
+            "primary",
+        ),
+        (
+            "Instalações de hoje",
+            "installations.view",
+            InstallationSchedule.objects.filter(scheduled_date=timezone.localdate()).count(),
+            "tool",
+            "secondary",
+        ),
+    ]
     card_specs.extend(lead_specs)
+    card_specs.extend(production_specs)
     for label, permission, value, icon, color in card_specs:
         if user_has_permission(user, permission):
             cards.append({"label": label, "value": value, "icon": icon, "color": color})

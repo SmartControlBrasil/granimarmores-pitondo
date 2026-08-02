@@ -152,6 +152,21 @@ def score_quote_accepted(*, quote, actor=None, request=None):
         actor=actor,
         request=request,
     )
+    won_recorded = False
+    if quote.lead_id:
+        won_recorded = score_lead_won(lead=quote.lead, actor=actor, request=request) is not None
+    if not won_recorded:
+        record_score_event(
+            salesperson=quote.salesperson,
+            event_type=ScoreEventType.LEAD_WON,
+            reference_type="quote",
+            reference_id=quote.pk,
+            reference_label=quote.number,
+            occurred_at=quote.accepted_at,
+            description=f"Orçamento aceito — {quote.number}",
+            actor=actor,
+            request=request,
+        )
     return None
 
 

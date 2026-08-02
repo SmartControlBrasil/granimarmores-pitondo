@@ -47,6 +47,25 @@
           {% endif %}
         {% endif %}
 
+        {% has_permission "sales_orders.view" as can_orders %}{% has_permission "deliveries.view" as can_deliveries %}{% has_permission "installations.view" as can_installations %}
+        {% if can_orders or can_deliveries or can_installations %}
+          <li class="menu-title mt-2">Operação</li>
+          {% if can_orders %}<li><a href="{% url 'operacao:order_list' %}" class="tp-link{% if request.resolver_match.namespace == 'operacao' %} active{% endif %}"><i data-feather="shopping-cart"></i><span>Pedidos</span></a></li>{% endif %}
+          {% if can_deliveries %}<li><a href="{% url 'operacao:delivery_list' %}" class="tp-link{% if request.resolver_match.url_name == 'delivery_list' %} active{% endif %}"><i data-feather="package"></i><span>Entregas</span></a></li>{% endif %}
+          {% if can_installations %}<li><a href="{% url 'operacao:installation_list' %}" class="tp-link{% if request.resolver_match.url_name == 'installation_list' %} active{% endif %}"><i data-feather="tool"></i><span>Instalações</span></a></li>{% endif %}
+        {% endif %}
+
+        {% has_permission "production_dashboard.view" as can_prod_dash %}{% has_permission "production_orders.view" as can_prod_orders %}{% has_permission "production_pieces.view" as can_prod_pieces %}{% has_permission "quality_inspections.view" as can_quality %}{% has_permission "production_stages.view" as can_prod_stages %}
+        {% if can_prod_dash or can_prod_orders or can_prod_pieces or can_quality or can_prod_stages %}
+          <li class="menu-title mt-2">Produção</li>
+          {% if can_prod_dash %}<li><a href="{% url 'producao:dashboard' %}" class="tp-link{% if request.resolver_match.url_name == 'dashboard' and request.resolver_match.namespace == 'producao' %} active{% endif %}"><i data-feather="bar-chart"></i><span>Dashboard de Produção</span></a></li>{% endif %}
+          {% if can_prod_orders %}<li><a href="{% url 'producao:production_list' %}" class="tp-link{% if 'production' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'producao' %} active{% endif %}"><i data-feather="cpu"></i><span>Ordens de Produção</span></a></li>{% endif %}
+          {% if can_prod_orders %}<li><a href="{% url 'producao:board' %}" class="tp-link{% if request.resolver_match.url_name == 'board' %} active{% endif %}"><i data-feather="columns"></i><span>Quadro de Produção</span></a></li>{% endif %}
+          {% if can_prod_pieces %}<li><a href="{% url 'producao:piece_list' %}" class="tp-link{% if request.resolver_match.url_name == 'piece_list' %} active{% endif %}"><i data-feather="grid"></i><span>Peças</span></a></li>{% endif %}
+          {% if can_quality %}<li><a href="{% url 'producao:production_list' %}?status=quality_control" class="tp-link"><i data-feather="check-square"></i><span>Qualidade</span></a></li>{% endif %}
+          {% if can_prod_stages %}<li><a href="{% url 'producao:stage_list' %}" class="tp-link{% if request.resolver_match.url_name == 'stage_list' %} active{% endif %}"><i data-feather="list"></i><span>Etapas Produtivas</span></a></li>{% endif %}
+        {% endif %}
+
         {% has_permission "customers.view" as can_customers_c %}{% has_permission "salespeople.view" as can_salespeople_c %}{% has_permission "users.view" as can_users %}{% has_permission "commercial_partners.view" as can_partners %}{% has_permission "commercial_sources.view" as can_sources %}{% has_permission "project_types.view" as can_project_types %}{% has_permission "contact_channels.view" as can_channels %}{% has_permission "loss_reasons.view" as can_loss_reasons %}{% has_permission "service_regions.view" as can_regions %}
         {% if can_customers_c or can_salespeople_c or can_users or can_partners or can_sources or can_project_types or can_channels or can_loss_reasons or can_regions or can_materials %}
           <li class="menu-title mt-2">Cadastros</li>

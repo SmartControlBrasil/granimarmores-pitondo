@@ -237,10 +237,102 @@ PERFORMANCE_MANAGER = [
     "sales_score_events.view",
 ]
 
+ORDERS_MANAGER = [
+    "quotes.accept",
+    "quotes.refuse",
+    "quotes.accept_expired",
+    "sales_orders.view",
+    "sales_orders.create",
+    "sales_orders.update",
+    "sales_orders.change_status",
+    "sales_orders.cancel",
+    "production_orders.view",
+    "production_dashboard.view",
+    "deliveries.view",
+    "deliveries.schedule",
+    "deliveries.complete",
+    "installations.view",
+    "installations.schedule",
+    "installations.complete",
+]
+
+ORDERS_SELLER = [
+    "quotes.accept",
+    "quotes.refuse",
+    "sales_orders.view",
+    "production_orders.view",
+    "production_dashboard.view",
+    "deliveries.view",
+    "installations.view",
+]
+
+PRODUCTION_OPERATIONS = [
+    "sales_orders.view",
+    "production_orders.view",
+    "production_orders.create",
+    "production_orders.update",
+    "production_orders.change_status",
+    "production_orders.start",
+    "production_orders.pause",
+    "production_orders.complete",
+    "production_orders.cancel",
+    "production_orders.assign",
+    "production_pieces.view",
+    "production_pieces.create",
+    "production_pieces.update",
+    "production_stages.view",
+    "production_stages.create",
+    "production_stages.update",
+    "production_stages.start",
+    "production_stages.complete",
+    "production_stages.skip",
+    "production_logs.view",
+    "production_logs.create",
+    "quality_inspections.view",
+    "quality_inspections.create",
+    "quality_inspections.inspect",
+    "quality_inspections.approve",
+    "quality_inspections.reject",
+    "deliveries.view",
+    "installations.view",
+    "production_dashboard.view",
+]
+
+PRODUCTION_STAGE_SEEDS = [
+    ("Medição final", "medicao-final", "waiting", 10),
+    ("Conferência técnica", "conferencia-tecnica", "conferencia", 20),
+    ("Separação do material", "separacao-material", "material", 30),
+    ("Corte", "corte", "corte", 40),
+    ("Acabamento", "acabamento", "acabamento", 50),
+    ("Polimento", "polimento", "polimento", 60),
+    ("Furação", "furacao", "furacao", 70),
+    ("Colagem de cuba", "colagem-cuba", "furacao", 80),
+    ("Conferência de qualidade", "conferencia-qualidade", "qualidade", 90, True),
+    ("Liberação para entrega", "liberacao-entrega", "pronto", 100),
+    ("Entrega", "entrega", "entrega", 110),
+    ("Instalação", "instalacao", "instalacao", 120),
+    ("Finalização", "finalizacao", "concluido", 130),
+]
+
+QUALITY_CHECKLIST_ITEMS = [
+    "Medidas conferidas",
+    "Material conferido",
+    "Acabamento conferido",
+    "Bordas conferidas",
+    "Recortes conferidos",
+    "Furações conferidas",
+    "Cuba conferida",
+    "Polimento aprovado",
+    "Peça limpa",
+    "Peça identificada",
+    "Embalagem aprovada",
+    "Fotos registradas",
+]
+
 SYSTEM_ROLE_PERMISSIONS = {
-    "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER + PERFORMANCE_MANAGER,
-    "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER + PERFORMANCE_SELLER,
-    "Operacional": ["project_types.view", "service_regions.view", "leads.view"],
+    "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER + PERFORMANCE_MANAGER + ORDERS_MANAGER,
+    "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER + PERFORMANCE_SELLER + ORDERS_SELLER,
+    "Operacional": ["project_types.view", "service_regions.view", "leads.view"] + PRODUCTION_OPERATIONS,
 }
 
 
@@ -323,6 +415,48 @@ def _seed_loss_reasons():
     return created, updated
 
 
+def _seed_production_stages():
+    from production.models import ProductionStage
+
+    created = updated = 0
+    for row in PRODUCTION_STAGE_SEEDS:
+        name, slug, board_column, order = row[:4]
+        requires_qc = row[4] if len(row) > 4 else False
+        _, was_created = ProductionStage.objects.update_or_create(
+            slug=slug,
+            defaults={
+                "name": name,
+                "board_column": board_column,
+                "display_order": order,
+                "is_active": True,
+                "is_required": True,
+                "requires_quality_check": requires_qc,
+            },
+        )
+        created += int(was_created)
+        updated += int(not was_created)
+    return created, updated
+
+
+def _seed_quality_checklist():
+    from production.models import QualityChecklist
+    from production.models import QualityChecklistItem
+
+    checklist, _ = QualityChecklist.objects.update_or_create(
+        slug="padrao",
+        defaults={"name": "Checklist padrão de qualidade", "is_active": True},
+    )
+    created = 0
+    for order, label in enumerate(QUALITY_CHECKLIST_ITEMS, start=1):
+        _, was_created = QualityChecklistItem.objects.update_or_create(
+            checklist=checklist,
+            label=label,
+            defaults={"display_order": order, "is_required": True},
+        )
+        created += int(was_created)
+    return created
+
+
 class Command(BaseCommand):
     help = "Cria cargos, permissões e dados iniciais da fundação ERP."
 
@@ -386,6 +520,8 @@ class Command(BaseCommand):
         channel_created, channel_updated = _seed_contact_channels()
         project_created, project_updated = _seed_project_types()
         loss_created, loss_updated = _seed_loss_reasons()
+        stage_created, stage_updated = _seed_production_stages()
+        quality_items = _seed_quality_checklist()
 
         user_model = get_user_model()
         admin_username = options.get("admin_username")
@@ -412,7 +548,9 @@ class Command(BaseCommand):
                 f"Origens: +{source_created}/~{source_updated}. "
                 f"Canais: +{channel_created}/~{channel_updated}. "
                 f"Tipos: +{project_created}/~{project_updated}. "
-                f"Motivos: +{loss_created}/~{loss_updated}."
+                f"Motivos: +{loss_created}/~{loss_updated}. "
+                f"Etapas produção: +{stage_created}/~{stage_updated}. "
+                f"Itens checklist qualidade novos: {quality_items}."
                 f"{policy_note}"
             ),
         )

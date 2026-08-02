@@ -5,6 +5,8 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include
 from django.urls import path
 
+from production.urls import operacao_urlpatterns
+from production.urls import producao_urlpatterns
 from src.institutional.presentation.robots import robots_txt
 from src.institutional.presentation.sitemaps import sitemaps
 
@@ -32,6 +34,14 @@ urlpatterns = [
     path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
     path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),
     path("painel/manutencao/", include("maintenance.urls", namespace="maintenance")),
+    path(
+        "painel/operacao/",
+        include((operacao_urlpatterns, "production"), namespace="operacao"),
+    ),
+    path(
+        "painel/producao/",
+        include((producao_urlpatterns, "production"), namespace="producao"),
+    ),
     path("painel/administracao/", include("accounts.urls", namespace="accounts")),
     path(
         "painel/administracao/",

@@ -1,0 +1,45 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <form method="get" class="d-flex gap-2 ms-auto">
+    <input type="search" name="q" value="{{ search }}" class="form-control form-control-sm" placeholder="Buscar..." />
+    <select name="status" class="form-select form-select-sm">
+      <option value="">Status</option>
+      {% for value, label in statuses %}
+        <option value="{{ value }}"{% if status == value %} selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-sm btn-primary" type="submit">Filtrar</button>
+  </form>
+{% endblock card_actions %}
+
+{% block table_content %}
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Prazo</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in page_obj %}
+          <tr>
+            <td><a href="{% url 'operacao:order_detail' order.pk %}">{{ order.number }}</a></td>
+            <td>{{ order.customer }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>R$ {{ order.total }}</td>
+            <td>{{ order.promised_date|default:"-" }}</td>
+            <td><a href="{% url 'operacao:order_detail' order.pk %}" class="btn btn-sm btn-light">Ver</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-muted">Nenhum pedido encontrado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock table_content %}

@@ -22,6 +22,7 @@ VALID_TRANSITIONS = {
     },
     QuoteStatus.APPROVED: {QuoteStatus.SENT, QuoteStatus.CANCELLED},
     QuoteStatus.SENT: {QuoteStatus.VIEWED, QuoteStatus.ACCEPTED, QuoteStatus.EXPIRED},
+    QuoteStatus.VIEWED: {QuoteStatus.ACCEPTED, QuoteStatus.EXPIRED},
 }
 
 
@@ -68,6 +69,9 @@ def change_status(*, quote, target_status, actor, request=None, metadata=None):
     elif target_status == QuoteStatus.SENT:
         quote.sent_at = now
         quote.sent_by = actor
+    elif target_status == QuoteStatus.ACCEPTED:
+        if not quote.accepted_at:
+            quote.accepted_at = now
     elif target_status == QuoteStatus.CANCELLED:
         quote.cancelled_at = now
         quote.cancelled_by = actor

@@ -13,6 +13,10 @@ from audit.models import AuditEvent
 from commercial.models import CommercialPartner
 from commercial.models import CommercialSource
 from commercial.models import ProjectType
+from production.forms import AcceptQuoteForm
+from production.forms import RefuseQuoteForm
+from production.models import SalesOrder
+from production.models import SalesOrderStatus
 from quotes.forms import CommercialPolicyForm
 from quotes.forms import QuoteApprovalForm
 from quotes.forms import QuoteCancellationForm
@@ -41,6 +45,8 @@ from quotes.services.quote_management import save_quote
 from quotes.services.quote_management import save_quote_item
 from quotes.services.quote_management import save_quote_service
 from quotes.services.versioning import create_version
+from quotes.services.acceptance import accept_quote
+from quotes.services.acceptance import refuse_quote
 from quotes.services.workflow import active_policy
 from quotes.services.workflow import approve_quote
 from quotes.services.workflow import cancel_quote
@@ -105,11 +111,77 @@ def quote_list(request):
 @require_permission("quotes.view")
 def quote_detail(request, pk):
     quote = _quote_or_403(request, pk)
+    sales_order = SalesOrder.objects.filter(quote=quote).exclude(
+        status=SalesOrderStatus.CANCELLED,
+    ).first()
+    current_acceptance = quote.acceptances.filter(is_current=True).first()
+    accept_form = AcceptQuoteForm(
+        initial={"customer_name": quote.customer.name},
+    )
+    refuse_form = RefuseQuoteForm()
     return render(
         request,
         "quotes/quote_detail.html",
-        {"page_title": quote.number, "quote": quote},
+        {
+            "page_title": quote.number,
+            "quote": quote,
+            "sales_order": sales_order,
+            "acceptances": quote.acceptances.select_related("contact_channel", "loss_reason", "recorded_by"),
+            "current_acceptance": current_acceptance,
+            "accept_form": accept_form,
+            "refuse_form": refuse_form,
+        },
     )
+
+
+@require_permission("quotes.accept")
+def quote_accept(request, pk):
+    quote = _quote_or_403(request, pk)
+    form = AcceptQuoteForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        try:
+            result = accept_quote(
+                quote=quote,
+                actor=request.user,
+                request=request,
+                customer_name=form.cleaned_data["customer_name"],
+                customer_document=form.cleaned_data.get("customer_document", ""),
+                acceptance_notes=form.cleaned_data.get("acceptance_notes", ""),
+                acceptance_channel=form.cleaned_data.get("acceptance_channel"),
+            )
+        except (ValidationError, PermissionDenied) as exc:
+            messages.error(request, str(exc))
+        else:
+            if isinstance(result, SalesOrder):
+                messages.success(request, f"Orçamento aceito. Pedido {result.number} criado.")
+            else:
+                messages.success(request, "Orçamento aceito.")
+            return redirect("quotes:detail", pk=quote.pk)
+    messages.error(request, "Dados inválidos para aceite.")
+    return redirect("quotes:detail", pk=pk)
+
+
+@require_permission("quotes.refuse")
+def quote_refuse(request, pk):
+    quote = _quote_or_403(request, pk)
+    form = RefuseQuoteForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        try:
+            refuse_quote(
+                quote=quote,
+                actor=request.user,
+                request=request,
+                loss_reason=form.cleaned_data["loss_reason"],
+                notes=form.cleaned_data.get("notes", ""),
+                acceptance_channel=form.cleaned_data.get("acceptance_channel"),
+            )
+        except (ValidationError, PermissionDenied) as exc:
+            messages.error(request, str(exc))
+        else:
+            messages.success(request, "Recusa registrada.")
+            return redirect("quotes:detail", pk=quote.pk)
+    messages.error(request, "Dados inválidos para recusa.")
+    return redirect("quotes:detail", pk=pk)
 
 
 @require_permission("quotes.create")

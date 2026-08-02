@@ -1,0 +1,76 @@
+{% extends "vertical.html" %}
+
+{% block title %}{{ page_title }}{% endblock title %}
+
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex align-items-center">
+    <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ order.number }}</h4>
+    <a href="{% url 'operacao:order_update' order.pk %}" class="btn btn-sm btn-primary">Editar</a>
+  </div>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <div class="row g-3">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Resumo</h5>
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Cliente</dt><dd class="col-sm-8">{{ order.customer }}</dd>
+            <dt class="col-sm-4">Vendedor</dt><dd class="col-sm-8">{{ order.salesperson }}</dd>
+            <dt class="col-sm-4">Orçamento</dt><dd class="col-sm-8"><a href="{% url 'quotes:detail' order.quote.pk %}">{{ order.quote.number }}</a></dd>
+            <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ order.get_status_display }}{% if overdue %} <span class="badge bg-danger">Atrasado</span>{% endif %}</dd>
+            <dt class="col-sm-4">Total</dt><dd class="col-sm-8">R$ {{ order.total }}</dd>
+            <dt class="col-sm-4">Prazo</dt><dd class="col-sm-8">{{ order.promised_date|default:"-" }}</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">Itens</h5>
+          <ul class="list-group list-group-flush">
+            {% for item in items %}
+              <li class="list-group-item">{{ item.description }} — R$ {{ item.total }}</li>
+            {% empty %}
+              <li class="list-group-item text-muted">Sem itens.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Ações</h5>
+          {% if production %}
+            <a href="{% url 'producao:production_detail' production.pk %}" class="btn btn-light w-100 mb-2">Ordem {{ production.number }}</a>
+          {% else %}
+            <form method="post" action="{% url 'operacao:order_create_production' order.pk %}">{% csrf_token %}
+              <button class="btn btn-success w-100 mb-2" type="submit">Criar ordem de produção</button>
+            </form>
+          {% endif %}
+          <a href="{% url 'operacao:delivery_schedule' order.pk %}" class="btn btn-light w-100 mb-2">Agendar entrega</a>
+          <a href="{% url 'operacao:installation_schedule' order.pk %}" class="btn btn-light w-100 mb-2">Agendar instalação</a>
+        </div>
+      </div>
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">Alterar status</h5>
+          <form method="post" action="{% url 'operacao:order_change_status' order.pk %}">{% csrf_token %}
+            {{ status_form.as_p }}
+            <button class="btn btn-primary btn-sm" type="submit">Atualizar</button>
+          </form>
+          <hr />
+          <form method="post" action="{% url 'operacao:order_hold' order.pk %}">{% csrf_token %}
+            {{ hold_form.as_p }}
+            <button class="btn btn-warning btn-sm" type="submit">Em espera</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock page_content %}

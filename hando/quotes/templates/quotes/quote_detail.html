@@ -92,6 +92,48 @@
             </div>
           </div>
         </div>
+        {% if sales_order %}
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">Pedido gerado</h5>
+              <a href="{% url 'operacao:order_detail' sales_order.pk %}">{{ sales_order.number }}</a>
+            </div>
+          </div>
+        {% endif %}
+        {% if quote.status == 'sent' or quote.status == 'viewed' or quote.status == 'expired' %}
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">Aceite do cliente</h5>
+              <form method="post" action="{% url 'quotes:accept' quote.pk %}">{% csrf_token %}
+                {{ accept_form.as_p }}
+                <button type="submit" class="btn btn-success">Aceitar orçamento</button>
+              </form>
+              <hr />
+              <form method="post" action="{% url 'quotes:refuse' quote.pk %}">{% csrf_token %}
+                {{ refuse_form.as_p }}
+                <button type="submit" class="btn btn-outline-danger">Recusar orçamento</button>
+              </form>
+            </div>
+          </div>
+        {% endif %}
+        {% if acceptances %}
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">Histórico de aceite</h5>
+              <ul class="list-group list-group-flush">
+                {% for acceptance in acceptances %}
+                  <li class="list-group-item px-0">
+                    <strong>{{ acceptance.get_status_display }}</strong>
+                    {% if acceptance.accepted_at %} — {{ acceptance.accepted_at }}{% endif %}
+                    {% if acceptance.customer_name %}<br />{{ acceptance.customer_name }}{% endif %}
+                    {% if acceptance.contact_channel %}<br />Canal: {{ acceptance.contact_channel }}{% endif %}
+                    {% if acceptance.notes %}<br /><span class="text-muted">{{ acceptance.notes }}</span>{% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </div>
     {% if quote.approval_reasons %}

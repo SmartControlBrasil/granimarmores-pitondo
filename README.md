@@ -199,4 +199,5 @@ python manage.py test
 | [docs/COMMERCIAL_MASTER_DATA.md](docs/COMMERCIAL_MASTER_DATA.md) | Cadastros mestres comerciais |
 | [docs/CRM.md](docs/CRM.md) | CRM, leads e funil comercial |
 | [docs/SALES_PERFORMANCE.md](docs/SALES_PERFORMANCE.md) | Metas, score e desempenho comercial |
+| [docs/PRODUCTION.md](docs/PRODUCTION.md) | Pedidos, produção, entrega e instalação |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |
