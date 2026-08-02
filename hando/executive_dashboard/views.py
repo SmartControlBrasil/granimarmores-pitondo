@@ -46,6 +46,7 @@ EXECUTIVE_ACCESS_CODES = [
     "executive_dashboard.view_quality",
     "executive_dashboard.view_audit",
     "executive_dashboard.view_finance",
+    "executive_dashboard.view_purchasing",
 ]
 
 

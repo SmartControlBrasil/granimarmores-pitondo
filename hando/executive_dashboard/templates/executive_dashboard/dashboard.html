@@ -349,6 +349,18 @@
     </div>
   {% endif %}
 
+  {% if "purchasing" in domains and purchasing %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Compras</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Valor comprado</small><div>{{ purchasing.purchased_amount|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Pedidos atrasados</small><div>{{ purchasing.delayed_orders|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Divergências</small><div>{{ purchasing.open_divergences|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Peças sem chapa</small><div>{{ purchasing.pieces_without_slab|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if "audit" in domains %}
     <div class="card mb-4">
       <div class="card-header"><h5 class="mb-0">Governança e auditoria</h5></div>

@@ -1,0 +1,17 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
+  {% if piece %}<p class="text-muted">Origem: peça #{{ piece.pk }}</p>{% endif %}
+  {% if production_order %}<p class="text-muted">Origem: OP {{ production_order.number }}</p>{% endif %}
+  <form method="post">{% csrf_token %}
+    <div class="card mb-3"><div class="card-body">{{ form.as_p }}</div></div>
+    <div class="card mb-3"><div class="card-header">Itens</div><div class="card-body">
+      {{ formset.management_form }}
+      {% for f in formset %}<div class="border rounded p-2 mb-2">{{ f.as_p }}</div>{% endfor %}
+    </div></div>
+    <button class="btn btn-primary" type="submit">Salvar</button>
+  </form>
+</div>
+{% endblock %}

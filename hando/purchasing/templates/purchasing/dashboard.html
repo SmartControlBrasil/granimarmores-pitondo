@@ -1,0 +1,29 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-1 flex-wrap">
+      {% for key, label in period_choices %}
+        <a class="btn btn-sm btn-outline-secondary{% if period == key %} active{% endif %}" href="?period={{ key }}">{{ label }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Solicitações abertas</small><div class="fs-20">{{ metrics.open_requests }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Aguardando aprovação</small><div class="fs-20">{{ metrics.awaiting_approval }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Aguardando cotação</small><div class="fs-20">{{ metrics.awaiting_quote }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Pedidos atrasados</small><div class="fs-20 text-danger">{{ metrics.delayed_orders }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Em inspeção</small><div class="fs-20">{{ metrics.inspection_receipts }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Divergências abertas</small><div class="fs-20">{{ metrics.open_divergences }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Valor comprado</small><div class="fs-20">{% if metrics.can_values %}{{ metrics.purchased_amount }}{% else %}—{% endif %}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small class="text-muted">Peças sem chapa</small><div class="fs-20">{{ metrics.pieces_without_slab }}</div></div></div></div>
+  </div>
+  <div class="card mb-3"><div class="card-header">Alertas</div><div class="card-body">
+    {% if alerts %}
+      <ul class="mb-0">{% for a in alerts %}<li class="text-{{ a.level }}">{{ a.message }}</li>{% endfor %}</ul>
+    {% else %}<p class="text-muted mb-0">Sem alertas.</p>{% endif %}
+  </div></div>
+</div>
+{% endblock %}

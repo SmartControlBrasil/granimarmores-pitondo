@@ -1,0 +1,26 @@
+{% extends "vertical.html" %}
+{% load erp_permissions %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <div><h4 class="m-0">{{ obj.number }}</h4><span class="badge bg-secondary">{{ obj.get_status_display }}</span></div>
+    <div class="d-flex gap-1">
+      {% has_permission "purchase_receipts.accept" as can_acc %}
+      {% has_permission "purchase_receipts.reject" as can_rej %}
+      {% if obj.status == "under_inspection" or obj.status == "draft" %}
+        {% if can_acc %}<form method="post" action="{% url 'purchasing:receipt_accept' obj.pk %}">{% csrf_token %}<button class="btn btn-sm btn-success">Aceitar / entrar estoque</button></form>{% endif %}
+        {% if can_rej %}<a class="btn btn-sm btn-outline-danger" href="{% url 'purchasing:receipt_reject' obj.pk %}">Rejeitar</a>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+  <p>Pedido {{ obj.purchase_order.number }} · {{ obj.received_at }}</p>
+  <div class="card mb-3"><div class="table-responsive"><table class="table table-sm mb-0">
+    <thead><tr><th>Item</th><th>Recebido</th><th>Aceito</th><th>Rejeitado</th><th>Condição</th><th>Estoque</th></tr></thead>
+    <tbody>{% for i in items %}<tr><td>{{ i.purchase_order_item.description }}</td><td>{{ i.received_quantity }}</td><td>{{ i.accepted_quantity }}</td><td>{{ i.rejected_quantity }}</td><td>{{ i.get_condition_display }}</td><td>{% if i.stock_entered %}Sim{% else %}Não{% endif %}</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+  {% if divergences %}
+  <div class="card"><div class="card-header">Divergências</div><ul class="list-group list-group-flush">{% for d in divergences %}<li class="list-group-item">{{ d.get_severity_display }} — {{ d.description }} ({{ d.get_status_display }})</li>{% endfor %}</ul></div>
+  {% endif %}
+</div>
+{% endblock %}

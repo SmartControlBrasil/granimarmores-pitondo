@@ -1,0 +1,24 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
+  {% if not order %}
+    <div class="card"><div class="card-body">
+      <p>Selecione o pedido:</p>
+      <ul>{% for o in orders %}<li><a href="?order={{ o.pk }}">{{ o.number }} — {{ o.supplier.name }}</a></li>{% empty %}<li class="text-muted">Nenhum pedido apto</li>{% endfor %}</ul>
+    </div></div>
+  {% else %}
+  <p>Pedido <strong>{{ order.number }}</strong> — {{ order.supplier.name }}</p>
+  <form method="post">{% csrf_token %}
+    <input type="hidden" name="order_id" value="{{ order.pk }}">
+    <div class="card mb-3"><div class="card-body">{{ form.as_p }}</div></div>
+    <div class="card mb-3"><div class="card-header">Itens</div><div class="card-body">
+      {{ formset.management_form }}
+      {% for f in formset %}<div class="border rounded p-2 mb-2"><strong>Item #{{ f.purchase_order_item_id.value }}</strong>{{ f.as_p }}</div>{% endfor %}
+    </div></div>
+    <button class="btn btn-primary" type="submit">Registrar recebimento</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

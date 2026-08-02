@@ -1,0 +1,47 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <h4 class="m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-2">
+      {% if page_title == "Solicitações de Compra" %}<a class="btn btn-primary btn-sm" href="{% url 'purchasing:request_create' %}">Nova</a>{% endif %}
+      {% if page_title == "Cotações" %}<a class="btn btn-primary btn-sm" href="{% url 'purchasing:quotation_create' %}">Nova</a>{% endif %}
+      {% if page_title == "Recebimentos" %}<a class="btn btn-primary btn-sm" href="{% url 'purchasing:receipt_create' %}">Novo</a>{% endif %}
+      {% if page_title == "Devoluções" %}<a class="btn btn-primary btn-sm" href="{% url 'purchasing:return_create' %}">Nova</a>{% endif %}
+      <a class="btn btn-outline-secondary btn-sm" href="?export=csv">CSV</a>
+    </div>
+  </div>
+  <div class="card"><div class="table-responsive"><table class="table table-sm mb-0">
+    <thead><tr><th>Registro</th><th>Status / Info</th><th></th></tr></thead>
+    <tbody>
+    {% for obj in page_obj %}
+      <tr>
+        <td>
+          {% if obj.number %}<strong>{{ obj.number }}</strong>{% else %}#{{ obj.pk }}{% endif %}
+          {% if obj.supplier %}<div class="text-muted small">{{ obj.supplier.name }}</div>{% endif %}
+          {% if obj.purchase_order %}<div class="text-muted small">{{ obj.purchase_order.number }}</div>{% endif %}
+          {% if obj.name and not obj.number %}<strong>{{ obj.name }}</strong>{% endif %}
+        </td>
+        <td>
+          {% if obj.status %}{{ obj.get_status_display|default:obj.status }}{% endif %}
+          {% if obj.total_amount %} · {{ obj.total_amount }}{% endif %}
+          {% if obj.priority %} · {{ obj.get_priority_display }}{% endif %}
+          {% if obj.severity %}{{ obj.get_severity_display }} · {{ obj.description|truncatechars:60 }}{% endif %}
+        </td>
+        <td class="text-end">
+          {% if page_title == "Solicitações de Compra" %}<a href="{% url 'purchasing:request_detail' obj.pk %}">Abrir</a>{% endif %}
+          {% if page_title == "Cotações" %}<a href="{% url 'purchasing:quotation_detail' obj.pk %}">Abrir</a>{% endif %}
+          {% if page_title == "Pedidos de Compra" %}<a href="{% url 'purchasing:order_detail' obj.pk %}">Abrir</a>{% endif %}
+          {% if page_title == "Recebimentos" %}<a href="{% url 'purchasing:receipt_detail' obj.pk %}">Abrir</a>{% endif %}
+          {% if page_title == "Fornecedores" %}<a href="{% url 'purchasing:supplier_detail' obj.pk %}">Abrir</a>{% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3" class="text-muted">Nenhum registro.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div></div>
+  {% if page_obj.has_other_pages %}<div class="mt-2">Página {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</div>{% endif %}
+</div>
+{% endblock %}

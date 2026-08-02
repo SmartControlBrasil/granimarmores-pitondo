@@ -49,6 +49,7 @@
           <form method="post" action="{% url 'producao:production_complete' production.pk %}">{% csrf_token %}<button class="btn btn-success" type="submit">Concluir</button></form>
           <a href="{% url 'media_library:upload_production' production.pk %}" class="btn btn-outline-secondary">Adicionar foto</a>
           <a href="{% url 'media_library:upload_production' production.pk %}" class="btn btn-outline-secondary">Adicionar documento</a>
+          <a href="{% url 'purchasing:request_create' %}?production_order={{ production.pk }}" class="btn btn-outline-primary">Solicitar material</a>
           <a href="{% url 'producao:board' %}" class="btn btn-outline-secondary">Quadro</a>
         </div>
       </div>

@@ -106,10 +106,15 @@ INSTALLED_APPS = [
     "media_library",
     "executive_dashboard",
     "finance",
+    "purchasing",
 ]
 
 # Painel executivo: cache curto por usuário/filtros (0 desativa)
 EXECUTIVE_DASHBOARD_CACHE_SECONDS = env.int("EXECUTIVE_DASHBOARD_CACHE_SECONDS", default=60)
+
+# Compras: gatilho padrão seguro para gerar conta a pagar
+# Valores: receipt | purchase_order | manual
+PURCHASING_PAYABLE_TRIGGER = env("PURCHASING_PAYABLE_TRIGGER", default="receipt")
 
 # Biblioteca interna de mídia (armazenamento local do ERP)
 MEDIA_LIBRARY_MAX_IMAGE_SIZE_MB = 10

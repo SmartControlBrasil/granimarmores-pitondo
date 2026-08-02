@@ -1,0 +1,14 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
+  <div class="list-group">
+    {% for r in requests %}
+      <a class="list-group-item list-group-item-action" href="{% url 'purchasing:request_compare' r.pk %}">{{ r.number }} — {{ r.get_status_display }}</a>
+    {% empty %}
+      <div class="text-muted">Nenhuma solicitação apta para comparação.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

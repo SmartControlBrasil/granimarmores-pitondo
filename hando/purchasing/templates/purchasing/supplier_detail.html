@@ -1,0 +1,18 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4>{{ obj.name }}</h4>
+  <p class="text-muted">{{ obj.document }} · {{ obj.city }}/{{ obj.state }} · {{ obj.phone }}</p>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Pedidos</small><div class="fs-20">{{ performance.orders }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Valor comprado</small><div class="fs-20">{{ performance.purchased_amount }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>% no prazo</small><div class="fs-20">{{ performance.on_time_percent }}%</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Divergências</small><div class="fs-20">{{ performance.divergences }}</div></div></div></div>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-6"><div class="card"><div class="card-header">Pedidos</div><ul class="list-group list-group-flush">{% for o in history.orders %}<li class="list-group-item"><a href="{% url 'purchasing:order_detail' o.pk %}">{{ o.number }}</a> — {{ o.total_amount }}</li>{% empty %}<li class="list-group-item text-muted">Nenhum</li>{% endfor %}</ul></div></div>
+    <div class="col-md-6"><div class="card"><div class="card-header">Cotações</div><ul class="list-group list-group-flush">{% for q in history.quotations %}<li class="list-group-item"><a href="{% url 'purchasing:quotation_detail' q.pk %}">{{ q.number }}</a></li>{% empty %}<li class="list-group-item text-muted">Nenhuma</li>{% endfor %}</ul></div></div>
+  </div>
+</div>
+{% endblock %}

@@ -22,6 +22,7 @@ from executive_dashboard.selectors.risks import build_executive_alerts
 from executive_dashboard.selectors.risks import orders_at_risk
 from executive_dashboard.selectors.stock import stock_metrics
 from finance.selectors import executive_finance_metrics
+from purchasing.selectors import executive_purchasing_metrics
 
 
 def _dec(value):
@@ -230,6 +231,11 @@ def build_executive_dashboard(*, user, start, end, previous_period, filters=None
     else:
         data["finance"] = {}
 
+    if "purchasing" in domains:
+        data["purchasing"] = executive_purchasing_metrics(user=user, start=start, end=end)
+    else:
+        data["purchasing"] = {}
+
     data["risks"] = orders_at_risk(filters=filters) if "production" in domains or "commercial" in domains else []
     data["alerts"] = build_executive_alerts(user=user, domains=data)
 
@@ -279,6 +285,7 @@ def _allowed_domains(user):
                 "audit",
                 "quality",
                 "finance",
+                "purchasing",
             },
         )
     if user_has_permission(user, "executive_dashboard.view_commercial"):
@@ -300,6 +307,11 @@ def _allowed_domains(user):
         "finance_values.view",
     ):
         domains.add("finance")
+    if user_has_permission(user, "executive_dashboard.view_purchasing") or user_has_permission(
+        user,
+        "purchasing_values.view",
+    ):
+        domains.add("purchasing")
     if user_has_permission(user, "media_dashboard.view") or user_has_permission(user, "media_assets.view"):
         if "commercial" in domains or "production" in domains or user_has_permission(
             user,

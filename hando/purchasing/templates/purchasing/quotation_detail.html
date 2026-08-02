@@ -1,0 +1,13 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4>{{ obj.number }} <span class="badge bg-secondary">{{ obj.get_status_display }}</span></h4>
+  <p>{{ obj.supplier.name }} · Total {{ obj.total_amount }} · Prazo {{ obj.delivery_days }}d</p>
+  <div class="card"><div class="table-responsive"><table class="table table-sm mb-0">
+    <thead><tr><th>Descrição</th><th>Qtd</th><th>Unit.</th><th>Total</th></tr></thead>
+    <tbody>{% for i in items %}<tr><td>{{ i.description }}</td><td>{{ i.quantity }}</td><td>{{ i.unit_price }}</td><td>{{ i.total_amount }}</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+  <a class="btn btn-link mt-2" href="{% url 'purchasing:request_compare' obj.purchase_request_id %}">Comparar na solicitação</a>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "vertical.html" %}
+{% load erp_permissions %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <div><h4 class="m-0">{{ obj.number }}</h4><span class="badge bg-secondary">{{ obj.get_status_display }}</span></div>
+    <div class="d-flex gap-1 flex-wrap">
+      {% has_permission "purchase_requests.submit" as can_sub %}
+      {% has_permission "purchase_requests.approve" as can_ap %}
+      {% has_permission "purchase_requests.reject" as can_rj %}
+      {% has_permission "supplier_quotations.create" as can_q %}
+      {% has_permission "supplier_quotations.view" as can_cmp %}
+      {% if obj.status == "draft" and can_sub %}<form method="post" action="{% url 'purchasing:request_submit' obj.pk %}">{% csrf_token %}<button class="btn btn-sm btn-primary">Enviar</button></form>{% endif %}
+      {% if obj.status == "submitted" or obj.status == "under_review" %}
+        {% if can_ap %}<form method="post" action="{% url 'purchasing:request_approve' obj.pk %}">{% csrf_token %}<button class="btn btn-sm btn-success">Aprovar</button></form>{% endif %}
+        {% if can_rj %}<a class="btn btn-sm btn-outline-danger" href="{% url 'purchasing:request_reject' obj.pk %}">Rejeitar</a>{% endif %}
+      {% endif %}
+      {% if can_q %}<a class="btn btn-sm btn-outline-primary" href="{% url 'purchasing:quotation_create' %}?request={{ obj.pk }}">Nova cotação</a>{% endif %}
+      {% if can_cmp %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'purchasing:request_compare' obj.pk %}">Comparar</a>{% endif %}
+    </div>
+  </div>
+  <div class="card mb-3"><div class="card-body">
+    <p><strong>Justificativa:</strong> {{ obj.justification }}</p>
+    <p class="mb-0 text-muted">Prioridade {{ obj.get_priority_display }} · Tipo {{ obj.get_request_type_display }} · Solicitante {{ obj.requested_by }}</p>
+  </div></div>
+  <div class="card mb-3"><div class="card-header">Itens</div><div class="table-responsive"><table class="table table-sm mb-0">
+    <thead><tr><th>Descrição</th><th>Qtd</th><th>Tipo</th><th>Est. unit.</th></tr></thead>
+    <tbody>{% for i in items %}<tr><td>{{ i.description }}</td><td>{{ i.quantity }} {{ i.unit }}</td><td>{{ i.get_item_type_display }}</td><td>{{ i.estimated_unit_cost }}</td></tr>{% empty %}<tr><td colspan="4">Sem itens</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+  <div class="row g-3">
+    <div class="col-md-6"><div class="card"><div class="card-header">Cotações</div><ul class="list-group list-group-flush">{% for q in quotations %}<li class="list-group-item"><a href="{% url 'purchasing:quotation_detail' q.pk %}">{{ q.number }}</a> — {{ q.supplier.name }} — {{ q.total_amount }}</li>{% empty %}<li class="list-group-item text-muted">Nenhuma</li>{% endfor %}</ul></div></div>
+    <div class="col-md-6"><div class="card"><div class="card-header">Pedidos</div><ul class="list-group list-group-flush">{% for o in orders %}<li class="list-group-item"><a href="{% url 'purchasing:order_detail' o.pk %}">{{ o.number }}</a> — {{ o.supplier.name }}</li>{% empty %}<li class="list-group-item text-muted">Nenhum</li>{% endfor %}</ul></div></div>
+  </div>
+</div>
+{% endblock %}

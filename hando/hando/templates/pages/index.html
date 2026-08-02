@@ -186,6 +186,25 @@
     </div>
   {% endif %}
 
+  {% if purchasing_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Compras</h5>
+            <a href="{% url 'purchasing:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard Compras</a>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-3"><p class="text-muted mb-1">Aguardando aprovação</p><h4>{{ purchasing_summary.awaiting_approval }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Pedidos atrasados</p><h4>{{ purchasing_summary.delayed_orders }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Em inspeção</p><h4>{{ purchasing_summary.inspection_receipts }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Divergências críticas</p><h4>{{ purchasing_summary.critical_divergences }}</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

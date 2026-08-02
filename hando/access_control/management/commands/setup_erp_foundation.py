@@ -625,6 +625,64 @@ FINANCE_SELLER = [
     "accounts_receivable.view",
 ]
 
+PURCHASING_FULL = [
+    "purchasing_dashboard.view",
+    "purchase_requests.view",
+    "purchase_requests.create",
+    "purchase_requests.update",
+    "purchase_requests.submit",
+    "purchase_requests.approve",
+    "purchase_requests.reject",
+    "purchase_requests.cancel",
+    "supplier_quotations.view",
+    "supplier_quotations.create",
+    "supplier_quotations.update",
+    "supplier_quotations.cancel",
+    "purchase_orders.view",
+    "purchase_orders.create",
+    "purchase_orders.update",
+    "purchase_orders.approve",
+    "purchase_orders.cancel",
+    "purchase_receipts.view",
+    "purchase_receipts.create",
+    "purchase_receipts.inspect",
+    "purchase_receipts.accept",
+    "purchase_receipts.reject",
+    "purchase_receipts.override_quantity",
+    "purchase_divergences.view",
+    "purchase_divergences.update",
+    "purchase_returns.view",
+    "purchase_returns.create",
+    "purchase_returns.approve",
+    "purchasing_values.view",
+    "purchasing_costs.view",
+    "purchasing_generate_payable",
+    "executive_dashboard.view_purchasing",
+]
+
+PURCHASING_OPERATIONS = [
+    "purchasing_dashboard.view",
+    "purchase_requests.view",
+    "purchase_requests.create",
+    "purchase_requests.submit",
+    "supplier_quotations.view",
+    "purchase_orders.view",
+    "purchase_receipts.view",
+    "purchase_receipts.create",
+    "purchase_receipts.inspect",
+    "purchase_receipts.accept",
+    "purchase_divergences.view",
+    "purchase_returns.view",
+    "purchase_returns.create",
+]
+
+PURCHASING_FINANCE = [
+    "purchase_orders.view",
+    "purchase_receipts.view",
+    "purchasing_generate_payable",
+    "purchasing_values.view",
+]
+
 EXECUTIVE_OPERATIONS = [
     "executive_dashboard.view_production",
     "executive_dashboard.view_stock",
@@ -648,7 +706,8 @@ SYSTEM_ROLE_PERMISSIONS = {
     "Operacional": ["project_types.view", "service_regions.view", "leads.view"]
     + PRODUCTION_OPERATIONS
     + STOCK_OPERATIONS
-    + EXECUTIVE_OPERATIONS,
+    + EXECUTIVE_OPERATIONS
+    + PURCHASING_OPERATIONS,
 }
 
 FINANCE_CATEGORY_SEEDS = [

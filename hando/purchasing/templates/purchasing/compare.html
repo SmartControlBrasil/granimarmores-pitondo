@@ -1,0 +1,32 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
+  {% for row in comparison.rows %}
+  <div class="card mb-3"><div class="card-header">{{ row.request_item.description }}</div>
+    <div class="table-responsive"><table class="table table-sm mb-0">
+      <thead><tr><th>Fornecedor</th><th>Unit.</th><th>Frete</th><th>Desc.</th><th>Total</th><th>Prazo</th><th>Condição</th><th>Validade</th></tr></thead>
+      <tbody>
+      {% for o in row.offers %}
+        <tr class="{% if o.total == row.best_total %}table-success{% endif %}{% if o.delivery_days == row.best_days %} {% endif %}">
+          <td>{{ o.supplier.name }}{% if o.supplier.id == row.preferred_supplier_id %} ★{% endif %}</td>
+          <td>{{ o.unit_price }}{% if o.unit_price == row.best_price %} ✓{% endif %}</td>
+          <td>{{ o.freight }}</td><td>{{ o.discount }}</td>
+          <td>{{ o.total }}{% if o.total == row.best_total %} ✓{% endif %}</td>
+          <td>{{ o.delivery_days }}d{% if o.delivery_days == row.best_days %} ✓{% endif %}</td>
+          <td>{{ o.payment_term|default:"—" }}</td><td>{{ o.valid_until|default:"—" }}</td>
+        </tr>
+      {% empty %}<tr><td colspan="8" class="text-muted">Sem ofertas</td></tr>{% endfor %}
+      </tbody>
+    </table></div>
+  </div>
+  {% endfor %}
+  <div class="card"><div class="card-header">Seleção (decisão humana)</div><div class="card-body">
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Gerar pedido(s)</button>
+    </form>
+  </div></div>
+</div>
+{% endblock %}
