@@ -147,6 +147,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "hando.users.context_processors.allauth_settings",
                 "access_control.context_processors.erp_permissions",
+                "src.institutional.presentation.context_processors.institutional_seo",
             ],
         },
     },

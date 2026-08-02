@@ -9,15 +9,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        {% block title %}
-        Granimármores Pitondo
-        {% endblock %}
-    </title>
+    <title>{% block seo_title %}{{ site_seo.page_title }}{% endblock %}</title>
 
     <meta
         name="description"
-        content="{% block meta_description %}Mármores, granitos, quartzitos e superfícies sob medida para cozinhas, banheiros, áreas gourmet e projetos comerciais.{% endblock %}"
+        content="{% block seo_description %}{{ site_seo.page_description }}{% endblock %}"
     >
 
     <meta
@@ -25,7 +21,23 @@
         content="{% block meta_keywords %}marmoraria, mármore, granito, quartzito, bancadas sob medida{% endblock %}"
     >
 
-    <meta name="author" content="Granimármores Pitondo">
+    <meta name="author" content="{{ site_seo.company_name }}">
+    <meta name="robots" content="{% block seo_robots %}{{ site_seo.robots }}{% endblock %}">
+
+    <link rel="canonical" href="{% block seo_canonical %}{{ site_seo.canonical_url }}{% endblock %}">
+
+    <meta property="og:type" content="{% block seo_og_type %}{{ site_seo.og_type }}{% endblock %}">
+    <meta property="og:site_name" content="{{ site_seo.site_name }}">
+    <meta property="og:title" content="{% block seo_og_title %}{{ site_seo.og_title }}{% endblock %}">
+    <meta property="og:description" content="{% block seo_og_description %}{{ site_seo.og_description }}{% endblock %}">
+    <meta property="og:url" content="{% block seo_og_url %}{{ site_seo.og_url }}{% endblock %}">
+    <meta property="og:image" content="{% block seo_og_image %}{{ site_seo.og_image }}{% endblock %}">
+    <meta property="og:locale" content="{{ site_seo.og_locale }}">
+
+    <meta name="twitter:card" content="{{ site_seo.twitter_card }}">
+    <meta name="twitter:title" content="{% block seo_twitter_title %}{{ site_seo.og_title }}{% endblock %}">
+    <meta name="twitter:description" content="{% block seo_twitter_description %}{{ site_seo.og_description }}{% endblock %}">
+    <meta name="twitter:image" content="{% block seo_twitter_image %}{{ site_seo.og_image }}{% endblock %}">
 
     <link
         rel="icon"
@@ -80,6 +92,10 @@
 
         gtag('config', 'G-76100WC6SB');
     </script>
+
+    {% block seo_schema %}
+    <script type="application/ld+json">{{ site_seo.local_business_schema|safe }}</script>
+    {% endblock %}
 
     {% block extra_css %}{% endblock %}
 </head>

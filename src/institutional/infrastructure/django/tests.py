@@ -45,7 +45,7 @@ class InstitutionalPagesTests(TestCase):
         "cozinhas": ("/cozinhas/", template("cozinhas"), "Cozinhas que unem beleza e funcionalidade"),
         "escadas": ("/escadas/", template("escadas"), "Escadas em Mármore e Granito"),
         "areas_gourmet": ("/areas-gourmet/", template("areas_gourmet"), "Áreas Gourmet"),
-        "banheiros": ("/banheiros/", template("banheiros"), "Banheiros em"),
+        "banheiros": ("/banheiros/", template("banheiros"), "Banheiros que unem"),
         "projetos_comerciais": ("/projetos-comerciais/", template("projetos_comerciais"), "Projetos"),
         "blog": ("/blog/", template("blog"), "Blog sobre mármores"),
         "contato": ("/contato/", template("contact"), "Solicite uma avaliação"),
@@ -370,4 +370,76 @@ class InstitutionalSitemapTests(TestCase):
         for path in expected_urls:
             with self.subTest(path=path):
                 self.assertIn(f"https://granimarmorespitondo.com.br{path}", content)
+
+
+@override_settings(SITE_DOMAIN="granimarmorespitondo.com.br")
+class InstitutionalSeoTests(TestCase):
+    def test_robots_txt_returns_plain_text(self):
+        response = self.client.get("/robots.txt")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "text/plain")
+        content = response.content.decode()
+
+        self.assertIn("Sitemap: https://granimarmorespitondo.com.br/sitemap.xml", content)
+        self.assertIn("Disallow: /painel/", content)
+        self.assertIn("Disallow: /admin/", content)
+        self.assertIn("Disallow: /accounts/", content)
+        self.assertTrue(content.endswith("\n"))
+
+    def test_home_contains_canonical_open_graph_and_schema(self):
+        response = self.client.get(reverse("institutional:home"))
+        html = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<link rel="canonical" href="https://granimarmorespitondo.com.br/">')
+        self.assertContains(response, 'name="description"')
+        self.assertContains(response, "Soluções sob medida em mármore, granito e superfícies especiais")
+        self.assertContains(response, 'property="og:title"')
+        self.assertContains(response, 'property="og:description"')
+        self.assertContains(response, 'property="og:url"')
+        self.assertContains(response, 'property="og:image"')
+        self.assertContains(response, 'name="twitter:card" content="summary_large_image"')
+        self.assertContains(response, '"@type": "LocalBusiness"')
+
+    def test_internal_page_has_unique_canonical_and_description(self):
+        response = self.client.get(reverse("institutional:cozinhas"))
+        html = response.content.decode()
+
+        self.assertContains(
+            response,
+            '<link rel="canonical" href="https://granimarmorespitondo.com.br/cozinhas/">',
+        )
+        self.assertContains(
+            response,
+            "Projetos de cozinhas com bancadas, ilhas, pias e revestimentos",
+        )
+        self.assertNotContains(
+            response,
+            '<link rel="canonical" href="https://granimarmorespitondo.com.br/">',
+        )
+
+    def test_blog_article_has_article_open_graph(self):
+        response = self.client.get(
+            reverse(
+                "institutional:blog_article",
+                kwargs={"slug": "marmore-ou-granito-diferencas"},
+            ),
+        )
+        html = response.content.decode()
+
+        self.assertContains(response, 'property="og:type" content="article"')
+        self.assertContains(
+            response,
+            '<link rel="canonical" href="https://granimarmorespitondo.com.br/blog/marmore-ou-granito-diferencas/">',
+        )
+
+    def test_sitemap_still_excludes_private_urls(self):
+        response = self.client.get("/sitemap.xml")
+        content = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("/painel/", content)
+        self.assertNotIn("/admin/", content)
+        self.assertNotIn("/accounts/", content)
 

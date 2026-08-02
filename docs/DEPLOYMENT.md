@@ -142,7 +142,7 @@ Expectativas:
 | Recurso | Status |
 |---------|--------|
 | `/sitemap.xml` | **Implementado** — 16 URLs públicas |
-| `robots.txt` | **Não implementado** no repositório (a validar se existe na VPS/proxy) |
+| `/robots.txt` | **Implementado** — view Django em `/robots.txt` |
 
 Enviar sitemap ao Google Search Console:
 

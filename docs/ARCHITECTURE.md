@@ -170,7 +170,8 @@ Slugs de artigos:
 
 - `/sitemap.xml` — implementado (`src/institutional/presentation/sitemaps.py`)
 - `SITE_DOMAIN` — domínio canônico (padrão: `granimarmorespitondo.com.br`)
-- `robots.txt` — **não encontrado no repositório** (a validar)
+- `robots.txt` é servido dinamicamente em `/robots.txt`.
+- Metadados SEO centralizados em `src/institutional/presentation/seo.py` (ver [docs/SEO.md](docs/SEO.md)).
 
 ## Por que não criar outro projeto Django
 

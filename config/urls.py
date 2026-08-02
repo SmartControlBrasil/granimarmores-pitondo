@@ -5,11 +5,13 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include
 from django.urls import path
 
+from src.institutional.presentation.robots import robots_txt
 from src.institutional.presentation.sitemaps import sitemaps
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("robots.txt", robots_txt, name="robots_txt"),
     path(
         "sitemap.xml",
         sitemap,

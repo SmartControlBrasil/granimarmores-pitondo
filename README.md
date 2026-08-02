@@ -161,6 +161,7 @@ python manage.py test
 | `/contato/` | Contato |
 | `/orcamento/` | Orçamento (mesmo fluxo de contato) |
 | `/sitemap.xml` | Sitemap XML |
+| `/robots.txt` | Diretivas para crawlers |
 
 ### Operacionais (ERP, autenticadas)
 
@@ -181,7 +182,8 @@ python manage.py test
 3. **Painel Hando** — preservar templates e assets em `hando/hando/templates/` e `hando/hando/static/`.
 4. **Menu oculto ≠ módulo ausente** — itens do sidebar somem por falta de permissão RBAC.
 5. **Sem signup público** — `ACCOUNT_ALLOW_REGISTRATION` padrão é `False`.
-6. **`robots.txt`** — **não implementado** no repositório (a validar para produção).
+6. **`robots.txt`** — servido dinamicamente em `/robots.txt` (ver `src/institutional/presentation/robots.py`).
+7. Metadados SEO centralizados em `src/institutional/presentation/seo.py`.
 7. Documentos legados em `docs/ARQUITETURA_E_DIRETRIZES.md` e `docs/DECISOES_ARQUITETURAIS.md` complementam esta documentação; preferir `docs/ARCHITECTURE.md` e `docs/DECISIONS.md` para referência operacional.
 
 ## Documentação
@@ -193,4 +195,5 @@ python manage.py test
 | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Deploy e operação |
 | [docs/RBAC.md](docs/RBAC.md) | Cargos, permissões, diagnóstico |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Decisões arquiteturais |
+| [docs/SEO.md](docs/SEO.md) | SEO técnico institucional |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |
