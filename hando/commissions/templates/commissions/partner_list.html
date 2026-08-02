@@ -1,0 +1,9 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3"><h4 class="mb-3">{{ page_title }}</h4>
+<div class="card"><div class="table-responsive"><table class="table table-sm mb-0">
+<thead><tr><th>Parceiro</th><th>Disponível</th><th>Pago</th><th></th></tr></thead>
+<tbody>{% for row in rows %}<tr><td>{{ row.partner.name }}</td><td>{{ row.balance.available }}</td><td>{{ row.balance.paid }}</td><td><a href="{% url 'commissions:partner_detail' row.partner.pk %}">Abrir</a></td></tr>{% empty %}<tr><td colspan="4">Nenhum</td></tr>{% endfor %}</tbody>
+</table></div></div></div>
+{% endblock %}

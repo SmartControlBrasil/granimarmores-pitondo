@@ -5,6 +5,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include
 from django.urls import path
 
+from commissions.views import my_commissions
 from production.urls import operacao_urlpatterns
 from production.urls import producao_urlpatterns
 from src.institutional.presentation.robots import robots_txt
@@ -40,6 +41,8 @@ urlpatterns = [
     ),
     path("painel/financeiro/", include("finance.urls", namespace="finance")),
     path("painel/compras/", include("purchasing.urls", namespace="purchasing")),
+    path("painel/comissoes/", include("commissions.urls", namespace="commissions")),
+    path("painel/comercial/minhas-comissoes/", my_commissions, name="my_commissions"),
     path("painel/cadastros/", include("commercial.urls", namespace="commercial")),
     path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
     path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),

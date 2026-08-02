@@ -683,6 +683,37 @@ PURCHASING_FINANCE = [
     "purchasing_values.view",
 ]
 
+COMMISSIONS_MANAGER = [
+    "commission_dashboard.view",
+    "commission_policies.view",
+    "commission_policies.create",
+    "commission_policies.update",
+    "commission_policies.activate",
+    "commission_events.view",
+    "commission_events.adjust",
+    "commission_events.reverse",
+    "commission_settlements.view",
+    "commission_settlements.create",
+    "commission_settlements.approve",
+    "commission_settlements.cancel",
+    "commission_values.view",
+    "commission_partner_values.view",
+    "executive_dashboard.view_commissions",
+]
+
+COMMISSIONS_SELLER = [
+    "commission_events.view_own",
+]
+
+COMMISSIONS_FINANCE = [
+    "commission_settlements.view",
+    "commission_settlements.generate_payable",
+    "commission_payments.view",
+    "commission_payments.create",
+    "commission_payments.reverse",
+    "commission_values.view",
+]
+
 EXECUTIVE_OPERATIONS = [
     "executive_dashboard.view_production",
     "executive_dashboard.view_stock",
@@ -697,12 +728,14 @@ SYSTEM_ROLE_PERMISSIONS = {
     + PERFORMANCE_MANAGER
     + ORDERS_MANAGER
     + EXECUTIVE_COMMERCIAL
-    + FINANCE_COMMERCIAL,
+    + FINANCE_COMMERCIAL
+    + COMMISSIONS_MANAGER,
     "Vendedor": COMMERCIAL_MASTER_VIEW
     + LEADS_SELLER
     + PERFORMANCE_SELLER
     + ORDERS_SELLER
-    + FINANCE_SELLER,
+    + FINANCE_SELLER
+    + COMMISSIONS_SELLER,
     "Operacional": ["project_types.view", "service_regions.view", "leads.view"]
     + PRODUCTION_OPERATIONS
     + STOCK_OPERATIONS
@@ -719,6 +752,7 @@ FINANCE_CATEGORY_SEEDS = [
     ("Restauração", "restauracao", "income", 60),
     ("Outras receitas", "outras-receitas", "income", 70),
     ("Compra de material", "compra-de-material", "expense", 110),
+    ("Comissões Comerciais", "comissoes-comerciais", "expense", 115),
     ("Frete", "frete", "expense", 120),
     ("Combustível", "combustivel", "expense", 130),
     ("Ferramentas", "ferramentas", "expense", 140),

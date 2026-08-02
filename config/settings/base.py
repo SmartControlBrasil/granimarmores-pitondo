@@ -107,6 +107,7 @@ INSTALLED_APPS = [
     "executive_dashboard",
     "finance",
     "purchasing",
+    "commissions",
 ]
 
 # Painel executivo: cache curto por usuário/filtros (0 desativa)

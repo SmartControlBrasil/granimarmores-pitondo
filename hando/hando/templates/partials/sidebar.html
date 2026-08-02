@@ -27,8 +27,8 @@
           </li>
         {% endif %}
 
-        {% has_permission "leads.view" as can_leads %}{% has_permission "quotes.view" as can_quotes %}{% has_permission "customers.view" as can_customers %}{% has_permission "salespeople.view" as can_salespeople %}{% has_permission "materials.view" as can_materials %}{% has_permission "quotes.manage_policy" as can_policy %}{% has_permission "sales_performance.view_own" as can_perf_own %}{% has_permission "sales_performance.view_all" as can_perf_all %}{% has_permission "sales_ranking.view" as can_ranking %}{% has_permission "sales_goals.view" as can_goals %}
-        {% if can_leads or can_quotes or can_customers or can_salespeople or can_materials or can_policy or can_perf_own or can_perf_all or can_ranking or can_goals %}
+        {% has_permission "leads.view" as can_leads %}{% has_permission "quotes.view" as can_quotes %}{% has_permission "customers.view" as can_customers %}{% has_permission "salespeople.view" as can_salespeople %}{% has_permission "materials.view" as can_materials %}{% has_permission "quotes.manage_policy" as can_policy %}{% has_permission "sales_performance.view_own" as can_perf_own %}{% has_permission "sales_performance.view_all" as can_perf_all %}{% has_permission "sales_ranking.view" as can_ranking %}{% has_permission "sales_goals.view" as can_goals %}{% has_permission "commission_events.view_own" as can_my_comm %}{% has_permission "commission_dashboard.view" as can_comm_dash %}{% has_permission "commission_events.view" as can_comm_events %}{% has_permission "commission_settlements.view" as can_comm_set %}{% has_permission "commission_policies.view" as can_comm_pol %}{% has_permission "commission_partner_values.view" as can_comm_partner %}
+        {% if can_leads or can_quotes or can_customers or can_salespeople or can_materials or can_policy or can_perf_own or can_perf_all or can_ranking or can_goals or can_my_comm or can_comm_dash %}
           <li class="menu-title mt-2">Comercial</li>
           {% if can_leads %}
             <li><a href="{% url 'leads:dashboard' %}" class="tp-link{% if request.resolver_match.url_name == 'dashboard' and request.resolver_match.namespace == 'leads' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard Comercial</span></a></li>
@@ -51,6 +51,18 @@
           {% if can_policy %}
             <li><a href="{% url 'quotes:policy' %}" class="tp-link{% if request.resolver_match.url_name == 'policy' %} active{% endif %}"><i data-feather="sliders"></i><span>Política Comercial</span></a></li>
           {% endif %}
+          {% if can_my_comm %}<li><a href="{% url 'my_commissions' %}" class="tp-link{% if request.resolver_match.url_name == 'my_commissions' %} active{% endif %}"><i data-feather="percent"></i><span>Minhas Comissões</span></a></li>{% endif %}
+        {% endif %}
+
+        {% if can_comm_dash or can_comm_events or can_comm_set or can_comm_pol or can_comm_partner %}
+          <li class="menu-title mt-2">Comissões</li>
+          {% if can_comm_dash %}<li><a href="{% url 'commissions:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'commissions' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
+          {% if can_comm_events %}<li><a href="{% url 'commissions:event_list' %}" class="tp-link{% if request.resolver_match.url_name == 'event_list' %} active{% endif %}"><i data-feather="list"></i><span>Eventos</span></a></li>{% endif %}
+          {% if can_comm_set %}<li><a href="{% url 'commissions:settlement_list' %}" class="tp-link{% if 'settlement' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="check-square"></i><span>Fechamentos</span></a></li>{% endif %}
+          {% if can_comm_pol %}<li><a href="{% url 'commissions:policy_list' %}" class="tp-link{% if 'policy' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'commissions' %} active{% endif %}"><i data-feather="sliders"></i><span>Políticas</span></a></li>{% endif %}
+          {% if can_comm_events %}<li><a href="{% url 'commissions:salesperson_list' %}" class="tp-link{% if request.resolver_match.url_name == 'salesperson_list' %} active{% endif %}"><i data-feather="user-check"></i><span>Vendedores</span></a></li>{% endif %}
+          {% if can_comm_partner %}<li><a href="{% url 'commissions:partner_list' %}" class="tp-link{% if 'partner' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'commissions' %} active{% endif %}"><i data-feather="briefcase"></i><span>Parceiros</span></a></li>{% endif %}
+          {% if can_comm_pol %}<li><a href="{% url 'commissions:simulator' %}" class="tp-link{% if request.resolver_match.url_name == 'simulator' %} active{% endif %}"><i data-feather="cpu"></i><span>Simulador</span></a></li>{% endif %}
         {% endif %}
 
         {% has_permission "sales_orders.view" as can_orders %}{% has_permission "deliveries.view" as can_deliveries %}{% has_permission "installations.view" as can_installations %}

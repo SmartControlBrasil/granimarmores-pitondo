@@ -149,6 +149,12 @@ def register_receivable_payment(
         obj=payment,
         description=f"Recebimento {payment.number} de {amount}",
     )
+    try:
+        from commissions.services.provisioning import release_commission_for_receivable_payment
+
+        release_commission_for_receivable_payment(payment=payment, actor=actor, request=request)
+    except Exception:
+        pass
     return payment
 
 
@@ -217,6 +223,17 @@ def reverse_receivable_payment(*, payment, actor, reason, request=None):
         description=f"Estornou recebimento {payment.number}",
         metadata={"reason": reason},
     )
+    try:
+        from commissions.services.reversals import reverse_releases_for_receivable_payment
+
+        reverse_releases_for_receivable_payment(
+            payment=payment,
+            actor=actor,
+            reason=reason,
+            request=request,
+        )
+    except Exception:
+        pass
     return payment
 
 

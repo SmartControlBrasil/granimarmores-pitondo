@@ -361,6 +361,20 @@
     </div>
   {% endif %}
 
+  {% if "commissions" in domains and commissions %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Comissões</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Provisionada</small><div>{{ commissions.provisioned|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Disponível</small><div>{{ commissions.available|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Paga</small><div>{{ commissions.paid|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Estornada</small><div>{{ commissions.reversed|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Sem política</small><div>{{ commissions.sales_without_policy|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Fech. pendentes</small><div>{{ commissions.settlements_pending|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if "audit" in domains %}
     <div class="card mb-4">
       <div class="card-header"><h5 class="mb-0">Governança e auditoria</h5></div>

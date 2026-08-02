@@ -205,6 +205,34 @@
     </div>
   {% endif %}
 
+  {% if commissions_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Comissões</h5>
+            {% if commissions_summary.mode == "salesperson" %}
+              <a href="{% url 'my_commissions' %}" class="btn btn-sm btn-outline-primary">Meu extrato</a>
+            {% else %}
+              <a href="{% url 'commissions:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard</a>
+            {% endif %}
+          </div>
+          <div class="card-body row">
+            {% if commissions_summary.mode == "salesperson" %}
+              <div class="col-md-4"><p class="text-muted mb-1">Disponível</p><h4>{{ commissions_summary.available }}</h4></div>
+              <div class="col-md-4"><p class="text-muted mb-1">Provisionada</p><h4>{{ commissions_summary.provisioned }}</h4></div>
+              <div class="col-md-4"><p class="text-muted mb-1">Último fechamento</p><h4>{{ commissions_summary.last_settlement }}</h4></div>
+            {% else %}
+              <div class="col-md-4"><p class="text-muted mb-1">Comissão pendente</p><h4>{{ commissions_summary.pending_commission }}</h4></div>
+              <div class="col-md-4"><p class="text-muted mb-1">Fechamentos aguardando</p><h4>{{ commissions_summary.settlements_pending }}</h4></div>
+              <div class="col-md-4"><p class="text-muted mb-1">Vendas sem política</p><h4>{{ commissions_summary.sales_without_policy }}</h4></div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

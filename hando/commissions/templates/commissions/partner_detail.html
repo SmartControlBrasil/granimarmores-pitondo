@@ -1,0 +1,14 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4>{{ page_title }}</h4>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Provisionado</small><div class="fs-20">{{ balance.provisioned }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Disponível</small><div class="fs-20">{{ balance.available }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Pago</small><div class="fs-20">{{ balance.paid }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Estornado</small><div class="fs-20">{{ balance.reversed }}</div></div></div></div>
+  </div>
+  <div class="card"><div class="card-header">Eventos</div><ul class="list-group list-group-flush">{% for e in events %}<li class="list-group-item">{{ e.number }} — {{ e.get_event_type_display }} — {{ e.commission_amount }}</li>{% empty %}<li class="list-group-item text-muted">Nenhum</li>{% endfor %}</ul></div>
+</div>
+{% endblock %}

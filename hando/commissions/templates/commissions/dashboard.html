@@ -1,0 +1,20 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <h4 class="m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-1">{% for key,label in period_choices %}<a class="btn btn-sm btn-outline-secondary{% if period == key %} active{% endif %}" href="?period={{ key }}">{{ label }}</a>{% endfor %}</div>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Provisionado</small><div class="fs-20">{% if metrics.can_values %}{{ metrics.provisioned }}{% else %}—{% endif %}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Disponível</small><div class="fs-20">{% if metrics.can_values %}{{ metrics.available }}{% else %}—{% endif %}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Pago</small><div class="fs-20">{% if metrics.can_values %}{{ metrics.paid }}{% else %}—{% endif %}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Estornado</small><div class="fs-20">{% if metrics.can_values %}{{ metrics.reversed }}{% else %}—{% endif %}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Aguardando aprovação</small><div class="fs-20">{{ metrics.pending_approval }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Fechamentos pendentes</small><div class="fs-20">{{ metrics.settlements_pending }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Vendas sem política</small><div class="fs-20">{{ metrics.sales_without_policy }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>AP não geradas</small><div class="fs-20">{{ metrics.settlements_no_payable }}</div></div></div></div>
+  </div>
+</div>
+{% endblock %}

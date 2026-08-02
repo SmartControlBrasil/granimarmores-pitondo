@@ -1,0 +1,30 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <h4 class="m-0">{{ page_title }}</h4>
+    <div class="d-flex gap-2">
+      {% if page_title == "Políticas de Comissão" %}<a class="btn btn-sm btn-primary" href="{% url 'commissions:policy_create' %}">Nova</a>{% endif %}
+      {% if page_title == "Fechamentos" %}<a class="btn btn-sm btn-primary" href="{% url 'commissions:settlement_create' %}">Novo</a>{% endif %}
+      {% if page_title == "Eventos de Comissão" %}<a class="btn btn-sm btn-outline-primary" href="{% url 'commissions:event_adjust' %}">Ajustar</a>{% endif %}
+      <a class="btn btn-sm btn-outline-secondary" href="?export=csv">CSV</a>
+    </div>
+  </div>
+  <div class="card"><div class="table-responsive"><table class="table table-sm mb-0">
+    <thead><tr><th>Registro</th><th>Info</th><th></th></tr></thead>
+    <tbody>
+    {% if policies %}{% for obj in policies %}
+      <tr><td><strong>{{ obj.name }}</strong></td><td>{{ obj.get_trigger_type_display }} · pri {{ obj.priority }} · {% if obj.is_active %}Ativa{% else %}Inativa{% endif %}</td><td><a href="{% url 'commissions:policy_detail' obj.pk %}">Abrir</a></td></tr>
+    {% empty %}<tr><td colspan="3" class="text-muted">Nenhuma política cadastrada.</td></tr>{% endfor %}{% endif %}
+    {% if page_obj %}{% for obj in page_obj %}
+      <tr>
+        <td><strong>{{ obj.number }}</strong>{% if obj.beneficiary_name_snapshot %}<div class="small text-muted">{{ obj.beneficiary_name_snapshot }}</div>{% endif %}</td>
+        <td>{% if obj.event_type %}{{ obj.get_event_type_display }} · {{ obj.commission_amount }} · {{ obj.get_status_display }}{% else %}{{ obj.period_start }}–{{ obj.period_end }} · {{ obj.net_amount }} · {{ obj.get_status_display }}{% endif %}</td>
+        <td>{% if obj.event_type %}<a href="{% url 'commissions:event_reverse' obj.pk %}">Estornar</a>{% else %}<a href="{% url 'commissions:settlement_detail' obj.pk %}">Abrir</a>{% endif %}</td>
+      </tr>
+    {% empty %}<tr><td colspan="3" class="text-muted">Nenhum registro.</td></tr>{% endfor %}{% endif %}
+    </tbody>
+  </table></div></div>
+</div>
+{% endblock %}

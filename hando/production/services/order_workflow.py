@@ -204,4 +204,17 @@ def cancel_order(*, order, actor, reason, request=None):
         obj=order,
         metadata={"from": old_status, "reason": reason[:500]},
     )
+    try:
+        from commissions.services.reversals import cancel_commissions_for_sale
+
+        cancel_commissions_for_sale(
+            quote=order.quote,
+            sales_order=order,
+            actor=actor,
+            reason=reason,
+            request=request,
+        )
+    except Exception:
+        # Não bloqueia cancelamento comercial por falha de comissão.
+        pass
     return order

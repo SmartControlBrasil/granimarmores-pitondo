@@ -1,0 +1,20 @@
+{% extends "vertical.html" %}
+{% load erp_permissions %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3">
+    <div><h4 class="m-0">{{ obj.name }}</h4><span class="badge bg-{% if obj.is_active %}success{% else %}secondary{% endif %}">{% if obj.is_active %}Ativa{% else %}Inativa{% endif %}</span></div>
+    <div class="d-flex gap-1">
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'commissions:policy_update' obj.pk %}">Editar</a>
+      {% has_permission "commission_policies.activate" as can_act %}
+      {% if can_act %}
+        {% if obj.is_active %}<form method="post" action="{% url 'commissions:policy_deactivate' obj.pk %}">{% csrf_token %}<button class="btn btn-sm btn-warning">Desativar</button></form>
+        {% else %}<form method="post" action="{% url 'commissions:policy_activate' obj.pk %}">{% csrf_token %}<button class="btn btn-sm btn-success">Ativar</button></form>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+  <p>{{ obj.get_commission_target_display }} · {{ obj.get_calculation_basis_display }} · {{ obj.get_trigger_type_display }} · Vigência {{ obj.valid_from }}{% if obj.valid_until %}–{{ obj.valid_until }}{% endif %}</p>
+  <div class="card mb-3"><div class="card-header">Faixas</div><ul class="list-group list-group-flush">{% for t in tiers %}<li class="list-group-item">{{ t.minimum_value }}–{{ t.maximum_value|default:"∞" }} → {{ t.commission_value }} ({{ t.get_commission_type_display }})</li>{% empty %}<li class="list-group-item text-muted">Sem faixas</li>{% endfor %}</ul></div>
+</div>
+{% endblock %}

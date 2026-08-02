@@ -1,0 +1,24 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-2">{{ page_title }}</h4>
+  <p class="text-muted">Simulação — nenhum evento será persistido.</p>
+  <div class="row g-3">
+    <div class="col-md-5"><div class="card"><div class="card-body"><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn btn-primary" type="submit">Simular</button></form></div></div></div>
+    <div class="col-md-7"><div class="card"><div class="card-header">Resultado</div><div class="card-body">
+      {% if result %}
+        {% if result.eligible %}
+          <p><strong>Política:</strong> {{ result.policy.name }}</p>
+          <p><strong>Base:</strong> {{ result.basis }} · <strong>Taxa:</strong> {{ result.rate }}%</p>
+          <p class="fs-20"><strong>Valor estimado:</strong> {{ result.amount }}</p>
+          <p class="text-muted">Liberação só após pagamento: {{ result.release_only_after_payment }} · Exige aprovação: {{ result.requires_approval }}</p>
+        {% else %}
+          <p class="text-danger">Não elegível: {{ result.reason }}</p>
+          {% if result.policy %}<p>Política encontrada: {{ result.policy.name }}</p>{% endif %}
+        {% endif %}
+      {% else %}<p class="text-muted">Preencha os dados e simule.</p>{% endif %}
+    </div></div></div>
+  </div>
+</div>
+{% endblock %}

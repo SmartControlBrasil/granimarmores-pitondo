@@ -207,4 +207,5 @@ python manage.py test
 | [docs/EXECUTIVE_DASHBOARD.md](docs/EXECUTIVE_DASHBOARD.md) | Painel executivo da diretoria |
 | [docs/FINANCE.md](docs/FINANCE.md) | Financeiro operacional e fluxo de caixa |
 | [docs/PURCHASING.md](docs/PURCHASING.md) | Compras, fornecedores e abastecimento |
+| [docs/COMMISSIONS.md](docs/COMMISSIONS.md) | Comissões comerciais e fechamentos |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |

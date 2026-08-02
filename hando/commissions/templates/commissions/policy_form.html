@@ -1,0 +1,15 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
+  <form method="post">{% csrf_token %}
+    <div class="card mb-3"><div class="card-body">{{ form.as_p }}</div></div>
+    <div class="card mb-3"><div class="card-header">Faixas</div><div class="card-body">
+      {{ formset.management_form }}
+      {% for f in formset %}<div class="border rounded p-2 mb-2">{{ f.as_p }}</div>{% endfor %}
+    </div></div>
+    <button class="btn btn-primary" type="submit">Salvar</button>
+  </form>
+</div>
+{% endblock %}

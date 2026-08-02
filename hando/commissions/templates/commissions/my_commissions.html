@@ -1,0 +1,17 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3"><h4 class="m-0">{{ page_title }}</h4><a class="btn btn-sm btn-outline-secondary" href="?export=csv">CSV</a></div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Provisionado</small><div class="fs-20">{{ balance.provisioned|default:0 }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Disponível</small><div class="fs-20">{{ balance.available|default:0 }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Pago</small><div class="fs-20">{{ balance.paid|default:0 }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><small>Estornado</small><div class="fs-20">{{ balance.reversed|default:0 }}</div></div></div></div>
+  </div>
+  <div class="card"><div class="card-header">Eventos</div><div class="table-responsive"><table class="table table-sm mb-0">
+    <thead><tr><th>Número</th><th>Tipo</th><th>Valor</th><th>Status</th><th>Origem</th></tr></thead>
+    <tbody>{% for e in events %}<tr><td>{{ e.number }}</td><td>{{ e.get_event_type_display }}</td><td>{{ e.commission_amount }}</td><td>{{ e.get_status_display }}</td><td>{% if e.quote %}{{ e.quote.number }}{% elif e.sales_order %}{{ e.sales_order.number }}{% else %}—{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="text-muted">Sem eventos.</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+</div>
+{% endblock %}

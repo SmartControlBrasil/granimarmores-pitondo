@@ -21,6 +21,7 @@ from executive_dashboard.selectors.production import quality_metrics
 from executive_dashboard.selectors.risks import build_executive_alerts
 from executive_dashboard.selectors.risks import orders_at_risk
 from executive_dashboard.selectors.stock import stock_metrics
+from commissions.selectors import executive_commission_metrics
 from finance.selectors import executive_finance_metrics
 from purchasing.selectors import executive_purchasing_metrics
 
@@ -236,6 +237,11 @@ def build_executive_dashboard(*, user, start, end, previous_period, filters=None
     else:
         data["purchasing"] = {}
 
+    if "commissions" in domains:
+        data["commissions"] = executive_commission_metrics(user=user, start=start, end=end)
+    else:
+        data["commissions"] = {}
+
     data["risks"] = orders_at_risk(filters=filters) if "production" in domains or "commercial" in domains else []
     data["alerts"] = build_executive_alerts(user=user, domains=data)
 
@@ -286,6 +292,7 @@ def _allowed_domains(user):
                 "quality",
                 "finance",
                 "purchasing",
+                "commissions",
             },
         )
     if user_has_permission(user, "executive_dashboard.view_commercial"):
@@ -312,6 +319,11 @@ def _allowed_domains(user):
         "purchasing_values.view",
     ):
         domains.add("purchasing")
+    if user_has_permission(user, "executive_dashboard.view_commissions") or user_has_permission(
+        user,
+        "commission_values.view",
+    ):
+        domains.add("commissions")
     if user_has_permission(user, "media_dashboard.view") or user_has_permission(user, "media_assets.view"):
         if "commercial" in domains or "production" in domains or user_has_permission(
             user,

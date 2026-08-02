@@ -125,11 +125,27 @@ def accept_quote(
         metadata={"acceptance_id": acceptance.pk, "customer_name": acceptance.customer_name},
     )
 
+    order = None
     if create_order:
         from production.services.orders import create_sales_order_from_quote
 
-        return create_sales_order_from_quote(quote=quote, actor=actor, request=request)
-    return acceptance
+        order = create_sales_order_from_quote(quote=quote, actor=actor, request=request)
+
+    try:
+        from commissions.services.provisioning import provision_commission
+
+        provision_commission(
+            quote=quote,
+            sales_order=order if getattr(order, "pk", None) else None,
+            actor=actor,
+            request=request,
+            trigger="quote_accepted",
+        )
+    except Exception:
+        # Não bloqueia aceite comercial por falha de comissão.
+        pass
+
+    return order if create_order else acceptance
 
 
 @transaction.atomic
