@@ -4,16 +4,8 @@
   <div class="h-100" data-simplebar>
     <div id="sidebar-menu">
       <div class="logo-box">
-        <a href="{% url 'pages:dashboard' %}" class="logo logo-light"><span class="logo-sm">
-          <img src="{% static '/images/logo-sm.png' %}" alt="" height="22" />
-        </span><span class="logo-lg">
-        <img src="{% static '/images/logo-light.png' %}" alt="" height="24" />
-      </span></a>
-        <a href="{% url 'pages:dashboard' %}" class="logo logo-dark"><span class="logo-sm">
-          <img src="{% static '/images/logo-sm.png' %}" alt="" height="22" />
-        </span><span class="logo-lg">
-        <img src="{% static '/images/logo-dark.png' %}" alt="" height="24" />
-      </span></a>
+        {% url 'pages:dashboard' as dashboard_url %}
+        {% include 'partials/brand_logo.html' with brand_href=dashboard_url %}
       </div>
       <ul id="side-menu">
         <li class="menu-title">Menu</li>

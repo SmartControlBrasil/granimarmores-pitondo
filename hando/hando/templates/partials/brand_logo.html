@@ -1,0 +1,37 @@
+{% load static %}
+<a href="{{ brand_href|default:'/' }}" class="logo logo-light">
+  {% if not auth_only %}
+    <span class="logo-sm">
+      <img
+        src="{% static 'institutional/images/icon.webp' %}"
+        alt="Granimármores Pitondo"
+        class="erp-brand-logo erp-brand-logo--sm"
+      />
+    </span>
+  {% endif %}
+  <span class="logo-lg">
+    <img
+      src="{% static 'institutional/images/logo-gp.webp' %}"
+      alt="Granimármores Pitondo"
+      class="erp-brand-logo erp-brand-logo--lg"
+    />
+  </span>
+</a>
+<a href="{{ brand_href|default:'/' }}" class="logo logo-dark">
+  {% if not auth_only %}
+    <span class="logo-sm">
+      <img
+        src="{% static 'institutional/images/icon.webp' %}"
+        alt="Granimármores Pitondo"
+        class="erp-brand-logo erp-brand-logo--sm"
+      />
+    </span>
+  {% endif %}
+  <span class="logo-lg">
+    <img
+      src="{% static 'institutional/images/logo-white.webp' %}"
+      alt="Granimármores Pitondo"
+      class="erp-brand-logo erp-brand-logo--lg"
+    />
+  </span>
+</a>

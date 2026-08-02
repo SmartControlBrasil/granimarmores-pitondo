@@ -19,16 +19,7 @@
                                     <div class="mb-0 border-0 p-md-4 p-lg-0">
                                         <div class="mb-4 p-0 text-lg-start text-center">
                                             <div class="auth-brand">
-                                                <a href="/" class="logo logo-light">
-                                                    <span class="logo-lg">
-                                                        <img src="{% static '/images/logo-light.png' %}" alt="" height="24">
-                                                    </span>
-                                                </a>
-                                                <a href="/" class="logo logo-dark">
-                                                    <span class="logo-lg">
-                                                        <img src="{% static '/images/logo-dark.png' %}" alt="" height="24">
-                                                    </span>
-                                                </a>
+                                                {% include 'partials/brand_logo.html' with auth_only=True %}
                                             </div>
                                         </div>
 
