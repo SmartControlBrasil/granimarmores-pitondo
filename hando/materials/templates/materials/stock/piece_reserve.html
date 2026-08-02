@@ -1,0 +1,14 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="py-3">{{ page_title }}</h4>
+  <p>OP: {{ piece.production_order.number }} · Material: {{ piece.material|default:"—" }}</p>
+  {% if suggestions %}
+    <div class="card mb-3"><div class="card-body"><h6>Sugestões (menor sobra estimada)</h6>
+    {% for s in suggestions %}<div class="small">{{ s.slab_code }} — disp. {{ s.available_area }} m² — {{ s.location|default:"sem local" }}{% if can_view_cost %} — custo/m² {{ s.cost_per_m2 }}{% endif %}</div>{% endfor %}
+    </div></div>
+  {% endif %}
+  <form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn btn-primary" type="submit">Confirmar reserva</button></form>
+</div>
+{% endblock page_content %}

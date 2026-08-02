@@ -22,6 +22,7 @@ from production.models import DeliverySchedule
 from production.models import InstallationSchedule
 from production.models import ProductionOrder
 from production.models import ProductionOrderStatus
+from production.models import ProductionPiece
 from production.models import ProductionPieceStage
 from production.models import ProductionStage
 from production.models import SalesOrder
@@ -247,7 +248,13 @@ def production_list(request):
 @require_permission("production_orders.view")
 def production_detail(request, pk):
     production = _production_or_403(request, pk)
-    pieces = production.pieces.prefetch_related("stages__stage", "slab")
+    pieces = production.pieces.prefetch_related(
+        "stages__stage",
+        "slab",
+        "slab_reservations__slab__stock_location",
+    )
+    from access_control.services.authorization import user_has_permission
+
     return render(
         request,
         "production/production_detail.html",
@@ -260,6 +267,39 @@ def production_detail(request, pk):
             "progress": calculate_order_progress(production),
             "overdue": is_production_order_overdue(production),
             "action_form": ProductionActionForm(),
+            "can_reserve": user_has_permission(request.user, "slab_reservations.reserve"),
+        },
+    )
+
+
+@require_permission("production_pieces.view")
+def piece_detail(request, pk):
+    from access_control.services.authorization import user_has_permission
+    from materials.stock_models import SlabReservation
+
+    piece = get_object_or_404(
+        ProductionPiece.objects.select_related(
+            "material",
+            "production_order",
+            "slab",
+        ).prefetch_related("stages__stage", "slab_reservations__slab"),
+        pk=pk,
+    )
+    _production_or_403(request, piece.production_order_id)
+    active_reservations = piece.slab_reservations.exclude(
+        status__in=[SlabReservation.Status.RELEASED, SlabReservation.Status.CANCELLED],
+    )
+    return render(
+        request,
+        "production/piece_detail.html",
+        {
+            "page_title": f"Peça {piece.code}",
+            "piece": piece,
+            "stages": piece.stages.select_related("stage", "assigned_to"),
+            "reservations": active_reservations,
+            "can_reserve": user_has_permission(request.user, "slab_reservations.reserve"),
+            "can_release": user_has_permission(request.user, "slab_reservations.release"),
+            "can_consume": user_has_permission(request.user, "slab_consumption.consume"),
         },
     )
 

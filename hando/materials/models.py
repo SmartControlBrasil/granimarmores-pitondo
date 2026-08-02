@@ -182,10 +182,18 @@ class MaterialPriceHistory(models.Model):
 class MaterialSlab(TimeStampedModel, AuditableModel, SoftDeleteModel):
     class Status(models.TextChoices):
         AVAILABLE = "available", "Disponível"
-        RESERVED = "reserved", "Reservada"
-        USED = "used", "Utilizada"
+        PARTIALLY_RESERVED = "partially_reserved", "Parcialmente reservada"
+        FULLY_RESERVED = "fully_reserved", "Totalmente reservada"
+        IN_USE = "in_use", "Em uso"
+        PARTIALLY_CONSUMED = "partially_consumed", "Parcialmente consumida"
+        CONSUMED = "consumed", "Consumida"
+        BLOCKED = "blocked", "Bloqueada"
         DAMAGED = "damaged", "Danificada"
         DISCARDED = "discarded", "Descartada"
+        INVENTORY_ADJUSTMENT = "inventory_adjustment", "Ajuste de inventário"
+        # legado — migrado automaticamente
+        RESERVED = "reserved", "Reservada (legado)"
+        USED = "used", "Utilizada (legado)"
 
     material = models.ForeignKey(
         Material,
@@ -193,8 +201,27 @@ class MaterialSlab(TimeStampedModel, AuditableModel, SoftDeleteModel):
         related_name="slabs",
     )
     slab_code = models.CharField(max_length=60, unique=True)
+    external_code = models.CharField(max_length=80, blank=True)
+    parent_slab = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="remnants",
+    )
+    is_remnant = models.BooleanField(default=False)
     lot_number = models.CharField(max_length=80, blank=True)
-    supplier = models.CharField(max_length=160, blank=True)
+    batch = models.CharField(max_length=80, blank=True)
+    bundle = models.CharField(max_length=80, blank=True)
+    serial_number = models.CharField(max_length=80, blank=True)
+    supplier_name = models.CharField(max_length=160, blank=True)
+    supplier_ref = models.ForeignKey(
+        "materials.MaterialSupplier",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="slabs",
+    )
     width_mm = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -211,7 +238,27 @@ class MaterialSlab(TimeStampedModel, AuditableModel, SoftDeleteModel):
         default=Decimal("0.00"),
         validators=[validate_non_negative],
     )
-    area_m2 = models.DecimalField(
+    total_area = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        default=Decimal("0.0000"),
+    )
+    available_area = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        default=Decimal("0.0000"),
+    )
+    reserved_area = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        default=Decimal("0.0000"),
+    )
+    consumed_area = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        default=Decimal("0.0000"),
+    )
+    lost_area = models.DecimalField(
         max_digits=10,
         decimal_places=4,
         default=Decimal("0.0000"),
@@ -222,25 +269,95 @@ class MaterialSlab(TimeStampedModel, AuditableModel, SoftDeleteModel):
         default=Decimal("0.00"),
         validators=[validate_non_negative],
     )
-    location = models.CharField(max_length=160, blank=True)
+    stock_location = models.ForeignKey(
+        "materials.StockLocation",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="slabs",
+    )
+    location_text = models.CharField(max_length=160, blank=True)
+    rack = models.CharField(max_length=80, blank=True)
+    position = models.CharField(max_length=80, blank=True)
+    received_at = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=Status.choices,
         default=Status.AVAILABLE,
     )
+    block_reason = models.TextField(blank=True)
     notes = models.TextField(blank=True)
 
     class Meta:
         ordering = ["slab_code"]
 
-    def save(self, *args, **kwargs):
-        self.area_m2 = (self.width_mm * self.height_mm / Decimal("1000000")).quantize(
-            Decimal("0.0001"),
-        )
-        return super().save(*args, **kwargs)
+    @property
+    def code(self):
+        return self.slab_code
+
+    @property
+    def area_m2(self):
+        return self.total_area
+
+    @property
+    def location(self):
+        if self.stock_location_id:
+            return str(self.stock_location)
+        return self.location_text
+
+    @property
+    def supplier(self):
+        if self.supplier_ref_id:
+            return str(self.supplier_ref)
+        return self.supplier_name
+
+    def compute_total_area(self):
+        if self.width_mm > 0 and self.height_mm > 0:
+            return (self.width_mm * self.height_mm / Decimal("1000000")).quantize(
+                Decimal("0.0001"),
+            )
+        return self.total_area
+
+    def cost_per_m2(self):
+        if self.total_area <= 0:
+            return Decimal("0.00")
+        return (self.cost_value / self.total_area).quantize(Decimal("0.01"))
+
+    def estimated_consumed_cost(self):
+        return (self.consumed_area * self.cost_per_m2()).quantize(Decimal("0.01"))
+
+    def clean(self):
+        areas = self.reserved_area + self.consumed_area + self.lost_area
+        if areas > self.total_area:
+            raise ValidationError("Soma das áreas não pode ultrapassar a área total.")
+        if self.available_area < 0:
+            raise ValidationError({"available_area": "Área disponível não pode ser negativa."})
+        if self.width_mm <= 0 or self.height_mm <= 0:
+            raise ValidationError("Largura e altura devem ser positivas.")
+        if self.thickness_mm < 0:
+            raise ValidationError({"thickness_mm": "Espessura não pode ser negativa."})
+
+    def delete(self, *args, **kwargs):
+        from materials.stock_models import StockMovement
+
+        if StockMovement.objects.filter(slab=self).exists():
+            raise ValidationError("Chapa com movimentações não pode ser excluída.")
+        return super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.slab_code
+
+
+from materials.stock_models import (  # noqa: E402, F401
+    MaterialSupplier,
+    SlabLoss,
+    SlabReservation,
+    SlabSequence,
+    StockInventory,
+    StockInventoryItem,
+    StockLocation,
+    StockMovement,
+)
 
 
 class FinishType(TimeStampedModel, AuditableModel, SoftDeleteModel):

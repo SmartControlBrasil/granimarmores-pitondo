@@ -11,6 +11,20 @@ from production.models import ProductionLogType
 from production.models import ProductionPieceStage
 from production.services.logging import add_production_log
 
+CUT_STAGE_SLUG = "corte"
+
+
+def _piece_has_active_reservation(piece):
+    from materials.stock_models import SlabReservation
+
+    return SlabReservation.objects.filter(
+        production_piece=piece,
+        status__in=[
+            SlabReservation.Status.ACTIVE,
+            SlabReservation.Status.PARTIALLY_CONSUMED,
+        ],
+    ).exists()
+
 
 def _activate_next_stage(piece_stage):
     next_stage = (
@@ -28,7 +42,7 @@ def _activate_next_stage(piece_stage):
 
 
 @transaction.atomic
-def start_stage(*, piece_stage, actor, request=None):
+def start_stage(*, piece_stage, actor, request=None, override_reason=""):
     if not user_has_permission(actor, "production_stages.start"):
         raise PermissionDenied("Sem permissão para iniciar etapa.")
     if piece_stage.status not in {PieceStageStatus.READY, PieceStageStatus.PENDING}:
@@ -40,6 +54,29 @@ def start_stage(*, piece_stage, actor, request=None):
     ).exclude(pk=piece_stage.pk).exists()
     if in_progress:
         raise ValidationError("Outra etapa já está em andamento nesta peça.")
+
+    if piece_stage.stage.slug == CUT_STAGE_SLUG:
+        piece = piece_stage.piece
+        if not _piece_has_active_reservation(piece):
+            if not user_has_permission(actor, "slab_reservations.override_cut"):
+                raise ValidationError("Peça sem chapa reservada para corte.")
+            if not override_reason.strip():
+                raise ValidationError("Override de corte sem reserva exige justificativa.")
+            record_audit_event(
+                request=request,
+                user=actor,
+                event_type="update",
+                module="production",
+                action="cut_start_without_reservation",
+                obj=piece_stage,
+                metadata={"reason": override_reason[:500]},
+            )
+        else:
+            from materials.models import MaterialSlab
+
+            active = piece.slab_reservations.filter(status="active").select_related("slab").first()
+            if active and active.slab.status == MaterialSlab.Status.BLOCKED:
+                raise ValidationError("Chapa reservada está bloqueada.")
 
     now = timezone.now()
     piece_stage.status = PieceStageStatus.IN_PROGRESS
@@ -73,6 +110,16 @@ def complete_stage(*, piece_stage, actor, request=None, notes=""):
         raise PermissionDenied("Sem permissão para concluir etapa.")
     if piece_stage.status != PieceStageStatus.IN_PROGRESS:
         raise ValidationError("Etapa não está em andamento.")
+
+    if piece_stage.stage.slug == CUT_STAGE_SLUG:
+        from materials.stock_models import SlabReservation
+
+        active_res = SlabReservation.objects.filter(
+            production_piece=piece_stage.piece,
+            status=SlabReservation.Status.ACTIVE,
+        ).first()
+        if active_res:
+            raise ValidationError("Registre o consumo da chapa antes de concluir o corte.")
 
     now = timezone.now()
     piece_stage.status = PieceStageStatus.COMPLETED

@@ -86,6 +86,25 @@
     </div>
   {% endif %}
 
+  {% if stock_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Estoque</h5>
+            <a href="{% url 'stock:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard de Estoque</a>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-3"><p class="text-muted mb-1">Peças sem chapa</p><h4>{{ stock_summary.pieces_without_slab }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Reservas ativas</p><h4>{{ stock_summary.active_reservations }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Chapas bloqueadas</p><h4>{{ stock_summary.blocked_slabs }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Inventários abertos</p><h4>{{ stock_summary.open_inventories }}</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

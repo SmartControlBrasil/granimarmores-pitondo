@@ -66,6 +66,20 @@
           {% if can_prod_stages %}<li><a href="{% url 'producao:stage_list' %}" class="tp-link{% if request.resolver_match.url_name == 'stage_list' %} active{% endif %}"><i data-feather="list"></i><span>Etapas Produtivas</span></a></li>{% endif %}
         {% endif %}
 
+        {% has_permission "stock_dashboard.view" as can_stock_dash %}{% has_permission "slabs.view" as can_slabs %}{% has_permission "slab_reservations.view" as can_reservations %}{% has_permission "slab_remnants.view" as can_remnants %}{% has_permission "stock_movements.view" as can_movements %}{% has_permission "stock_inventory.view" as can_inventory %}{% has_permission "stock_locations.view" as can_locations %}{% has_permission "material_suppliers.view" as can_suppliers %}
+        {% if can_stock_dash or can_slabs or can_reservations or can_remnants or can_movements or can_inventory or can_locations or can_suppliers %}
+          <li class="menu-title mt-2">Estoque</li>
+          {% if can_stock_dash %}<li><a href="{% url 'stock:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'stock' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
+          {% if can_slabs %}<li><a href="{% url 'stock:slab_list' %}" class="tp-link{% if 'slab' in request.resolver_match.url_name|default:'' and request.resolver_match.namespace == 'stock' %} active{% endif %}"><i data-feather="copy"></i><span>Chapas</span></a></li>{% endif %}
+          {% if can_slabs %}<li><a href="{% url 'stock:slab_receive' %}" class="tp-link{% if request.resolver_match.url_name == 'slab_receive' %} active{% endif %}"><i data-feather="log-in"></i><span>Entradas</span></a></li>{% endif %}
+          {% if can_reservations %}<li><a href="{% url 'stock:reservation_list' %}" class="tp-link{% if 'reservation' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="bookmark"></i><span>Reservas</span></a></li>{% endif %}
+          {% if can_remnants %}<li><a href="{% url 'stock:remnant_list' %}" class="tp-link{% if 'remnant' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="scissors"></i><span>Sobras</span></a></li>{% endif %}
+          {% if can_movements %}<li><a href="{% url 'stock:movement_list' %}" class="tp-link{% if request.resolver_match.url_name == 'movement_list' %} active{% endif %}"><i data-feather="activity"></i><span>Movimentações</span></a></li>{% endif %}
+          {% if can_inventory %}<li><a href="{% url 'stock:inventory_list' %}" class="tp-link{% if 'inventory' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="clipboard"></i><span>Inventários</span></a></li>{% endif %}
+          {% if can_locations %}<li><a href="{% url 'stock:location_list' %}" class="tp-link{% if 'location' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="map-pin"></i><span>Localizações</span></a></li>{% endif %}
+          {% if can_suppliers %}<li><a href="{% url 'stock:supplier_list' %}" class="tp-link{% if 'supplier' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="truck"></i><span>Fornecedores</span></a></li>{% endif %}
+        {% endif %}
+
         {% has_permission "customers.view" as can_customers_c %}{% has_permission "salespeople.view" as can_salespeople_c %}{% has_permission "users.view" as can_users %}{% has_permission "commercial_partners.view" as can_partners %}{% has_permission "commercial_sources.view" as can_sources %}{% has_permission "project_types.view" as can_project_types %}{% has_permission "contact_channels.view" as can_channels %}{% has_permission "loss_reasons.view" as can_loss_reasons %}{% has_permission "service_regions.view" as can_regions %}
         {% if can_customers_c or can_salespeople_c or can_users or can_partners or can_sources or can_project_types or can_channels or can_loss_reasons or can_regions or can_materials %}
           <li class="menu-title mt-2">Cadastros</li>
@@ -79,7 +93,6 @@
           {% if can_materials %}
             <li><a href="{% url 'materials:list' %}" class="tp-link{% if request.resolver_match.url_name == 'list' and request.resolver_match.namespace == 'materials' %} active{% endif %}"><i data-feather="layers"></i><span>Materiais</span></a></li>
             <li><a href="{% url 'materials:categories' %}" class="tp-link{% if 'category' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="grid"></i><span>Categorias</span></a></li>
-            <li><a href="{% url 'materials:slabs' %}" class="tp-link{% if 'slab' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="copy"></i><span>Chapas</span></a></li>
             <li><a href="{% url 'materials:finishes' %}" class="tp-link{% if 'finish' in request.resolver_match.url_name %} active{% endif %}"><i data-feather="tool"></i><span>Acabamentos</span></a></li>
             <li><a href="{% url 'materials:services' %}" class="tp-link{% if 'service' in request.resolver_match.url_name and request.resolver_match.namespace == 'materials' %} active{% endif %}"><i data-feather="settings"></i><span>Serviços</span></a></li>
           {% endif %}

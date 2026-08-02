@@ -1,0 +1,36 @@
+{% extends "erp/list_base.html" %}
+
+{% block card_actions %}
+  <a href="{% url 'stock:slab_receive' %}" class="btn btn-sm btn-primary">Entrada</a>
+{% endblock card_actions %}
+
+{% block table_content %}
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-2"><select name="material" class="form-select"><option value="">Material</option>{% for m in materials %}<option value="{{ m.pk }}"{% if request.GET.material == m.pk|stringformat:'s' %} selected{% endif %}>{{ m.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="status" class="form-select"><option value="">Status</option>{% for val, label in status_choices %}<option value="{{ val }}"{% if request.GET.status == val %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><input type="text" name="q" class="form-control" placeholder="Buscar código" value="{{ request.GET.q }}"></div>
+  <div class="col-md-2"><button class="btn btn-light" type="submit">Filtrar</button></div>
+</form>
+<div class="table-responsive">
+  <table class="table table-sm">
+    <thead><tr><th>Código</th><th>Material</th><th>Dimensões</th><th>Total</th><th>Disponível</th><th>Reservada</th><th>Local</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for slab in page_obj %}
+        <tr>
+          <td><a href="{% url 'stock:slab_detail' slab.pk %}">{{ slab.slab_code }}</a></td>
+          <td>{{ slab.material.name }}</td>
+          <td>{{ slab.width_mm }}×{{ slab.height_mm }}×{{ slab.thickness_mm }}mm</td>
+          <td>{{ slab.total_area }} m²</td>
+          <td>{{ slab.available_area }} m²</td>
+          <td>{{ slab.reserved_area }} m²</td>
+          <td>{{ slab.location|default:"—" }}</td>
+          <td>{{ slab.get_status_display }}</td>
+          <td><a href="{% url 'stock:slab_detail' slab.pk %}">Detalhe</a></td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="9" class="text-muted">Nenhuma chapa.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock table_content %}

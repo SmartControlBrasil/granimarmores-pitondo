@@ -1,0 +1,6 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Código</th><th>Origem</th><th>Material</th><th>Área</th><th>Local</th><th>Status</th></tr></thead><tbody>
+{% for s in page_obj %}<tr><td><a href="{% url 'stock:slab_detail' s.pk %}">{{ s.slab_code }}</a></td><td>{% if s.parent_slab %}{{ s.parent_slab.slab_code }}{% else %}—{% endif %}</td><td>{{ s.material.name }}</td><td>{{ s.available_area }} m²</td><td>{{ s.location|default:"—" }}</td><td>{{ s.get_status_display }}</td></tr>{% empty %}<tr><td colspan="6" class="text-muted">Sem sobras.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock table_content %}

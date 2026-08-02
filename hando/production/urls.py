@@ -43,6 +43,7 @@ producao_urlpatterns = [
     path("ordens/<int:pk>/quadro/", views.production_order_board, name="production_order_board"),
     path("quadro/", views.production_board, name="board"),
     path("pecas/", views.piece_stage_list, name="piece_list"),
+    path("pecas/<int:pk>/", views.piece_detail, name="piece_detail"),
     path("etapas/", views.stage_list, name="stage_list"),
 ]
 

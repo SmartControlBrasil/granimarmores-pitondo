@@ -1,0 +1,37 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <div class="py-3 d-flex align-items-center flex-wrap gap-2">
+    <h4 class="fs-18 fw-semibold m-0 flex-grow-1">{{ slab.slab_code }}</h4>
+    <span class="badge bg-secondary">{{ slab.get_status_display }}</span>
+    {% if can_transfer %}<a class="btn btn-sm btn-light" href="{% url 'stock:slab_transfer' slab.pk %}">Transferir</a>{% endif %}
+    {% if can_block and slab.status != 'blocked' %}<a class="btn btn-sm btn-warning" href="{% url 'stock:slab_block' slab.pk %}">Bloquear</a>{% endif %}
+    {% if can_adjust %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'stock:slab_adjust' slab.pk %}">Ajustar</a>{% endif %}
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="card"><div class="card-body">
+        <p><strong>Material:</strong> {{ slab.material.name }}</p>
+        <p><strong>Fornecedor:</strong> {{ slab.supplier|default:"—" }}</p>
+        <p><strong>Lote:</strong> {{ slab.lot_number|default:"—" }} / {{ slab.batch|default:"—" }}</p>
+        <p><strong>Dimensões:</strong> {{ slab.width_mm }}×{{ slab.height_mm }}×{{ slab.thickness_mm }} mm</p>
+        <p><strong>Áreas:</strong> total {{ slab.total_area }} m² · disp. {{ slab.available_area }} · res. {{ slab.reserved_area }} · cons. {{ slab.consumed_area }} · perda {{ slab.lost_area }}</p>
+        {% if can_view_cost %}<p><strong>Custo:</strong> R$ {{ slab.cost_value }} ({{ slab.cost_per_m2 }}/m²)</p>{% endif %}
+        <p><strong>Localização:</strong> {{ slab.location|default:"—" }}{% if slab.rack %} · {{ slab.rack }}{% endif %}{% if slab.position %} · {{ slab.position }}{% endif %}</p>
+        {% if slab.parent_slab %}<p><strong>Origem:</strong> <a href="{% url 'stock:slab_detail' slab.parent_slab.pk %}">{{ slab.parent_slab.slab_code }}</a></p>{% endif %}
+      </div></div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card"><div class="card-body">
+        <h5>Reservas</h5>
+        {% for r in reservations %}<div class="small border-bottom py-1">{{ r.production_piece.code }} — {{ r.reserved_area }} m² — {{ r.get_status_display }}</div>{% empty %}<p class="text-muted mb-0">Sem reservas.</p>{% endfor %}
+      </div></div>
+      <div class="card mt-3"><div class="card-body">
+        <h5>Movimentações</h5>
+        {% for m in movements %}<div class="small border-bottom py-1">{{ m.occurred_at|date:"d/m/Y H:i" }} — {{ m.get_movement_type_display }} — {{ m.quantity_area }} m²</div>{% empty %}<p class="text-muted mb-0">Sem movimentações.</p>{% endfor %}
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock page_content %}

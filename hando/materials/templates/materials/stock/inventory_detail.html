@@ -1,0 +1,13 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="py-3">{{ inventory.number }} — {{ inventory.get_status_display }}</h4>
+  <p>Local: {{ inventory.location }}</p>
+  {% if inventory.status == 'draft' and can_inventory %}<form method="post" action="{% url 'stock:inventory_start' inventory.pk %}">{% csrf_token %}<button class="btn btn-primary btn-sm">Iniciar inventário</button></form>{% endif %}
+  {% if inventory.status == 'in_progress' and can_approve %}<a class="btn btn-success btn-sm" href="{% url 'stock:inventory_complete' inventory.pk %}">Concluir</a>{% endif %}
+  <div class="table-responsive mt-3"><table class="table table-sm"><thead><tr><th>Chapa</th><th>Esperado</th><th>Contado</th><th>Status</th><th></th></tr></thead><tbody>
+  {% for item in items %}<tr><td>{{ item.slab.slab_code }}</td><td>{{ item.expected_area }}</td><td>{{ item.counted_area|default:"—" }}</td><td>{{ item.get_status_display }}</td><td>{% if inventory.status == 'in_progress' %}<a href="{% url 'stock:inventory_count_item' inventory.pk item.pk %}">Contar</a>{% endif %}</td></tr>{% endfor %}
+  </tbody></table></div>
+</div>
+{% endblock page_content %}

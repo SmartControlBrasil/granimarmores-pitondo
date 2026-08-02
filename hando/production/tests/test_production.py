@@ -103,7 +103,12 @@ class ProductionFlowTests(TestCase):
             unit_price=Decimal("1000.00"),
             subtotal=Decimal("1000.00"),
         )
-        ProductionStage.objects.create(name="Corte", slug="corte", display_order=1, is_active=True)
+        ProductionStage.objects.create(
+            name="Medição final",
+            slug="medicao-final",
+            display_order=1,
+            is_active=True,
+        )
         QualityChecklist.objects.create(name="Padrão", slug="padrao-test", is_active=True)
 
     def test_acceptance_creates_order_and_score(self):

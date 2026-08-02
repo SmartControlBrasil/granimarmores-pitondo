@@ -237,6 +237,56 @@ PERFORMANCE_MANAGER = [
     "sales_score_events.view",
 ]
 
+STOCK_VIEW = [
+    "stock_dashboard.view",
+    "slabs.view",
+    "slab_reservations.view",
+    "slab_remnants.view",
+    "stock_movements.view",
+    "stock_locations.view",
+    "material_suppliers.view",
+    "stock_inventory.view",
+]
+
+STOCK_COMMERCIAL_VIEW = [
+    "stock_dashboard.view",
+    "slabs.view",
+    "slab_reservations.view",
+]
+
+STOCK_SELLER_VIEW = [
+    "slabs.view",
+]
+
+STOCK_OPERATIONS = [
+    *STOCK_VIEW,
+    "slabs.create",
+    "slabs.transfer",
+    "slab_reservations.reserve",
+    "slab_reservations.release",
+    "slab_consumption.consume",
+    "slab_losses.create",
+    "slab_remnants.create",
+    "slab_remnants.update",
+    "stock_inventory.inventory",
+    "slab_reservations.override_cut",
+]
+
+STOCK_MANAGER = [
+    *STOCK_OPERATIONS,
+    "slabs.block",
+    "slabs.unblock",
+    "slabs.update",
+    "stock_locations.create",
+    "stock_locations.update",
+    "material_suppliers.create",
+    "material_suppliers.update",
+    "stock_inventory.create",
+    "stock_inventory.approve_inventory",
+    "stock_adjustments.execute",
+    "stock_costs.view",
+]
+
 ORDERS_MANAGER = [
     "quotes.accept",
     "quotes.refuse",
@@ -254,7 +304,7 @@ ORDERS_MANAGER = [
     "installations.view",
     "installations.schedule",
     "installations.complete",
-]
+] + STOCK_COMMERCIAL_VIEW
 
 ORDERS_SELLER = [
     "quotes.accept",
@@ -264,7 +314,7 @@ ORDERS_SELLER = [
     "production_dashboard.view",
     "deliveries.view",
     "installations.view",
-]
+] + STOCK_SELLER_VIEW
 
 PRODUCTION_OPERATIONS = [
     "sales_orders.view",
@@ -332,7 +382,7 @@ QUALITY_CHECKLIST_ITEMS = [
 SYSTEM_ROLE_PERMISSIONS = {
     "Gestor Comercial": COMMERCIAL_MASTER_EDIT + LEADS_MANAGER + PERFORMANCE_MANAGER + ORDERS_MANAGER,
     "Vendedor": COMMERCIAL_MASTER_VIEW + LEADS_SELLER + PERFORMANCE_SELLER + ORDERS_SELLER,
-    "Operacional": ["project_types.view", "service_regions.view", "leads.view"] + PRODUCTION_OPERATIONS,
+    "Operacional": ["project_types.view", "service_regions.view", "leads.view"] + PRODUCTION_OPERATIONS + STOCK_OPERATIONS,
 }
 
 

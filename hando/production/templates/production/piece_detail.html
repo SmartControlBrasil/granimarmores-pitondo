@@ -1,0 +1,13 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="py-3">{{ piece.code }} — {{ piece.description }}</h4>
+  <p>OP: <a href="{% url 'producao:production_detail' piece.production_order.pk %}">{{ piece.production_order.number }}</a></p>
+  {% if can_reserve %}<a class="btn btn-primary btn-sm mb-3" href="{% url 'stock:piece_reserve' piece.pk %}">Reservar chapa</a>{% endif %}
+  <div class="card mb-3"><div class="card-body"><h5>Reservas</h5>
+  {% for r in reservations %}<div class="border-bottom py-1">{{ r.slab.slab_code }} — {{ r.reserved_area }} m² — {{ r.get_status_display }}{% if can_consume and r.status == 'active' %} · <a href="{% url 'stock:reservation_consume' r.pk %}">Consumir</a>{% endif %}{% if can_release and r.status == 'active' %} · <a href="{% url 'stock:reservation_release' r.pk %}">Liberar</a>{% endif %}</div>{% empty %}<p class="text-muted">Sem reservas ativas.</p>{% endfor %}
+  </div></div>
+  <div class="card"><div class="card-body"><h5>Etapas</h5>{% for st in stages %}<div class="small">{{ st.sequence }}. {{ st.stage.name }} — {{ st.get_status_display }}</div>{% endfor %}</div></div>
+</div>
+{% endblock page_content %}

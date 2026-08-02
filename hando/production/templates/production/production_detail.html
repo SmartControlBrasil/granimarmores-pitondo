@@ -22,8 +22,17 @@
           <h5 class="card-title">Peças</h5>
           {% for piece in pieces %}
             <div class="border rounded p-2 mb-2">
-              <strong>{{ piece.code }}</strong> — {{ piece.description }}
+              <strong><a href="{% url 'producao:piece_detail' piece.pk %}">{{ piece.code }}</a></strong> — {{ piece.description }}
               <div class="small text-muted">{{ piece.get_status_display }}</div>
+              {% with active=piece.slab_reservations.all %}
+                {% for r in active %}
+                  {% if r.status == 'active' or r.status == 'partially_consumed' %}
+                    <div class="small">Chapa: {{ r.slab.slab_code }} · {{ r.reserved_area }} m² · {{ r.get_status_display }}</div>
+                  {% endif %}
+                {% empty %}
+                  <div class="small text-warning">Sem chapa reservada</div>
+                {% endfor %}
+              {% endwith %}
             </div>
           {% empty %}
             <p class="text-muted mb-0">Sem peças.</p>

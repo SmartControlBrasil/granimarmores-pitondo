@@ -1,0 +1,6 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="table-responsive"><table class="table table-sm"><thead><tr><th>Data</th><th>Chapa</th><th>Tipo</th><th>Área</th><th>Usuário</th></tr></thead><tbody>
+{% for m in page_obj %}<tr><td>{{ m.occurred_at|date:"d/m/Y H:i" }}</td><td>{{ m.slab.slab_code }}</td><td>{{ m.get_movement_type_display }}</td><td>{{ m.quantity_area }}</td><td>{{ m.created_by }}</td></tr>{% empty %}<tr><td colspan="5" class="text-muted">Sem movimentações.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock table_content %}
