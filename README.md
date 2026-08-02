@@ -208,5 +208,6 @@ python manage.py test
 | [docs/FINANCE.md](docs/FINANCE.md) | Financeiro operacional e fluxo de caixa |
 | [docs/PURCHASING.md](docs/PURCHASING.md) | Compras, fornecedores e abastecimento |
 | [docs/COMMISSIONS.md](docs/COMMISSIONS.md) | Comissões comerciais e fechamentos |
+| [docs/DOCUMENT_MANAGEMENT.md](docs/DOCUMENT_MANAGEMENT.md) | Documentos, contratos e aprovações |
 | [docs/ADMIN_NAVIGATION.md](docs/ADMIN_NAVIGATION.md) | Sidebar e menus dropdown do painel |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |

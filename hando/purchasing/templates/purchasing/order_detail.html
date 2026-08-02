@@ -10,6 +10,10 @@
       {% if can_rec %}<a class="btn btn-sm btn-primary" href="{% url 'purchasing:receipt_create' %}?order={{ obj.pk }}">Receber</a>{% endif %}
       {% if can_generate_payable and not obj.payable_id %}<a class="btn btn-sm btn-outline-primary" href="{% url 'purchasing:order_generate_payable' obj.pk %}">Gerar conta a pagar</a>{% endif %}
       {% if obj.payable_id %}<span class="badge bg-success">AP {{ obj.payable.number }}</span>{% endif %}
+      {% has_permission "documents.create" as can_doc_create %}
+      {% has_permission "documents.view" as can_doc_view %}
+      {% if can_doc_create %}<a class="btn btn-sm btn-outline-primary" href="{% url 'documents:document_from_template' %}?purchase_order={{ obj.pk }}">Documento do fornecedor</a>{% endif %}
+      {% if can_doc_view %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:document_list' %}?purchase_order={{ obj.pk }}">Ver documentos</a>{% endif %}
     </div>
   </div>
   <p>{{ obj.supplier.name }} · {{ obj.order_date }} · Total {{ obj.total_amount }} · Previsão {{ obj.expected_delivery_date|default:"—" }}</p>

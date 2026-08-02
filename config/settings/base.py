@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     "finance",
     "purchasing",
     "commissions",
+    "documents",
 ]
 
 # Painel executivo: cache curto por usuário/filtros (0 desativa)
@@ -123,6 +124,10 @@ MEDIA_LIBRARY_MAX_DOCUMENT_SIZE_MB = 20
 MEDIA_LIBRARY_MAX_FILES_PER_BATCH = 20
 MEDIA_LIBRARY_ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]
 MEDIA_LIBRARY_ALLOWED_DOCUMENT_TYPES = ["application/pdf"]
+
+# Documentos e contratos (operacional; sem assinatura digital)
+DOCUMENT_EXPIRATION_WARNING_DAYS = env.int("DOCUMENT_EXPIRATION_WARNING_DAYS", default=30)
+DOCUMENT_MAX_UPLOAD_SIZE_MB = env.int("DOCUMENT_MAX_UPLOAD_SIZE_MB", default=20)
 
 
 # =============================================================================

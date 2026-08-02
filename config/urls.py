@@ -43,6 +43,7 @@ urlpatterns = [
     path("painel/compras/", include("purchasing.urls", namespace="purchasing")),
     path("painel/comissoes/", include("commissions.urls", namespace="commissions")),
     path("painel/comercial/minhas-comissoes/", my_commissions, name="my_commissions"),
+    path("painel/documentos/", include("documents.urls", namespace="documents")),
     path("painel/cadastros/", include("commercial.urls", namespace="commercial")),
     path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
     path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),

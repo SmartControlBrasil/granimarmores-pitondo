@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>{{ obj.number }}</title>
+  <style>
+    body{font-family:Georgia,serif;margin:24px;color:#111}
+    h1{font-size:20px;margin-bottom:4px}
+    .meta{font-size:12px;color:#444;margin-bottom:24px}
+    .content{white-space:pre-wrap;font-size:14px;line-height:1.5}
+    @media print{button{display:none}}
+  </style>
+</head>
+<body>
+  <button onclick="window.print()">Imprimir</button>
+  <h1>{{ obj.title }}</h1>
+  <div class="meta">
+    {{ obj.number }} · Versão {% if version %}{{ version.version_number }}{% else %}—{% endif %} ·
+    {{ obj.document_type.name }} · {{ obj.get_status_display }} ·
+    {% now "d/m/Y" %}
+  </div>
+  <div class="content">{% if version %}{{ version.rendered_content|default:version.content }}{% endif %}</div>
+</body>
+</html>

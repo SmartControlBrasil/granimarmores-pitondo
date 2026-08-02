@@ -119,6 +119,7 @@ class SidebarDropdownTests(TestCase):
             "sidebarSchedule",
             "sidebarAfterSales",
             "sidebarMedia",
+            "sidebarDocuments",
             "sidebarFinance",
             "sidebarPurchasing",
             "sidebarCommissions",
@@ -188,8 +189,10 @@ class SidebarDropdownTests(TestCase):
         response = self.client.get(reverse("pages:dashboard"))
         content = response.content.decode()
         self.assertEqual(content.count('aria-controls="sidebarFinance"'), 1)
+        self.assertEqual(content.count('aria-controls="sidebarDocuments"'), 1)
         self.assertEqual(content.count('aria-controls="sidebarPurchasing"'), 1)
         self.assertEqual(content.count('aria-controls="sidebarCommissions"'), 1)
         self.assertEqual(content.count('aria-controls="sidebarAdministration"'), 1)
         self.assertEqual(content.count('href="#sidebarFinance"'), 1)
+        self.assertEqual(content.count('href="#sidebarDocuments"'), 1)
         self.assertEqual(content.count("Resumo de Cadastros"), 1)

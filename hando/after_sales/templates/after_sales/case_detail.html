@@ -1,5 +1,6 @@
 {% extends "vertical.html" %}
 {% load crispy_forms_tags %}
+{% load erp_permissions %}
 {% block title %}{{ page_title }}{% endblock title %}
 {% block page_content %}
 <div class="container-fluid">
@@ -72,6 +73,10 @@
       <div class="card mb-3"><div class="card-body">
         <h5>Ações rápidas</h5>
         <a href="{% url 'media_library:upload_after_sales' case.pk %}" class="btn btn-outline-secondary btn-sm w-100 mb-2">Adicionar mídia</a>
+        {% has_permission "documents.create" as can_doc_create %}
+        {% has_permission "documents.view" as can_doc_view %}
+        {% if can_doc_create %}<a href="{% url 'documents:document_create' %}?after_sales_case={{ case.pk }}" class="btn btn-outline-primary btn-sm w-100 mb-2">Novo documento</a>{% endif %}
+        {% if can_doc_view %}<a href="{% url 'documents:document_list' %}?after_sales_case={{ case.pk }}" class="btn btn-outline-secondary btn-sm w-100 mb-2">Documentos vinculados</a>{% endif %}
         <form method="post" action="{% url 'after_sales:case_triage' case.pk %}" class="mb-2">{% csrf_token %}<button class="btn btn-light btn-sm w-100">Triar</button></form>
         <form method="post" action="{% url 'after_sales:case_start' case.pk %}" class="mb-2">{% csrf_token %}<button class="btn btn-light btn-sm w-100">Iniciar atendimento</button></form>
         <form method="post" action="{% url 'after_sales:case_evaluate_warranty' case.pk %}" class="mb-2">{% csrf_token %}<button class="btn btn-light btn-sm w-100">Avaliar garantia</button></form>

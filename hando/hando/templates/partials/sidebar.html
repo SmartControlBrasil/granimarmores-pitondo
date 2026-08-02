@@ -246,6 +246,35 @@
           </li>
         {% endif %}
 
+        {% has_permission "document_dashboard.view" as can_doc_dash %}
+        {% has_permission "documents.view" as can_docs %}
+        {% has_permission "documents.view_all" as can_docs_all %}
+        {% has_permission "documents.create" as can_docs_create %}
+        {% has_permission "document_templates.view" as can_doc_tpl %}
+        {% has_permission "documents.approve" as can_doc_appr %}
+        {% has_permission "document_types.view" as can_doc_types %}
+        {% if can_doc_dash or can_docs or can_docs_all or can_docs_create or can_doc_tpl or can_doc_appr or can_doc_types %}
+          {% nav_active "documents" as documents_open %}
+          <li class="{% if documents_open %}menuitem-active{% endif %}">
+            <a href="#sidebarDocuments" data-bs-toggle="collapse" role="button" aria-expanded="{% if documents_open %}true{% else %}false{% endif %}" aria-controls="sidebarDocuments" class="tp-link">
+              <i data-feather="file-text"></i><span>Documentos</span><span class="menu-arrow"></span>
+            </a>
+            <div class="collapse{% if documents_open %} show{% endif %}" id="sidebarDocuments">
+              <ul class="nav-second-level">
+                {% if can_doc_dash %}{% nav_active "documents:dashboard" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:dashboard' %}" class="tp-link{% if a %} active{% endif %}"><span>Dashboard</span></a></li>{% endif %}
+                {% if can_docs or can_docs_all %}{% nav_active "documents:document_list" "documents:document_detail" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:document_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Biblioteca</span></a></li>{% endif %}
+                {% if can_docs_create %}{% nav_active "documents:document_create" "documents:document_from_template" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:document_create' %}" class="tp-link{% if a %} active{% endif %}"><span>Novo Documento</span></a></li>{% endif %}
+                {% if can_doc_tpl %}{% nav_active "documents:template*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:template_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Modelos</span></a></li>{% endif %}
+                {% if can_docs or can_docs_all %}{% nav_active "documents:review_queue" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:review_queue' %}" class="tp-link{% if a %} active{% endif %}"><span>Revisões</span></a></li>{% endif %}
+                {% if can_doc_appr %}{% nav_active "documents:approval_queue" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:approval_queue' %}" class="tp-link{% if a %} active{% endif %}"><span>Aprovações</span></a></li>{% endif %}
+                {% if can_docs or can_docs_all %}{% nav_active "documents:acceptance_queue" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:acceptance_queue' %}" class="tp-link{% if a %} active{% endif %}"><span>Aguardando Aceite</span></a></li>{% endif %}
+                {% if can_docs or can_docs_all %}{% nav_active "documents:expiration_list" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:expiration_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Vencimentos</span></a></li>{% endif %}
+                {% if can_doc_types %}{% nav_active "documents:type*" as a %}<li class="{% if a %}menuitem-active{% endif %}"><a href="{% url 'documents:type_list' %}" class="tp-link{% if a %} active{% endif %}"><span>Tipos</span></a></li>{% endif %}
+              </ul>
+            </div>
+          </li>
+        {% endif %}
+
         {% has_permission "finance_dashboard.view" as can_fin_dash %}
         {% has_permission "accounts_receivable.view" as can_ar %}
         {% has_permission "accounts_payable.view" as can_ap %}

@@ -1,0 +1,15 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <h4 class="mb-3">{{ page_title }}</h4>
+  {% if placeholder_help %}<p class="small text-muted">Placeholders: {{ placeholder_help }}</p>{% endif %}
+  <div class="card"><div class="card-body">
+    <form method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      <a class="btn btn-light" href="javascript:history.back()">Voltar</a>
+    </form>
+  </div></div>
+</div>
+{% endblock %}

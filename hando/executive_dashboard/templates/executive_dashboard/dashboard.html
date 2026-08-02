@@ -375,6 +375,19 @@
     </div>
   {% endif %}
 
+  {% if "documents" in domains and documents %}
+    <div class="card mb-4">
+      <div class="card-header"><h5 class="mb-0">Documentos</h5></div>
+      <div class="card-body row g-2">
+        <div class="col-md-2"><small class="text-muted">Contratos ativos</small><div>{{ documents.active_contracts|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Vencendo</small><div>{{ documents.expiring|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Aguard. aceite</small><div>{{ documents.awaiting_acceptance|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Vencidos</small><div>{{ documents.expired|default:0 }}</div></div>
+        <div class="col-md-2"><small class="text-muted">Forn. vencidos</small><div>{{ documents.supplier_expired|default:0 }}</div></div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if "audit" in domains %}
     <div class="card mb-4">
       <div class="card-header"><h5 class="mb-0">Governança e auditoria</h5></div>

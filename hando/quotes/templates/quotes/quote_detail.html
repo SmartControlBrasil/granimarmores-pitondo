@@ -1,4 +1,5 @@
 {% extends "vertical.html" %}
+{% load erp_permissions %}
 
 {% block title %}
   {{ page_title }}
@@ -89,6 +90,15 @@
               <a href="{% url 'quotes:approve' quote.pk %}" class="btn btn-success">Aprovar</a>
               <a href="{% url 'quotes:reject' quote.pk %}" class="btn btn-warning">Rejeitar</a>
               <a href="{% url 'quotes:cancel' quote.pk %}" class="btn btn-danger">Cancelar</a>
+              {% has_permission "documents.create" as can_doc_create %}
+              {% has_permission "documents.view" as can_doc_view %}
+              {% if can_doc_create %}
+                <a href="{% url 'documents:document_from_template' %}?quote={{ quote.pk }}" class="btn btn-outline-primary">Gerar proposta documental</a>
+                <a href="{% url 'documents:document_create' %}?quote={{ quote.pk }}&type=termo-de-aceite" class="btn btn-outline-primary">Gerar termo de aceite</a>
+              {% endif %}
+              {% if can_doc_view %}
+                <a href="{% url 'documents:document_list' %}?quote={{ quote.pk }}" class="btn btn-outline-secondary">Ver documentos</a>
+              {% endif %}
             </div>
           </div>
         </div>

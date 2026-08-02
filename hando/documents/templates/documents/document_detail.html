@@ -1,0 +1,63 @@
+{% extends "vertical.html" %}
+{% load erp_permissions %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between mb-3 flex-wrap gap-2">
+    <div>
+      <h4 class="m-0">{{ obj.number }} — {{ obj.title }}</h4>
+      <span class="badge bg-secondary">{{ obj.get_status_display }}</span>
+      <span class="badge bg-light text-dark">{{ obj.get_confidentiality_display }}</span>
+    </div>
+    <div class="d-flex flex-wrap gap-1">
+      {% has_permission "documents.submit_review" as can_sub %}
+      {% has_permission "documents.approve" as can_ap %}
+      {% has_permission "documents.send" as can_send %}
+      {% has_permission "documents.accept" as can_acc %}
+      {% has_permission "documents.register_signature" as can_sig %}
+      {% has_permission "documents.update" as can_up %}
+      {% has_permission "documents.print" as can_print %}
+      {% has_permission "documents.renew" as can_ren %}
+      {% has_permission "documents.cancel" as can_can %}
+      {% if can_sub and obj.status == "draft" %}<form method="post" action="{% url 'documents:document_submit_review' obj.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-primary">Enviar revisão</button></form>{% endif %}
+      {% if can_ap and obj.status == "under_review" %}<a class="btn btn-sm btn-success" href="{% url 'documents:document_approve' obj.pk %}">Aprovar</a><a class="btn btn-sm btn-outline-danger" href="{% url 'documents:document_reject' obj.pk %}">Rejeitar</a>{% endif %}
+      {% if can_send %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:document_send' obj.pk %}">Registrar envio</a>{% endif %}
+      {% if can_acc %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:document_accept' obj.pk %}">Aceite</a>{% endif %}
+      {% if can_sig %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:document_signature' obj.pk %}">Assinatura</a>{% endif %}
+      {% if can_up %}<a class="btn btn-sm btn-outline-primary" href="{% url 'documents:document_new_version' obj.pk %}">Nova versão</a>{% endif %}
+      {% if can_print %}<a class="btn btn-sm btn-light" href="{% url 'documents:document_print' obj.pk %}" target="_blank">Imprimir</a>{% endif %}
+      {% if can_ren %}<a class="btn btn-sm btn-light" href="{% url 'documents:document_renew' obj.pk %}">Renovar</a>{% endif %}
+      {% if can_can %}<a class="btn btn-sm btn-outline-danger" href="{% url 'documents:document_cancel' obj.pk %}">Cancelar</a>{% endif %}
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-8">
+      <div class="card mb-3"><div class="card-header">Conteúdo (versão atual)</div><div class="card-body">
+        {% if obj.current_version %}
+          <pre class="mb-0" style="white-space:pre-wrap">{{ obj.current_version.rendered_content|default:obj.current_version.content }}</pre>
+          {% if obj.current_version.media_asset %}<p class="mt-2 mb-0">Arquivo vinculado: {{ obj.current_version.media_asset.code }}</p>{% endif %}
+        {% else %}<p class="text-muted mb-0">Sem versão.</p>{% endif %}
+      </div></div>
+      <div class="card mb-3"><div class="card-header">Versões</div><ul class="list-group list-group-flush">
+        {% for v in versions %}<li class="list-group-item">v{{ v.version_number }} — {{ v.get_status_display }} — {{ v.change_summary|default:"—" }}</li>{% empty %}<li class="list-group-item text-muted">Sem versões</li>{% endfor %}
+      </ul></div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card mb-3"><div class="card-body">
+        <p><strong>Tipo:</strong> {{ obj.document_type.name }}</p>
+        <p><strong>Cliente:</strong> {% firstof obj.customer.name "—" %}</p>
+        <p><strong>Fornecedor:</strong> {% firstof obj.supplier.name "—" %}</p>
+        <p><strong>Orçamento:</strong> {% firstof obj.quote.number "—" %}</p>
+        <p><strong>Pedido:</strong> {% firstof obj.sales_order.number "—" %}</p>
+        <p><strong>Compra:</strong> {% firstof obj.purchase_order.number "—" %}</p>
+        <p><strong>Vigência:</strong> {{ obj.effective_date|default:"—" }} → {{ obj.expiration_date|default:"—" }}</p>
+        <p><strong>Responsável:</strong> {% firstof obj.responsible_user.get_username "—" %}</p>
+      </div></div>
+      <div class="card mb-3"><div class="card-header">Aceites / Assinaturas</div><ul class="list-group list-group-flush">
+        {% for a in acceptances %}<li class="list-group-item">{{ a.get_status_display }} — {{ a.accepted_by_name }}</li>{% empty %}<li class="list-group-item text-muted">Sem aceites</li>{% endfor %}
+        {% for s in signatures %}<li class="list-group-item">Assinatura: {{ s.signer_name }} ({{ s.get_signature_type_display }})</li>{% endfor %}
+      </ul></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -58,6 +58,14 @@
           <a href="{% url 'after_sales:pending_create' %}?order={{ order.pk }}" class="btn btn-light w-100 mb-2">Registrar pendência</a>
           <a href="{% url 'after_sales:case_create' %}?order={{ order.pk }}" class="btn btn-outline-secondary w-100 mb-2">Abrir caso pós-venda</a>
           <a href="{% url 'media_library:order_gallery' order.pk %}" class="btn btn-outline-secondary w-100 mb-2">Galeria do pedido</a>
+          {% has_permission "documents.create" as can_doc_create %}
+          {% has_permission "documents.view" as can_doc_view %}
+          {% if can_doc_create %}
+            <a href="{% url 'documents:document_from_template' %}?sales_order={{ order.pk }}" class="btn btn-outline-primary w-100 mb-2">Novo documento do pedido</a>
+          {% endif %}
+          {% if can_doc_view %}
+            <a href="{% url 'documents:document_list' %}?sales_order={{ order.pk }}" class="btn btn-outline-secondary w-100 mb-2">Documentos do pedido</a>
+          {% endif %}
           <a href="{% url 'scheduling:order_schedule' order.pk %}" class="btn btn-outline-primary w-100 mb-2">Agenda operacional</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}?type=measurement" class="btn btn-outline-info w-100 mb-2">Agendar medição</a>
           <a href="{% url 'scheduling:order_schedule' order.pk %}?type=return" class="btn btn-outline-info w-100 mb-2">Agendar retorno técnico</a>

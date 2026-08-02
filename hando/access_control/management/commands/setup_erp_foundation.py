@@ -714,6 +714,71 @@ COMMISSIONS_FINANCE = [
     "commission_values.view",
 ]
 
+DOCUMENTS_MANAGER = [
+    "document_dashboard.view",
+    "documents.view",
+    "documents.view_all",
+    "documents.create",
+    "documents.update",
+    "documents.submit_review",
+    "documents.approve",
+    "documents.reject",
+    "documents.send",
+    "documents.accept",
+    "documents.reject_acceptance",
+    "documents.register_signature",
+    "documents.cancel",
+    "documents.terminate",
+    "documents.renew",
+    "documents.archive",
+    "documents.print",
+    "documents.export",
+    "document_templates.view",
+    "document_templates.create",
+    "document_templates.update",
+    "document_templates.approve",
+    "document_templates.deactivate",
+    "document_types.view",
+    "document_types.create",
+    "document_types.update",
+    "document_reviews.view",
+    "document_reviews.decide",
+    "document_confidential.view",
+    "executive_dashboard.view_documents",
+]
+
+DOCUMENTS_SELLER = [
+    "documents.view",
+    "documents.create",
+    "documents.update",
+    "documents.send",
+    "documents.print",
+    "document_templates.view",
+    "document_types.view",
+]
+
+DOCUMENTS_OPERATIONS = [
+    "documents.view",
+    "documents.create",
+    "documents.update",
+    "documents.print",
+    "document_types.view",
+]
+
+DOCUMENT_TYPE_SEEDS = [
+    ("Proposta Comercial", "proposta-comercial", "commercial", 10, True, False, False, False, None, False),
+    ("Contrato de Prestação de Serviços", "contrato-prestacao-servicos", "contract", 20, True, True, True, True, 365, True),
+    ("Termo de Aceite", "termo-de-aceite", "commercial", 30, True, True, False, False, None, False),
+    ("Termo de Entrega", "termo-de-entrega", "operational", 40, True, True, False, False, None, False),
+    ("Termo de Instalação", "termo-de-instalacao", "operational", 50, True, True, False, False, None, False),
+    ("Autorização de Uso de Imagem", "autorizacao-uso-imagem", "consent", 60, True, True, False, True, 730, False),
+    ("Relatório Técnico", "relatorio-tecnico", "technical", 70, True, False, False, False, None, False),
+    ("Laudo de Inspeção", "laudo-de-inspecao", "technical", 80, True, False, False, False, None, False),
+    ("Documento de Garantia", "documento-de-garantia", "warranty", 90, True, False, False, True, 365, False),
+    ("Contrato de Fornecedor", "contrato-de-fornecedor", "supplier", 100, True, True, True, True, 365, True),
+    ("Documento Interno", "documento-interno", "internal", 110, False, False, False, False, None, False),
+]
+
 EXECUTIVE_OPERATIONS = [
     "executive_dashboard.view_production",
     "executive_dashboard.view_stock",
@@ -729,18 +794,21 @@ SYSTEM_ROLE_PERMISSIONS = {
     + ORDERS_MANAGER
     + EXECUTIVE_COMMERCIAL
     + FINANCE_COMMERCIAL
-    + COMMISSIONS_MANAGER,
+    + COMMISSIONS_MANAGER
+    + DOCUMENTS_MANAGER,
     "Vendedor": COMMERCIAL_MASTER_VIEW
     + LEADS_SELLER
     + PERFORMANCE_SELLER
     + ORDERS_SELLER
     + FINANCE_SELLER
-    + COMMISSIONS_SELLER,
+    + COMMISSIONS_SELLER
+    + DOCUMENTS_SELLER,
     "Operacional": ["project_types.view", "service_regions.view", "leads.view"]
     + PRODUCTION_OPERATIONS
     + STOCK_OPERATIONS
     + EXECUTIVE_OPERATIONS
-    + PURCHASING_OPERATIONS,
+    + PURCHASING_OPERATIONS
+    + DOCUMENTS_OPERATIONS,
 }
 
 FINANCE_CATEGORY_SEEDS = [
@@ -868,6 +936,43 @@ def _seed_loss_reasons():
                 "category": category,
                 "display_order": order,
                 "is_active": True,
+            },
+        )
+        created += int(was_created)
+        updated += int(not was_created)
+    return created, updated
+
+
+def _seed_document_types():
+    from documents.models import DocumentType
+
+    created = updated = 0
+    for (
+        name,
+        code,
+        category,
+        order,
+        requires_approval,
+        requires_acceptance,
+        requires_signature,
+        has_validity,
+        validity_days,
+        allows_renewal,
+    ) in DOCUMENT_TYPE_SEEDS:
+        _, was_created = DocumentType.objects.update_or_create(
+            code=code,
+            defaults={
+                "name": name,
+                "category": category,
+                "display_order": order,
+                "requires_internal_approval": requires_approval,
+                "requires_customer_acceptance": requires_acceptance,
+                "requires_signature": requires_signature,
+                "has_validity": has_validity,
+                "default_validity_days": validity_days,
+                "allows_renewal": allows_renewal,
+                "is_active": True,
+                "description": "",
             },
         )
         created += int(was_created)
@@ -1079,6 +1184,7 @@ class Command(BaseCommand):
             fin_pt_c,
             fin_pt_u,
         ) = _seed_finance_masters()
+        doc_type_c, doc_type_u = _seed_document_types()
 
         user_model = get_user_model()
         admin_username = options.get("admin_username")
@@ -1112,7 +1218,8 @@ class Command(BaseCommand):
                 f"Financeiro cat:+{fin_cat_c}/~{fin_cat_u} "
                 f"centros:+{fin_cc_c}/~{fin_cc_u} "
                 f"formas:+{fin_pm_c}/~{fin_pm_u} "
-                f"condições:+{fin_pt_c}/~{fin_pt_u}."
+                f"condições:+{fin_pt_c}/~{fin_pt_u}. "
+                f"Tipos documento:+{doc_type_c}/~{doc_type_u}."
                 f"{policy_note}"
             ),
         )
