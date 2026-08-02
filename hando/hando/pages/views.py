@@ -32,6 +32,7 @@ from production.selectors import overdue_production_orders
 from production.selectors import sales_orders_queryset_for_user
 from after_sales.selectors import main_dashboard_after_sales_summary
 from materials.stock_selectors import main_dashboard_stock_summary
+from media_library.selectors import main_dashboard_media_summary
 from quotes.models import Quote
 from scheduling.selectors import main_dashboard_schedule_summary
 from salespeople.models import Salesperson
@@ -259,6 +260,7 @@ def root_page_view(request):
         schedule_summary = main_dashboard_schedule_summary(user)
 
     after_sales_summary = main_dashboard_after_sales_summary(user)
+    media_summary = main_dashboard_media_summary(user)
 
     context = {
         "cards": cards,
@@ -267,6 +269,7 @@ def root_page_view(request):
         "stock_summary": stock_summary,
         "schedule_summary": schedule_summary,
         "after_sales_summary": after_sales_summary,
+        "media_summary": media_summary,
         "latest_events": AuditEvent.objects.select_related("user")[:8]
         if user_has_permission(user, "audit.view")
         else [],

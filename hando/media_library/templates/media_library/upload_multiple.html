@@ -1,0 +1,14 @@
+{% extends "vertical.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
+  <div class="card mb-3"><div class="card-body">
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}{% crispy form %}<button class="btn btn-primary">Enviar</button></form>
+  </div></div>
+  {% if results %}<div class="card"><div class="card-body"><h5>Resultado</h5>
+    {% for r in results %}<div>{% if r.ok %}OK — {{ r.asset.code }} ({{ r.name }}){% if r.duplicate %} · duplicidade{% endif %}{% else %}Falha — {{ r.name }}: {{ r.error }}{% endif %}</div>{% endfor %}
+  </div></div>{% endif %}
+</div>
+{% endblock page_content %}

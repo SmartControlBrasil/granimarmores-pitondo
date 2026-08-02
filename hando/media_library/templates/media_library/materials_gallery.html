@@ -1,0 +1,5 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<form method="get" class="mb-3"><select name="material" class="form-select w-auto d-inline"><option value="">Material</option>{% for m in materials %}<option value="{{ m.pk }}"{% if request.GET.material == m.pk|stringformat:'s' %} selected{% endif %}>{{ m.name }}</option>{% endfor %}</select> <button class="btn btn-light">Filtrar</button></form>
+<div class="row g-3">{% for asset in page_obj %}<div class="col-md-3"><a href="{% url 'media_library:asset_detail' asset.pk %}">{{ asset.code }}</a><div class="small">{{ asset.material }}</div></div>{% empty %}<p class="text-muted">Sem mídias.</p>{% endfor %}</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
+  {% if metrics.alerts %}{% for a in metrics.alerts %}<div class="alert alert-{{ a.level }} py-2">{{ a.message }}</div>{% endfor %}{% endif %}
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Total</div><div class="fs-20 fw-bold">{{ metrics.total }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Uploads no período</div><div class="fs-20 fw-bold">{{ metrics.uploads_period }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Portfólio</div><div class="fs-20 fw-bold">{{ metrics.portfolio_approved }}</div></div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body"><div class="text-muted small">Espaço</div><div class="fs-20 fw-bold">{{ metrics.space_mb }} MB</div></div></div></div>
+  </div>
+  <div class="row g-3">
+    <div class="col-md-3"><div class="card"><div class="card-body">Imagens: {{ metrics.images }}</div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body">Documentos: {{ metrics.documents }}</div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body">Sem categoria: {{ metrics.no_category }}</div></div></div>
+    <div class="col-md-3"><div class="card"><div class="card-body">Em revisão: {{ metrics.under_review }}</div></div></div>
+  </div>
+</div>
+{% endblock page_content %}

@@ -1,0 +1,16 @@
+{% extends "vertical.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ collection.code }} — {{ collection.name }}</h4>
+  <div class="row g-3">
+    <div class="col-lg-8"><div class="card"><div class="card-body">
+      {% for item in items %}<div class="border-bottom py-2"><a href="{% url 'media_library:asset_detail' item.asset.pk %}">{{ item.asset.code }}</a> {% if item.is_cover %}<span class="badge bg-primary">Capa</span>{% endif %} — {{ item.caption }}</div>{% empty %}<p class="text-muted">Sem itens.</p>{% endfor %}
+    </div></div></div>
+    <div class="col-lg-4"><div class="card"><div class="card-body"><h6>Adicionar mídia</h6>
+      <form method="post">{% csrf_token %}{{ form|crispy }}<button class="btn btn-primary btn-sm">Adicionar</button></form>
+    </div></div></div>
+  </div>
+</div>
+{% endblock %}

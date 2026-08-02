@@ -1,0 +1,13 @@
+{% extends "vertical.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+{% block page_content %}
+<div class="container-fluid">
+  <h4 class="fs-18 fw-semibold py-3">{{ page_title }}</h4>
+  {% for key, qs in queues.items %}
+  <div class="card mb-3"><div class="card-body">
+    <h5>{{ key }} ({{ qs|length }})</h5>
+    {% for a in qs|slice:":20" %}<div><a href="{% url 'media_library:asset_detail' a.pk %}">{{ a.code }}</a> — {{ a.title }}</div>{% empty %}<p class="text-muted">Vazio.</p>{% endfor %}
+  </div></div>
+  {% endfor %}
+</div>
+{% endblock page_content %}

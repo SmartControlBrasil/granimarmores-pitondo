@@ -145,6 +145,25 @@
     </div>
   {% endif %}
 
+  {% if media_summary %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Mídia</h5>
+            <a href="{% url 'media_library:dashboard' %}" class="btn btn-sm btn-outline-primary">Dashboard de Mídia</a>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-3"><p class="text-muted mb-1">Aguardando revisão</p><h4>{{ media_summary.under_review }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Consentimentos pendentes</p><h4>{{ media_summary.pending_consent }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Candidatos ao portfólio</p><h4>{{ media_summary.portfolio_candidates }}</h4></div>
+            <div class="col-md-3"><p class="text-muted mb-1">Arquivos com problema</p><h4>{{ media_summary.problems }}</h4></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if lead_links %}
     <div class="row mt-2">
       <div class="col-12">

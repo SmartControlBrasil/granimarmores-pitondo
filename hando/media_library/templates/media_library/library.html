@@ -1,0 +1,27 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}
+  <a href="{% url 'media_library:upload' %}" class="btn btn-sm btn-primary">Upload</a>
+  <a href="{% url 'media_library:upload_multiple' %}" class="btn btn-sm btn-outline-primary">Múltiplo</a>
+{% endblock card_actions %}
+{% block table_content %}
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-2"><input class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar"></div>
+  <div class="col-md-2"><select name="status" class="form-select"><option value="">Status</option>{% for v,l in status_choices %}<option value="{{ v }}"{% if request.GET.status == v %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="media_type" class="form-select"><option value="">Tipo</option>{% for v,l in type_choices %}<option value="{{ v }}"{% if request.GET.media_type == v %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select name="category" class="form-select"><option value="">Categoria</option>{% for c in categories %}<option value="{{ c.pk }}"{% if request.GET.category == c.pk|stringformat:'s' %} selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-2 form-check"><input type="checkbox" class="form-check-input" name="portfolio" value="1" id="pf"{% if request.GET.portfolio == '1' %} checked{% endif %}><label for="pf" class="form-check-label">Portfólio</label></div>
+  <div class="col-md-2"><button class="btn btn-light" type="submit">Filtrar</button></div>
+</form>
+<div class="row g-3">
+{% for asset in page_obj %}
+  <div class="col-md-3">
+    <div class="border rounded p-2 h-100">
+      {% if asset.thumbnail %}<img src="{% url 'media_library:asset_file' asset.pk %}" alt="{{ asset.alt_text|default:asset.title }}" class="img-fluid mb-2" style="max-height:140px;object-fit:cover;width:100%">{% elif asset.media_type == 'image' %}<div class="bg-light text-center py-4 mb-2">Imagem</div>{% else %}<div class="bg-light text-center py-4 mb-2">Documento</div>{% endif %}
+      <div class="fw-semibold"><a href="{% url 'media_library:asset_detail' asset.pk %}">{{ asset.code }}</a></div>
+      <div class="small">{{ asset.title|default:asset.original_filename }}</div>
+      <div class="small text-muted">{{ asset.get_status_display }} · {% if asset.category %}{{ asset.category.name }}{% else %}Sem categoria{% endif %}</div>
+    </div>
+  </div>
+{% empty %}<div class="col-12 text-muted">Nenhuma mídia.</div>{% endfor %}
+</div>
+{% endblock table_content %}

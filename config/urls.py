@@ -33,6 +33,7 @@ urlpatterns = [
     path("painel/estoque/", include("materials.stock_urls", namespace="stock")),
     path("painel/agenda/", include("scheduling.urls", namespace="scheduling")),
     path("painel/pos-venda/", include("after_sales.urls", namespace="after_sales")),
+    path("painel/midias/", include("media_library.urls", namespace="media_library")),
     path("painel/cadastros/", include("commercial.urls", namespace="commercial")),
     path("painel/patrimonio/ativos/", include("assets.urls", namespace="assets")),
     path("painel/patrimonio/veiculos/", include("fleet.urls", namespace="fleet")),

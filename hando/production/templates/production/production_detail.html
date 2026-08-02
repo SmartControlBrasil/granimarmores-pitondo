@@ -47,6 +47,8 @@
           <form method="post" action="{% url 'producao:production_start' production.pk %}">{% csrf_token %}<button class="btn btn-primary" type="submit">Iniciar</button></form>
           <form method="post" action="{% url 'producao:production_pause' production.pk %}">{% csrf_token %}{{ action_form.reason }}<button class="btn btn-warning" type="submit">Pausar</button></form>
           <form method="post" action="{% url 'producao:production_complete' production.pk %}">{% csrf_token %}<button class="btn btn-success" type="submit">Concluir</button></form>
+          <a href="{% url 'media_library:upload_production' production.pk %}" class="btn btn-outline-secondary">Adicionar foto</a>
+          <a href="{% url 'media_library:upload_production' production.pk %}" class="btn btn-outline-secondary">Adicionar documento</a>
           <a href="{% url 'producao:board' %}" class="btn btn-outline-secondary">Quadro</a>
         </div>
       </div>

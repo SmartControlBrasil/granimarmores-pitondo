@@ -203,4 +203,5 @@ python manage.py test
 | [docs/STOCK.md](docs/STOCK.md) | Estoque, chapas, reservas e consumo |
 | [docs/OPERATIONAL_SCHEDULE.md](docs/OPERATIONAL_SCHEDULE.md) | Agenda operacional interna |
 | [docs/AFTER_SALES.md](docs/AFTER_SALES.md) | Pós-venda, garantia e assistência |
+| [docs/MEDIA_LIBRARY.md](docs/MEDIA_LIBRARY.md) | Biblioteca interna de mídias |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Roadmap de produto (legado) |

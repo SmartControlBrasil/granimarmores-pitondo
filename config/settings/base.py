@@ -103,7 +103,15 @@ INSTALLED_APPS = [
     "production",
     "scheduling",
     "after_sales",
+    "media_library",
 ]
+
+# Biblioteca interna de mídia (armazenamento local do ERP)
+MEDIA_LIBRARY_MAX_IMAGE_SIZE_MB = 10
+MEDIA_LIBRARY_MAX_DOCUMENT_SIZE_MB = 20
+MEDIA_LIBRARY_MAX_FILES_PER_BATCH = 20
+MEDIA_LIBRARY_ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]
+MEDIA_LIBRARY_ALLOWED_DOCUMENT_TYPES = ["application/pdf"]
 
 
 # =============================================================================

@@ -1,0 +1,6 @@
+{% extends "erp/list_base.html" %}
+{% block table_content %}
+<div class="row g-3">{% for asset in page_obj %}
+<div class="col-md-3"><div class="border rounded p-2"><a href="{% url 'media_library:asset_detail' asset.pk %}">{{ asset.code }}</a><div>{{ asset.title }}</div><div class="small text-muted">{{ asset.alt_text }}</div></div></div>
+{% empty %}<p class="text-muted">Portfólio vazio.</p>{% endfor %}</div>
+{% endblock %}

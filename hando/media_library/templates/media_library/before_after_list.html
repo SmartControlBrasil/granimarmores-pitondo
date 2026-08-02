@@ -1,0 +1,8 @@
+{% extends "erp/list_base.html" %}
+{% block card_actions %}<a href="{% url 'media_library:before_after_create' %}" class="btn btn-sm btn-primary">Novo par</a>{% endblock %}
+{% block table_content %}
+<table class="table table-sm"><thead><tr><th>Título</th><th>Antes</th><th>Depois</th><th>Portfólio</th></tr></thead><tbody>
+{% for p in page_obj %}<tr><td>{{ p.title }}</td><td>{{ p.before_asset.code }}</td><td>{{ p.after_asset.code }}</td><td>{{ p.approved_for_portfolio|yesno:"Sim,Não" }}</td></tr>
+{% empty %}<tr><td colspan="4" class="text-muted">Nenhum par.</td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}

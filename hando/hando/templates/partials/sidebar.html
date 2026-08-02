@@ -77,6 +77,20 @@
           {% if can_prod_stages %}<li><a href="{% url 'producao:stage_list' %}" class="tp-link{% if request.resolver_match.url_name == 'stage_list' %} active{% endif %}"><i data-feather="list"></i><span>Etapas Produtivas</span></a></li>{% endif %}
         {% endif %}
 
+        {% has_permission "media_dashboard.view" as can_media_dash %}{% has_permission "media_assets.view" as can_media %}{% has_permission "media_assets.upload" as can_media_upload %}{% has_permission "media_assets.review" as can_media_review %}{% has_permission "media_collections.view" as can_media_collections %}{% has_permission "media_portfolio.view" as can_media_portfolio %}{% has_permission "media_publication_candidates.view" as can_media_pub %}
+        {% if can_media_dash or can_media or can_media_upload or can_media_review or can_media_collections or can_media_portfolio or can_media_pub %}
+          <li class="menu-title mt-2">Mídia</li>
+          {% if can_media_dash %}<li><a href="{% url 'media_library:dashboard' %}" class="tp-link{% if request.resolver_match.namespace == 'media_library' and request.resolver_match.url_name == 'dashboard' %} active{% endif %}"><i data-feather="bar-chart-2"></i><span>Dashboard</span></a></li>{% endif %}
+          {% if can_media %}<li><a href="{% url 'media_library:library' %}" class="tp-link{% if request.resolver_match.url_name == 'library' %} active{% endif %}"><i data-feather="image"></i><span>Biblioteca</span></a></li>{% endif %}
+          {% if can_media_upload %}<li><a href="{% url 'media_library:upload' %}" class="tp-link{% if request.resolver_match.url_name == 'upload' or request.resolver_match.url_name == 'upload_multiple' %} active{% endif %}"><i data-feather="upload"></i><span>Upload</span></a></li>{% endif %}
+          {% if can_media_review %}<li><a href="{% url 'media_library:review_queue' %}" class="tp-link{% if request.resolver_match.url_name == 'review_queue' %} active{% endif %}"><i data-feather="check-circle"></i><span>Revisão</span></a></li>{% endif %}
+          {% if can_media_collections %}<li><a href="{% url 'media_library:collection_list' %}" class="tp-link{% if 'collection' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="folder"></i><span>Coleções</span></a></li>{% endif %}
+          {% if can_media_collections %}<li><a href="{% url 'media_library:before_after_list' %}" class="tp-link{% if 'before_after' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="columns"></i><span>Antes e Depois</span></a></li>{% endif %}
+          {% if can_media %}<li><a href="{% url 'media_library:materials_gallery' %}" class="tp-link{% if request.resolver_match.url_name == 'materials_gallery' %} active{% endif %}"><i data-feather="layers"></i><span>Materiais</span></a></li>{% endif %}
+          {% if can_media_portfolio %}<li><a href="{% url 'media_library:portfolio' %}" class="tp-link{% if request.resolver_match.url_name == 'portfolio' %} active{% endif %}"><i data-feather="award"></i><span>Portfólio</span></a></li>{% endif %}
+          {% if can_media_pub %}<li><a href="{% url 'media_library:publication_list' %}" class="tp-link{% if 'publication' in request.resolver_match.url_name|default:'' %} active{% endif %}"><i data-feather="send"></i><span>Publicação Futura</span></a></li>{% endif %}
+        {% endif %}
+
         {% has_permission "after_sales_dashboard.view" as can_as_dash %}{% has_permission "after_sales_cases.view" as can_as_cases %}{% has_permission "installation_pending_items.view" as can_as_pending %}{% has_permission "warranties.view" as can_as_warranties %}{% has_permission "customer_satisfaction.view" as can_as_surveys %}{% has_permission "review_requests.view" as can_as_reviews %}{% has_permission "media_usage_consents.view" as can_as_consents %}{% has_permission "customer_referrals.view" as can_as_referrals %}
         {% if can_as_dash or can_as_cases or can_as_pending or can_as_warranties or can_as_surveys or can_as_reviews or can_as_consents or can_as_referrals %}
           <li class="menu-title mt-2">Pós-venda</li>

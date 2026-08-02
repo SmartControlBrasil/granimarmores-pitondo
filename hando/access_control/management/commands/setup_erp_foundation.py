@@ -393,6 +393,67 @@ AFTER_SALES_PRODUCTION = [
     "installation_pending_items.view",
 ]
 
+MEDIA_VIEW = [
+    "media_dashboard.view",
+    "media_assets.view",
+    "media_collections.view",
+    "media_portfolio.view",
+]
+
+MEDIA_SELLER = [
+    *MEDIA_VIEW,
+    "media_assets.upload",
+    "media_assets.classify",
+    "media_collections.create",
+    "media_collections.update",
+]
+
+MEDIA_MANAGER = [
+    *MEDIA_SELLER,
+    "media_assets.view_all",
+    "media_assets.update",
+    "media_assets.review",
+    "media_assets.approve",
+    "media_assets.reject",
+    "media_assets.archive",
+    "media_portfolio.approve",
+    "media_publication_candidates.view",
+    "media_publication_candidates.create",
+    "media_publication_candidates.update",
+    "media_private_files.view",
+]
+
+MEDIA_OPERATIONS = [
+    *MEDIA_VIEW,
+    "media_assets.upload",
+    "media_assets.classify",
+    "media_assets.update",
+    "media_private_files.view",
+]
+
+MEDIA_CATEGORY_SEEDS = [
+    ("Antes da obra", "antes-da-obra", True, True, 10),
+    ("Durante a produção", "durante-a-producao", False, False, 20),
+    ("Material", "material", False, True, 30),
+    ("Chapa", "chapa", False, False, 40),
+    ("Corte", "corte", False, False, 50),
+    ("Acabamento", "acabamento", False, False, 60),
+    ("Polimento", "polimento", False, False, 70),
+    ("Qualidade", "qualidade", False, False, 80),
+    ("Peça concluída", "peca-concluida", False, True, 90),
+    ("Entrega", "entrega", True, False, 100),
+    ("Instalação", "instalacao", True, True, 110),
+    ("Obra concluída", "obra-concluida", True, True, 120),
+    ("Depois da obra", "depois-da-obra", True, True, 130),
+    ("Pendência", "pendencia", False, False, 140),
+    ("Assistência técnica", "assistencia-tecnica", False, False, 150),
+    ("Garantia", "garantia", False, False, 160),
+    ("Retrabalho", "retrabalho", False, False, 170),
+    ("Portfólio", "portfolio", True, True, 180),
+    ("Documento técnico", "documento-tecnico", False, False, 190),
+    ("Outro", "outro", False, False, 200),
+]
+
 ORDERS_MANAGER = [
     "quotes.accept",
     "quotes.refuse",
@@ -410,7 +471,7 @@ ORDERS_MANAGER = [
     "installations.view",
     "installations.schedule",
     "installations.complete",
-] + STOCK_COMMERCIAL_VIEW + SCHEDULE_MANAGER + AFTER_SALES_MANAGER
+] + STOCK_COMMERCIAL_VIEW + SCHEDULE_MANAGER + AFTER_SALES_MANAGER + MEDIA_MANAGER
 
 ORDERS_SELLER = [
     "quotes.accept",
@@ -420,7 +481,7 @@ ORDERS_SELLER = [
     "production_dashboard.view",
     "deliveries.view",
     "installations.view",
-] + STOCK_SELLER_VIEW + SCHEDULE_SELLER + AFTER_SALES_SELLER
+] + STOCK_SELLER_VIEW + SCHEDULE_SELLER + AFTER_SALES_SELLER + MEDIA_SELLER
 
 PRODUCTION_OPERATIONS = [
     "sales_orders.view",
@@ -452,7 +513,7 @@ PRODUCTION_OPERATIONS = [
     "deliveries.view",
     "installations.view",
     "production_dashboard.view",
-] + SCHEDULE_OPERATIONS + AFTER_SALES_OPERATIONS + AFTER_SALES_PRODUCTION
+] + SCHEDULE_OPERATIONS + AFTER_SALES_OPERATIONS + AFTER_SALES_PRODUCTION + MEDIA_OPERATIONS
 
 PRODUCTION_STAGE_SEEDS = [
     ("Medição final", "medicao-final", "waiting", 10),
@@ -613,6 +674,26 @@ def _seed_quality_checklist():
     return created
 
 
+def _seed_media_categories():
+    from media_library.models import MediaCategory
+
+    created = updated = 0
+    for name, slug, requires_consent, portfolio, order in MEDIA_CATEGORY_SEEDS:
+        _, was_created = MediaCategory.objects.update_or_create(
+            slug=slug,
+            defaults={
+                "name": name,
+                "display_order": order,
+                "requires_consent": requires_consent,
+                "is_portfolio_eligible": portfolio,
+                "is_active": True,
+            },
+        )
+        created += int(was_created)
+        updated += int(not was_created)
+    return created, updated
+
+
 class Command(BaseCommand):
     help = "Cria cargos, permissões e dados iniciais da fundação ERP."
 
@@ -678,6 +759,7 @@ class Command(BaseCommand):
         loss_created, loss_updated = _seed_loss_reasons()
         stage_created, stage_updated = _seed_production_stages()
         quality_items = _seed_quality_checklist()
+        media_cat_created, media_cat_updated = _seed_media_categories()
 
         user_model = get_user_model()
         admin_username = options.get("admin_username")
@@ -706,7 +788,8 @@ class Command(BaseCommand):
                 f"Tipos: +{project_created}/~{project_updated}. "
                 f"Motivos: +{loss_created}/~{loss_updated}. "
                 f"Etapas produção: +{stage_created}/~{stage_updated}. "
-                f"Itens checklist qualidade novos: {quality_items}."
+                f"Itens checklist qualidade novos: {quality_items}. "
+                f"Categorias mídia: +{media_cat_created}/~{media_cat_updated}."
                 f"{policy_note}"
             ),
         )

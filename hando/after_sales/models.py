@@ -529,7 +529,14 @@ class AfterSalesAttachment(models.Model):
         on_delete=models.CASCADE,
         related_name="attachments",
     )
-    file = models.FileField(upload_to=after_sales_attachment_path)
+    file = models.FileField(upload_to=after_sales_attachment_path, blank=True)
+    media_asset = models.ForeignKey(
+        "media_library.MediaAsset",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="after_sales_attachments",
+    )
     attachment_type = models.CharField(
         max_length=30,
         choices=AttachmentType.choices,
