@@ -3,23 +3,196 @@
 
 {% block content %}
 <main>
-    <section class="section-dark text-light">
-        <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8">
-                    <div class="subtitle">Granimármores Pitondo</div>
-                    <h1>Materiais</h1>
-                    <p class="lead">Mármores, granitos, quartzitos e superfícies para diferentes aplicações.</p>
 
-                    <a
-                        href="{% url 'institutional:contato' %}"
-                        class="btn-main fx-slide"
-                    >
-                        <span>Solicite um orçamento</span>
+    <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a>
+
+    <div id="de-loader"></div>
+
+    <!-- Banner interno -->
+    <section class="bg-dark text-light relative jarallax">
+        <img
+            src="{% static 'institutional/images/background/cliente-escolhendo-marmore-ou-granito.webp' %}"
+            class="jarallax-img"
+            alt="Cliente selecionando chapas de mármore e granito no showroom"
+        >
+        <div class="container relative z-2">
+            <div class="row gy-4 gx-5 align-items-center">
+                <div class="col-md-8">
+                    <div class="spacer-double sm-hide"></div>
+                    <h1 class="mb-3 wow fadeInUp" data-wow-delay=".2s">
+                        Materiais
+                    </h1>
+                    <ul class="crumb wow fadeInUp">
+                        <li>
+                            <a href="{% url 'institutional:home' %}">
+                                Início
+                            </a>
+                        </li>
+                        <li class="active">
+                            Materiais
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-0 text-light op-7">
+                        Conheça os diferenciais técnicos e estéticos das principais superfícies nacionais e importadas para o seu projeto.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apresentação -->
+    <section class="bg-light text-dark py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <div class="subtitle">Guia de Especificação</div>
+                    <h2 class="wow fadeInRight">
+                        Como escolher a pedra ideal para cada ambiente
+                    </h2>
+                </div>
+                <div class="col-lg-5">
+                    <p class="lead">
+                        A escolha da pedra deve equilibrar a estética desejada com os requisitos de uso do local. Resistência térmica, porosidade e facilidade de limpeza variam significativamente entre rochas naturais e compostos sintéticos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detalhamento de Materiais -->
+    <section class="pt-0">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Mármore -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="p-4 bg-light rounded-1 h-100">
+                        <div class="subtitle">Rocha Natural Nobre</div>
+                        <h3 class="mb-3">Mármores</h3>
+                        <p>
+                            Reconhecidos pelos seus veios marcantes e apelo sofisticado, os mármores são ideais para agregar requinte visual a revestimentos decorativos e superfícies de baixo impacto químico.
+                        </p>
+                        <hr class="op-2 my-3">
+                        <ul class="ul-check mb-4">
+                            <li><strong>Aplicações comuns:</strong> Banheiros, lareiras, escadas e painéis decorativos.</li>
+                            <li><strong>Cuidados básicos:</strong> Limpar com sabão neutro e pano úmido. Evitar contato com substâncias ácidas ou corantes.</li>
+                            <li><strong>Limitações:</strong> Mais suscetível a riscos e manchas que o granito; não recomendado para pias de cozinhas de uso intenso.</li>
+                        </ul>
+                        <a href="{% url 'institutional:quotation' %}" class="btn-line">Solicitar orçamento de Mármore</a>
+                    </div>
+                </div>
+
+                <!-- Granito -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="p-4 bg-light rounded-1 h-100">
+                        <div class="subtitle">Resistência Natural</div>
+                        <h3 class="mb-3">Granitos</h3>
+                        <p>
+                            Rochas de alta densidade compostas por quartzo, feldspato e mica. Oferecem excelente durabilidade mecânica e térmica, ideal para uso cotidiano pesado.
+                        </p>
+                        <hr class="op-2 my-3">
+                        <ul class="ul-check mb-4">
+                            <li><strong>Aplicações comuns:</strong> Bancadas de cozinha, soleiras, pisos de tráfego intenso e áreas gourmet externas.</li>
+                            <li><strong>Cuidados básicos:</strong> Manter selado contra líquidos. Limpeza diária simples com detergente neutro.</li>
+                            <li><strong>Limitações:</strong> Visual predominantemente granulado, que pode limitar opções com veios fluidos lineares.</li>
+                        </ul>
+                        <a href="{% url 'institutional:quotation' %}" class="btn-line">Solicitar orçamento de Granito</a>
+                    </div>
+                </div>
+
+                <!-- Quartzito -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="p-4 bg-light rounded-1 h-100">
+                        <div class="subtitle">O Melhor de Dois Mundos</div>
+                        <h3 class="mb-3">Quartzitos</h3>
+                        <p>
+                            Rochas metamórficas naturais que oferecem a beleza fluida e os veios exuberantes do mármore aliados a uma dureza que supera a do granito.
+                        </p>
+                        <hr class="op-2 my-3">
+                        <ul class="ul-check mb-4">
+                            <li><strong>Aplicações comuns:</strong> Bancadas gourmet, ilhas centrais, cozinhas de alto padrão e painéis retroiluminados.</li>
+                            <li><strong>Cuidados básicos:</strong> Pouca manutenção mecânica necessária; limpeza apenas com pano úmido e sabão neutro.</li>
+                            <li><strong>Limitações:</strong> Processo de corte e polimento altamente complexo, exigindo maquinário industrial avançado na marmoraria.</li>
+                        </ul>
+                        <a href="{% url 'institutional:quotation' %}" class="btn-line">Solicitar orçamento de Quartzito</a>
+                    </div>
+                </div>
+
+                <!-- Lâminas Ultra-compactas -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="p-4 bg-light rounded-1 h-100">
+                        <div class="subtitle">Tecnologia Sinterizada</div>
+                        <h3 class="mb-3">Lâminas Ultra-compactas</h3>
+                        <p>
+                            Superfícies sinterizadas produzidas industrialmente através da fusão de minerais puros sob calor e pressão extremos. Possuem porosidade quase nula.
+                        </p>
+                        <hr class="op-2 my-3">
+                        <ul class="ul-check mb-4">
+                            <li><strong>Aplicações comuns:</strong> Bancadas de cozinhas exigentes, churrasqueiras integradas, revestimentos internos e fachadas.</li>
+                            <li><strong>Cuidados básicos:</strong> Altamente resistentes a produtos químicos comuns e calor direto de panelas.</li>
+                            <li><strong>Limitações:</strong> Requerem mão de obra homologada e especializada para manuseio, cortes e instalação.</li>
+                        </ul>
+                        <a href="{% url 'institutional:quotation' %}" class="btn-line">Solicitar orçamento de Lâminas</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Orientações Técnicas -->
+    <section class="bg-dark-1 text-light py-5">
+        <div class="container">
+            <div class="row g-4 align-items-center justify-content-between">
+                <div class="col-lg-5">
+                    <div class="subtitle">Orientação Importante</div>
+                    <h2>A escolha da pedra ideal para seu ambiente</h2>
+                    <p class="mb-0 text-light op-7">
+                        A especificação depende diretamente da rotina de uso do espaço. Não existe material universal: cada pedra natural ou industrializada apresenta vantagens específicas de acordo com o projeto de arquitetura.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-4 bg-dark rounded-1">
+                        <h4>Fatores para avaliação técnica:</h4>
+                        <ul class="ul-check mb-0">
+                            <li>Contato direto com calor intenso (panelas, grelhas)</li>
+                            <li>Exposição a raios solares UV (áreas externas)</li>
+                            <li>Incidência de gordura, ácidos (limão, vinagre) ou vinhos</li>
+                            <li>Marcenaria e estruturas de fixação existentes no local</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA final -->
+    <section class="section-dark text-light relative jarallax">
+        <img
+            src="{% static 'institutional/images/background/studio-picture.webp' %}"
+            class="jarallax-img"
+            alt=""
+        >
+        <div class="sw-overlay op-6"></div>
+        <div class="container relative z-2">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8">
+                    <div class="subtitle">Assessoria Gratuita</div>
+                    <h2 class="mb-2">Deseja orientação sobre qual material escolher?</h2>
+                    <p class="mb-0">
+                        Nossos consultores ajudam você ou seu arquiteto a selecionar a pedra ideal combinando acabamento estético e durabilidade adequada.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide">
+                        <span>Falar com especialista</span>
                     </a>
                 </div>
             </div>
         </div>
     </section>
+
 </main>
 {% endblock %}

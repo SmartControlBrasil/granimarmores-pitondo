@@ -108,7 +108,7 @@ def contato(request):
 
 
 def quotation(request):
-    return render(request, page_template("contact"))
+    return render(request, page_template("quotation"))
 
 
 def cozinhas(request):

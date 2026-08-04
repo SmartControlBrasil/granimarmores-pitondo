@@ -3,23 +3,222 @@
 
 {% block content %}
 <main>
-    <section class="section-dark text-light">
-        <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-8">
-                    <div class="subtitle">Granimármores Pitondo</div>
-                    <h1>Projetos</h1>
-                    <p class="lead">Conheça alguns dos ambientes produzidos pela Granimármores Pitondo.</p>
 
-                    <a
-                        href="{% url 'institutional:contato' %}"
-                        class="btn-main fx-slide"
-                    >
-                        <span>Solicite um orçamento</span>
+    <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a>
+
+    <div id="de-loader"></div>
+
+    <!-- Banner interno -->
+    <section class="bg-dark text-light relative jarallax">
+        <img
+            src="{% static 'institutional/images/background/escadaria-em-marmore.webp' %}"
+            class="jarallax-img"
+            alt="Escadaria monumental revestida em mármore claro"
+        >
+        <div class="container relative z-2">
+            <div class="row gy-4 gx-5 align-items-center">
+                <div class="col-md-8">
+                    <div class="spacer-double sm-hide"></div>
+                    <h1 class="mb-3 wow fadeInUp" data-wow-delay=".2s">
+                        Projetos
+                    </h1>
+                    <ul class="crumb wow fadeInUp">
+                        <li>
+                            <a href="{% url 'institutional:home' %}">
+                                Início
+                            </a>
+                        </li>
+                        <li class="active">
+                            Projetos
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-0 text-light op-7">
+                        Aplicações práticas e referências de acabamentos refinados em pedras nobres para diversos ambientes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apresentação -->
+    <section class="bg-light text-dark py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <div class="subtitle">Galeria de Inspirações</div>
+                    <h2 class="wow fadeInRight">
+                        Possibilidades de aplicação em residências e comércios
+                    </h2>
+                </div>
+                <div class="col-lg-5">
+                    <p class="lead">
+                        Explore nossa galeria de referências para ver como diferentes rochas ornamentais e lâminas tecnológicas podem ser empregadas para conferir funcionalidade e elegância a tampos, pisos, paredes e escadas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grade de Projetos -->
+    <section class="pt-0">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Cozinha -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="hover">
+                        <div class="relative overflow-hidden rounded-1 wow zoomIn" data-wow-duration="1.5s">
+                            <img
+                                src="{% static 'institutional/images/services/mesa-cozinha-marmore.webp' %}"
+                                class="w-100 hover-scale-1-1"
+                                alt="Referência de bancada de cozinha sob medida"
+                            >
+                            <a href="{% url 'institutional:cozinhas' %}" class="d-block abs w-100 h-100 top-0 start-0"></a>
+                        </div>
+                        <div class="pt-4">
+                            <h3>
+                                <a class="text-dark" href="{% url 'institutional:cozinhas' %}">
+                                    Bancadas de Cozinha
+                                </a>
+                            </h3>
+                            <p class="mb-0">
+                                Opções de pias, ilhas integradas e acabamentos de rodabancas em materiais altamente duráveis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banheiro -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="hover">
+                        <div class="relative overflow-hidden rounded-1 wow zoomIn" data-wow-duration="1.5s">
+                            <img
+                                src="{% static 'institutional/images/services/bancada-para-banheiro.webp' %}"
+                                class="w-100 hover-scale-1-1"
+                                alt="Lavatório esculpido sob medida para banheiro"
+                                loading="lazy"
+                            >
+                            <a href="{% url 'institutional:banheiros' %}" class="d-block abs w-100 h-100 top-0 start-0"></a>
+                        </div>
+                        <div class="pt-4">
+                            <h3>
+                                <a class="text-dark" href="{% url 'institutional:banheiros' %}">
+                                    Banheiros e Lavabos
+                                </a>
+                            </h3>
+                            <p class="mb-0">
+                                Lavatórios esculpidos, nichos embutidos e revestimentos de piso e parede com acabamento impecável.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Escada -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="hover">
+                        <div class="relative overflow-hidden rounded-1 wow zoomIn" data-wow-duration="1.5s">
+                            <img
+                                src="{% static 'institutional/images/services/escada-com-patamar.webp' %}"
+                                class="w-100 hover-scale-1-1"
+                                alt="Escada com acabamento fino sob medida"
+                                loading="lazy"
+                            >
+                            <a href="{% url 'institutional:escadas' %}" class="d-block abs w-100 h-100 top-0 start-0"></a>
+                        </div>
+                        <div class="pt-4">
+                            <h3>
+                                <a class="text-dark" href="{% url 'institutional:escadas' %}">
+                                    Escadas e Degraus
+                                </a>
+                            </h3>
+                            <p class="mb-0">
+                                Degraus com cortes em meia-esquadria, patamares e soleiras revestidos com precisão.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área Gourmet -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="hover">
+                        <div class="relative overflow-hidden rounded-1 wow zoomIn" data-wow-duration="1.5s">
+                            <img
+                                src="{% static 'institutional/images/services/area-gourmet-granito.webp' %}"
+                                class="w-100 hover-scale-1-1"
+                                alt="Área gourmet com churrasqueira revestida em pedra"
+                                loading="lazy"
+                            >
+                            <a href="{% url 'institutional:areas_gourmet' %}" class="d-block abs w-100 h-100 top-0 start-0"></a>
+                        </div>
+                        <div class="pt-4">
+                            <h3>
+                                <a class="text-dark" href="{% url 'institutional:areas_gourmet' %}">
+                                    Áreas Gourmet e Churrasqueiras
+                                </a>
+                            </h3>
+                            <p class="mb-0">
+                                Ambientes externos e internos com bancadas de apoio, pias de alta resistência e revestimento térmico.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projeto Comercial -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="hover">
+                        <div class="relative overflow-hidden rounded-1 wow zoomIn" data-wow-duration="1.5s">
+                            <img
+                                src="{% static 'institutional/images/services/balcao-recepcao-marmore.webp' %}"
+                                class="w-100 hover-scale-1-1"
+                                alt="Recepção comercial com balcão de atendimento sob medida"
+                                loading="lazy"
+                            >
+                            <a href="{% url 'institutional:projetos_comerciais' %}" class="d-block abs w-100 h-100 top-0 start-0"></a>
+                        </div>
+                        <div class="pt-4">
+                            <h3>
+                                <a class="text-dark" href="{% url 'institutional:projetos_comerciais' %}">
+                                    Ambientes Corporativos e Lojas
+                                </a>
+                            </h3>
+                            <p class="mb-0">
+                                Balcões de atendimento, pias de lavatórios múltiplos e superfícies corporativas planejadas para uso intenso.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Chamada para Orçamento -->
+    <section class="section-dark text-light relative jarallax">
+        <img
+            src="{% static 'institutional/images/background/studio-picture.webp' %}"
+            class="jarallax-img"
+            alt=""
+        >
+        <div class="sw-overlay op-6"></div>
+        <div class="container relative z-2">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8">
+                    <div class="subtitle">Faça seu orçamento</div>
+                    <h2 class="mb-2">Gostaria de ver uma avaliação do seu projeto?</h2>
+                    <p class="mb-0">
+                        Envie fotos da sua obra, medidas dos tampos ou a planta do ambiente. Nossa equipe técnica avaliará e orientará seu orçamento.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{% url 'institutional:quotation' %}" class="btn-main fx-slide">
+                        <span>Enviar medidas / fotos</span>
                     </a>
                 </div>
             </div>
         </div>
     </section>
+
 </main>
 {% endblock %}

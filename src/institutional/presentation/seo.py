@@ -65,14 +65,14 @@ PAGE_SEO = {
         ),
     ),
     "projects": PageSeo(
-        title="Projetos em Pedra Natural | Granimármores Pitondo",
+        title="Projetos e Aplicações em Pedras | Granimármores Pitondo",
         description=(
-            "Veja ambientes produzidos em mármore e granito para cozinhas, banheiros, "
-            "escadas, áreas gourmet e projetos comerciais sob medida."
+            "Conheça aplicações em mármore, granito e outras superfícies para cozinhas, "
+            "banheiros, escadas, áreas gourmet e ambientes comerciais."
         ),
     ),
     "materials": PageSeo(
-        title="Materiais: Mármore, Granito e Superfícies | Granimármores Pitondo",
+        title="Mármores, Granitos e Outros Materiais | Granimármores Pitondo",
         description=(
             "Conheça mármore, granito, quartzito e superfícies especiais usadas em "
             "bancadas, revestimentos e projetos residenciais e comerciais."
