@@ -10554,7 +10554,10 @@ height: 100%;
 #mainmenu .mobile-restricted-area {
 display: none;
 }
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 993px) {
+header.header-mobile.menu-open {
+overflow-y: auto;
+}
 #mainmenu .mobile-restricted-area {
 display: block;
 border-bottom: none;
