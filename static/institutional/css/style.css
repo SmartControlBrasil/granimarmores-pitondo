@@ -10562,8 +10562,8 @@ display: block;
 border-bottom: none;
 padding-top: 16px;
 }
-#mainmenu .mobile-restricted-area a.btn-main {
-display: flex;
+header.header-mobile.menu-open #mainmenu .mobile-restricted-area a.btn-main {
+display: flex !important;
 align-items: center;
 justify-content: center;
 width: 100%;

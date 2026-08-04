@@ -235,10 +235,11 @@
 
 
      function updateButton() {
+         const $headerCta = $('header .menu_side_area .btn-main');
          if ($(window).width() >= btnHideWidth) {
-             $('header .btn-main').show();
+             $headerCta.show();
          } else {
-             $('header .btn-main').hide();
+             $headerCta.hide();
          }
      }
 

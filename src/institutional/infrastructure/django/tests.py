@@ -1,4 +1,7 @@
+import json
+from html.parser import HTMLParser
 from unittest.mock import patch
+from urllib.parse import urlsplit
 
 from django.core import mail
 from django.test import TestCase
@@ -12,6 +15,47 @@ from customers.models import Customer
 
 PAGE_DIR = "institutional/pages/"
 HTML = ".html"
+CANONICAL_BASE_URL = "https://granimarmorespitondo.com.br"
+
+
+class SeoHTMLParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.in_head = False
+        self.in_json_ld = False
+        self.canonical_tags = []
+        self.head_canonical_tags = []
+        self.og_url = None
+        self.json_ld_scripts = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "head":
+            self.in_head = True
+        elif tag == "link" and attrs.get("rel") == "canonical":
+            self.canonical_tags.append(attrs)
+            if self.in_head:
+                self.head_canonical_tags.append(attrs)
+        elif tag == "meta" and attrs.get("property") == "og:url":
+            self.og_url = attrs.get("content")
+        elif tag == "script" and attrs.get("type") == "application/ld+json":
+            self.in_json_ld = True
+
+    def handle_endtag(self, tag):
+        if tag == "head":
+            self.in_head = False
+        elif tag == "script":
+            self.in_json_ld = False
+
+    def handle_data(self, data):
+        if self.in_json_ld:
+            self.json_ld_scripts.append(data.strip())
+
+
+def parse_seo_html(response):
+    parser = SeoHTMLParser()
+    parser.feed(response.content.decode())
+    return parser
 
 
 def template(name):
@@ -96,6 +140,14 @@ class InstitutionalPagesTests(TestCase):
         self.assertContains(response, reverse("institutional:projetos_comerciais"))
         self.assertNotContains(response, ">Projetos</a>")
         self.assertNotContains(response, ">Materiais</a>")
+
+    def test_header_includes_mobile_restricted_area_link(self):
+        response = self.client.get(reverse("institutional:home"))
+
+        self.assertContains(response, 'class="mobile-restricted-area"')
+        self.assertContains(response, reverse("account_login"))
+        self.assertContains(response, "ÁREA RESTRITA")
+        self.assertContains(response, 'class="btn-main fx-slide"')
 
     def test_blog_articles_render(self):
         for slug, title in self.articles.items():
@@ -374,6 +426,147 @@ class InstitutionalSitemapTests(TestCase):
 
 @override_settings(SITE_DOMAIN="granimarmorespitondo.com.br")
 class InstitutionalSeoTests(TestCase):
+    PUBLIC_CANONICALS = (
+        ("home", {}, "/"),
+        ("sobre", {}, "/sobre/"),
+        ("services", {}, "/solucoes/"),
+        ("cozinhas", {}, "/cozinhas/"),
+        ("banheiros", {}, "/banheiros/"),
+        ("escadas", {}, "/escadas/"),
+        ("areas_gourmet", {}, "/areas-gourmet/"),
+        ("projetos_comerciais", {}, "/projetos-comerciais/"),
+        ("projects", {}, "/projetos/"),
+        ("materials", {}, "/materiais/"),
+        ("blog", {}, "/blog/"),
+        ("contato", {}, "/contato/"),
+        ("quotation", {}, "/orcamento/"),
+        (
+            "blog_article",
+            {"slug": "escolher-pedra-bancada-cozinha"},
+            "/blog/escolher-pedra-bancada-cozinha/",
+        ),
+        (
+            "blog_article",
+            {"slug": "marmore-ou-granito-diferencas"},
+            "/blog/marmore-ou-granito-diferencas/",
+        ),
+        (
+            "blog_article",
+            {"slug": "cuidados-conservar-bancadas-pedra"},
+            "/blog/cuidados-conservar-bancadas-pedra/",
+        ),
+    )
+
+    TRACKING_QUERY_STRINGS = (
+        ("home", {}, "gclid=123", "/"),
+        ("services", {}, "utm_source=google&utm_campaign=ads", "/solucoes/"),
+        ("projects", {}, "fbclid=abc", "/projetos/"),
+    )
+
+    def canonical_url(self, path):
+        return f"{CANONICAL_BASE_URL}{path}"
+
+    def parse_json_ld(self, parser):
+        self.assertEqual(len(parser.json_ld_scripts), 1)
+        return json.loads(parser.json_ld_scripts[0])
+
+    def assert_canonical(self, response, expected_url):
+        parser = parse_seo_html(response)
+        self.assertEqual(len(parser.canonical_tags), 1)
+        self.assertEqual(len(parser.head_canonical_tags), 1)
+        self.assertEqual(parser.canonical_tags[0].get("href"), expected_url)
+
+        parsed = urlsplit(expected_url)
+        self.assertEqual(parsed.scheme, "https")
+        self.assertEqual(parsed.netloc, "granimarmorespitondo.com.br")
+        self.assertNotEqual(parsed.netloc[:4], "www.")
+        self.assertEqual(parsed.query, "")
+        self.assertEqual(parsed.fragment, "")
+        self.assertTrue(parsed.path.endswith("/"))
+        return parser
+
+    def find_schema_entity(self, graph, entity_type):
+        for entity in graph:
+            value = entity.get("@type")
+            if value == entity_type or (isinstance(value, list) and entity_type in value):
+                return entity
+        return None
+
+    def test_public_html_pages_render_exactly_one_head_canonical(self):
+        for route, kwargs, path in self.PUBLIC_CANONICALS:
+            with self.subTest(route=route, path=path):
+                response = self.client.get(reverse(f"institutional:{route}", kwargs=kwargs))
+
+                self.assertEqual(response.status_code, 200)
+                self.assert_canonical(response, self.canonical_url(path))
+
+    def test_tracking_parameters_are_removed_from_canonical(self):
+        for route, kwargs, query_string, path in self.TRACKING_QUERY_STRINGS:
+            with self.subTest(route=route, query_string=query_string):
+                url = reverse(f"institutional:{route}", kwargs=kwargs)
+                response = self.client.get(f"{url}?{query_string}")
+
+                self.assertEqual(response.status_code, 200)
+                self.assert_canonical(response, self.canonical_url(path))
+
+    def test_contact_and_quotation_have_different_canonicals(self):
+        contact = self.client.get(reverse("institutional:contato"))
+        quotation = self.client.get(reverse("institutional:quotation"))
+
+        contact_parser = self.assert_canonical(contact, self.canonical_url("/contato/"))
+        quotation_parser = self.assert_canonical(quotation, self.canonical_url("/orcamento/"))
+        self.assertNotEqual(
+            contact_parser.canonical_tags[0]["href"],
+            quotation_parser.canonical_tags[0]["href"],
+        )
+
+    def test_canonical_og_json_ld_breadcrumb_and_sitemap_are_consistent(self):
+        sitemap_response = self.client.get("/sitemap.xml")
+        sitemap = sitemap_response.content.decode()
+
+        for route, kwargs, path in self.PUBLIC_CANONICALS:
+            with self.subTest(route=route, path=path):
+                expected_url = self.canonical_url(path)
+                response = self.client.get(reverse(f"institutional:{route}", kwargs=kwargs))
+                parser = self.assert_canonical(response, expected_url)
+                data = self.parse_json_ld(parser)
+                graph = data["@graph"]
+
+                self.assertEqual(parser.og_url, expected_url)
+                self.assertIn(expected_url, sitemap)
+
+                breadcrumb = self.find_schema_entity(graph, "BreadcrumbList")
+                if route == "home":
+                    self.assertIsNone(breadcrumb)
+                else:
+                    self.assertIsNotNone(breadcrumb)
+                    items = breadcrumb["itemListElement"]
+                    self.assertEqual(items[-1]["item"], expected_url)
+
+                service = self.find_schema_entity(graph, "Service")
+                if route in {"cozinhas", "banheiros", "escadas", "areas_gourmet", "projetos_comerciais"}:
+                    self.assertIsNotNone(service)
+                    self.assertEqual(service["url"], expected_url)
+                else:
+                    self.assertIsNone(service)
+
+                blog_posting = self.find_schema_entity(graph, "BlogPosting")
+                if route == "blog_article":
+                    self.assertIsNotNone(blog_posting)
+                    self.assertEqual(blog_posting["url"], expected_url)
+                    self.assertEqual(blog_posting["mainEntityOfPage"], expected_url)
+                else:
+                    self.assertIsNone(blog_posting)
+
+    def test_non_html_public_responses_do_not_render_canonical(self):
+        for path in ("/robots.txt", "/sitemap.xml"):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                parser = parse_seo_html(response)
+
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(parser.canonical_tags, [])
+
     def test_robots_txt_returns_plain_text(self):
         response = self.client.get("/robots.txt")
 
