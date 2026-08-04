@@ -400,7 +400,7 @@ class InstitutionalSeoTests(TestCase):
         self.assertContains(response, 'property="og:url"')
         self.assertContains(response, 'property="og:image"')
         self.assertContains(response, 'name="twitter:card" content="summary_large_image"')
-        self.assertContains(response, '"@type": "LocalBusiness"')
+        self.assertContains(response, '"LocalBusiness"')
 
     def test_internal_page_has_unique_canonical_and_description(self):
         response = self.client.get(reverse("institutional:cozinhas"))
@@ -443,3 +443,116 @@ class InstitutionalSeoTests(TestCase):
         self.assertNotIn("/admin/", content)
         self.assertNotIn("/accounts/", content)
 
+    def test_local_business_logo_file_exists(self):
+        import os
+        from django.conf import settings
+        logo_path = os.path.join(settings.BASE_DIR, "static/institutional/images/logo-gp.webp")
+        self.assertTrue(os.path.exists(logo_path), f"Logo não encontrado no caminho físico: {logo_path}")
+
+    def test_json_ld_schemas_are_valid_and_comprehensive(self):
+        import json
+        pages_to_test = [
+            ("home", {}),
+            ("sobre", {}),
+            ("services", {}),
+            ("projects", {}),
+            ("materials", {}),
+            ("contato", {}),
+            ("quotation", {}),
+            ("blog", {}),
+            ("cozinhas", {}),
+            ("blog_article", {"slug": "marmore-ou-granito-diferencas"}),
+        ]
+
+        for route, kwargs in pages_to_test:
+            with self.subTest(route=route):
+                if kwargs:
+                    url = reverse(f"institutional:{route}", kwargs=kwargs)
+                else:
+                    url = reverse(f"institutional:{route}")
+
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+                html = response.content.decode()
+
+                # Encontrar a tag script
+                start_marker = '<script type="application/ld+json">'
+                end_marker = '</script>'
+                self.assertIn(start_marker, html)
+
+                start_idx = html.find(start_marker) + len(start_marker)
+                end_idx = html.find(end_marker, start_idx)
+                json_str = html[start_idx:end_idx].strip()
+
+                # Fazer parse real
+                data = json.loads(json_str)
+                self.assertEqual(data.get("@context"), "https://schema.org")
+                self.assertIn("@graph", data)
+
+                graph = data["@graph"]
+
+                # Garantir ausência de Review ou AggregateRating conforme as regras da Fase 3
+                for entity in graph:
+                    self.assertNotIn(entity.get("@type"), ["Review", "AggregateRating"])
+
+                # Encontrar entidades
+                business = next((x for x in graph if "LocalBusiness" in x.get("@type", []) or x.get("@type") == "LocalBusiness"), None)
+                website = next((x for x in graph if x.get("@type") == "WebSite"), None)
+                breadcrumb = next((x for x in graph if x.get("@type") == "BreadcrumbList"), None)
+                blog_posting = next((x for x in graph if x.get("@type") == "BlogPosting"), None)
+                service = next((x for x in graph if x.get("@type") == "Service"), None)
+
+                # Validar Business
+                self.assertIsNotNone(business)
+                self.assertEqual(business["@id"], "https://granimarmorespitondo.com.br/#business")
+                self.assertEqual(business["name"], "Granimármores Pitondo")
+                self.assertEqual(business["telephone"], "+55 11 94024-1328")
+                self.assertEqual(business["address"]["streetAddress"], "Av. do Cursino, 3342 - Jardim da Saúde")
+                self.assertEqual(business["address"]["addressLocality"], "São Paulo")
+                self.assertIn("Marmoraria especializada", business["description"])
+                self.assertTrue(business["url"].startswith("http"))
+                self.assertTrue(business["logo"]["url"].startswith("http"))
+
+                # Validar WebSite
+                self.assertIsNotNone(website)
+                self.assertEqual(website["@id"], "https://granimarmorespitondo.com.br/#website")
+                self.assertEqual(website["publisher"]["@id"], "https://granimarmorespitondo.com.br/#business")
+
+                # Validar Breadcrumbs (nas páginas internas)
+                if route != "home":
+                    self.assertIsNotNone(breadcrumb)
+                    self.assertTrue(breadcrumb["@id"].endswith("#breadcrumb"))
+                    elements = breadcrumb["itemListElement"]
+                    self.assertTrue(len(elements) >= 2)
+                    self.assertEqual(elements[0]["name"], "Início")
+                    self.assertEqual(elements[0]["item"], "https://granimarmorespitondo.com.br")
+
+                    # Checar sequencialidade de posições e URLs absolutas
+                    for i, elem in enumerate(elements):
+                        self.assertEqual(elem["position"], i + 1)
+                        self.assertTrue(elem["item"].startswith("https://granimarmorespitondo.com.br"))
+
+                    # Validar hierarquia semântica específica para serviços (Início > Soluções > Serviço)
+                    if route == "cozinhas":
+                        self.assertEqual(len(elements), 3)
+                        self.assertEqual(elements[1]["name"], "Soluções")
+                        self.assertEqual(elements[1]["item"], "https://granimarmorespitondo.com.br/solucoes/")
+                        self.assertEqual(elements[2]["name"], "Cozinhas")
+                        self.assertEqual(elements[2]["item"], "https://granimarmorespitondo.com.br/cozinhas/")
+
+                # Validar BlogPosting
+                if route == "blog_article":
+                    self.assertIsNotNone(blog_posting)
+                    self.assertTrue(blog_posting["@id"].endswith("#blogposting"))
+                    self.assertEqual(blog_posting["publisher"]["@id"], "https://granimarmorespitondo.com.br/#business")
+                    self.assertIn("marmore-ou-granito-diferencas", blog_posting["url"])
+                    self.assertTrue(blog_posting["image"].startswith("http"))
+                    self.assertNotIn("author", blog_posting) # Confirmar que não inventou autor
+
+                # Validar Service
+                if route == "cozinhas":
+                    self.assertIsNotNone(service)
+                    self.assertTrue(service["@id"].endswith("#service"))
+                    self.assertEqual(service["provider"]["@id"], "https://granimarmorespitondo.com.br/#business")
+                    self.assertIn("Cozinhas", service["name"])
+                    self.assertTrue(service["url"].startswith("https://"))

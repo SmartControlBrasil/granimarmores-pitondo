@@ -22,6 +22,7 @@ SITE_PROFILE = {
     "address_region": "SP",
     "address_country": "BR",
     "default_social_image": DEFAULT_SOCIAL_IMAGE,
+    "description": "Marmoraria especializada no corte, acabamento e instalação de pedras naturais e superfícies especiais para tampos, lavatórios, escadas e ambientes gourmet em São Paulo.",
 }
 
 
@@ -210,22 +211,161 @@ def resolve_canonical_url(request):
     return absolute_url(request.path)
 
 
-def build_local_business_schema():
+def build_local_business_schema(request):
     profile = SITE_PROFILE
-    schema = {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
+    base_url = site_base_url()
+    business_id = f"{base_url}/#business"
+    website_id = f"{base_url}/#website"
+    canonical_url = resolve_canonical_url(request)
+
+    # 1. LocalBusiness / HomeAndConstructionBusiness
+    business_schema = {
+        "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
+        "@id": business_id,
         "name": profile["company_name"],
-        "url": site_base_url(),
-        "telephone": profile["phone"],
+        "url": base_url,
+        "telephone": "+55 11 94024-1328",
+        "description": profile["description"],
+        "logo": {
+            "@type": "ImageObject",
+            "url": absolute_static_url("institutional/images/logo-gp.webp"),
+        },
         "image": absolute_static_url(profile["default_social_image"]),
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": profile["street_address"],
-            "addressLocality": profile["address_locality"],
+            "streetAddress": f"{profile['street_address']} - {profile['address_locality']}",
+            "addressLocality": profile["address_city"],
             "addressRegion": profile["address_region"],
             "addressCountry": profile["address_country"],
         },
+    }
+
+    # 2. WebSite
+    website_schema = {
+        "@type": "WebSite",
+        "@id": website_id,
+        "url": base_url,
+        "name": profile["company_name"],
+        "publisher": {"@id": business_id},
+    }
+
+    graph = [business_schema, website_schema]
+
+    # 3. Breadcrumbs
+    match = getattr(request, "resolver_match", None)
+    if match and match.namespace == "institutional" and match.url_name != "home":
+        breadcrumbs = [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Início",
+                "item": base_url,
+            }
+        ]
+
+        # Posição 2
+        pos = 2
+        url_name = match.url_name
+
+        # Se for página de solução específica, "Soluções" fica no meio
+        if url_name in ["cozinhas", "banheiros", "escadas", "areas_gourmet", "projetos_comerciais"]:
+            breadcrumbs.append({
+                "@type": "ListItem",
+                "position": pos,
+                "name": "Soluções",
+                "item": f"{base_url}/solucoes/",
+            })
+            pos += 1
+
+            names = {
+                "cozinhas": "Cozinhas",
+                "banheiros": "Banheiros",
+                "escadas": "Escadas",
+                "areas_gourmet": "Áreas Gourmet",
+                "projetos_comerciais": "Projetos Comerciais",
+            }
+            breadcrumbs.append({
+                "@type": "ListItem",
+                "position": pos,
+                "name": names.get(url_name, "Solução"),
+                "item": canonical_url,
+            })
+        elif url_name == "blog_article":
+            breadcrumbs.append({
+                "@type": "ListItem",
+                "position": pos,
+                "name": "Blog",
+                "item": f"{base_url}/blog/",
+            })
+            pos += 1
+
+            slug = match.kwargs.get("slug", "")
+            article = BLOG_ARTICLE_SEO.get(slug)
+            if article:
+                title = article.title.split(" | ")[0]
+                breadcrumbs.append({
+                    "@type": "ListItem",
+                    "position": pos,
+                    "name": title,
+                    "item": canonical_url,
+                })
+        else:
+            names = {
+                "sobre": "Sobre Nós",
+                "services": "Soluções",
+                "projects": "Projetos",
+                "materials": "Materiais",
+                "contato": "Contato",
+                "quotation": "Orçamento",
+                "blog": "Blog",
+            }
+            breadcrumbs.append({
+                "@type": "ListItem",
+                "position": pos,
+                "name": names.get(url_name, "Página"),
+                "item": canonical_url,
+            })
+
+        graph.append({
+            "@type": "BreadcrumbList",
+            "@id": f"{canonical_url}#breadcrumb",
+            "itemListElement": breadcrumbs,
+        })
+
+    # 4. BlogPosting
+    if match and match.namespace == "institutional" and match.url_name == "blog_article":
+        slug = match.kwargs.get("slug", "")
+        article = BLOG_ARTICLE_SEO.get(slug)
+        if article:
+            title = article.title.split(" | ")[0]
+            graph.append({
+                "@type": "BlogPosting",
+                "@id": f"{canonical_url}#blogposting",
+                "headline": title,
+                "description": article.description,
+                "url": canonical_url,
+                "mainEntityOfPage": canonical_url,
+                "publisher": {"@id": business_id},
+                "image": absolute_static_url(article.og_image) if article.og_image else absolute_static_url(profile["default_social_image"]),
+            })
+
+    # 5. Service (para páginas de soluções específicas)
+    if match and match.namespace == "institutional" and match.url_name in ["cozinhas", "banheiros", "escadas", "areas_gourmet", "projetos_comerciais"]:
+        page = resolve_page_seo(request)
+        title = page.title.split(" | ")[0]
+        graph.append({
+            "@type": "Service",
+            "@id": f"{canonical_url}#service",
+            "name": title,
+            "description": page.description,
+            "url": canonical_url,
+            "provider": {"@id": business_id},
+            "serviceType": "Marmoraria",
+        })
+
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": graph,
     }
     return json.dumps(schema, ensure_ascii=False)
 
@@ -256,7 +396,7 @@ def build_site_seo_context(request):
         "og_locale": DEFAULT_OG_LOCALE,
         "twitter_card": DEFAULT_TWITTER_CARD,
         "robots": page.robots,
-        "local_business_schema": build_local_business_schema(),
+        "local_business_schema": build_local_business_schema(request),
     }
 
 
