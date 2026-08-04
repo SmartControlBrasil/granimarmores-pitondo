@@ -10554,11 +10554,10 @@ height: 100%;
 #mainmenu .mobile-restricted-area {
 display: none;
 }
-@media only screen and (max-width: 1199px) {
 header.header-mobile.menu-open {
 overflow-y: auto;
 }
-#mainmenu .mobile-restricted-area {
+header.header-mobile.menu-open #mainmenu .mobile-restricted-area {
 display: block;
 border-bottom: none;
 padding-top: 16px;
@@ -10572,7 +10571,6 @@ min-height: 48px;
 padding: 10px 18px;
 margin-top: 8px;
 text-align: center;
-}
 }
 /* 2/3 */
 @media (min-width: 992px) {
