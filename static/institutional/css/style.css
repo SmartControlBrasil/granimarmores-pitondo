@@ -10551,6 +10551,26 @@ background-position: center;
 min-height: 400px;
 height: 100%;
 }
+#mainmenu .mobile-restricted-area {
+display: none;
+}
+@media only screen and (max-width: 992px) {
+#mainmenu .mobile-restricted-area {
+display: block;
+border-bottom: none;
+padding-top: 16px;
+}
+#mainmenu .mobile-restricted-area a.btn-main {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+min-height: 48px;
+padding: 10px 18px;
+margin-top: 8px;
+text-align: center;
+}
+}
 /* 2/3 */
 @media (min-width: 992px) {
 .two-third-fluid .left-two-third {
