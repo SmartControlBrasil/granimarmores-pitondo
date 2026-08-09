@@ -10570,3 +10570,13 @@ margin-left: auto;
 width: auto;
 }
 }
+/*Botão de area restrita somente para celulares  */
+.menu-only-mobile {
+  display: none;
+}
+
+@media only screen and (max-width: 991px) {
+  #mainmenu .menu-only-mobile {
+      display: block;
+  }
+}
