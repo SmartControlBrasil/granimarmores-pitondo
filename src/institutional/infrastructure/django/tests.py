@@ -121,6 +121,8 @@ class InstitutionalPagesTests(TestCase):
             self.assertContains(response, f'name="{field}"')
         self.assertContains(response, "csrfmiddlewaretoken")
         self.assertContains(response, reverse("institutional:politica_de_privacidade"))
+        self.assertNotContains(response, "novalidate")
+        self.assertNotContains(response, "validation-contact.js")
 
     def test_valid_post_persists_customer_sends_notification_and_shows_success(self):
         response = self.post_contact(follow=True)
