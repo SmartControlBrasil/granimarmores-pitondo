@@ -200,37 +200,53 @@ def record_public_contact_identity_conflict(contact_request, *, request=None):
     )
 
 
+def _contact_notification_recipients():
+    to = [settings.CONTACT_EMAIL_TO]
+    cc = [email for email in settings.CONTACT_EMAIL_CC if email not in to]
+    return to, cc
+
+
+def _request_absolute_url(request):
+    if request is None:
+        return "Não disponível"
+    return request.build_absolute_uri(request.path)
+
+
 def send_public_contact_notification(customer, contact_request, *, request=None):
-    subject = (
-        "Nova solicitação de orçamento pelo site - "
-        f"{contact_request.nome} - {contact_request.ambiente}"
-    )
+    subject = "Novo contato pelo site | Granimármores Pitondo"
+    url = _request_absolute_url(request)
     body = "\n".join(
         [
-            "Nova solicitação de orçamento pelo site da Granimármores Pitondo",
+            "Novo contato pelo site | Granimármores Pitondo",
             "",
             f"Cliente no painel: {customer.name} (ID {customer.pk})",
-            f"Nome: {contact_request.nome}",
-            f"Telefone / WhatsApp: {contact_request.telefone}",
-            f"E-mail: {contact_request.email or 'Não informado'}",
-            f"Cidade: {contact_request.cidade}",
-            f"Ambiente: {contact_request.ambiente}",
             "",
-            "Descrição do projeto:",
+            f"Nome: {contact_request.nome}",
+            f"E-mail: {contact_request.email or 'Não informado'}",
+            f"Telefone: {contact_request.telefone}",
+            f"Assunto/serviço: {contact_request.ambiente}",
+            f"Cidade: {contact_request.cidade}",
+            "",
+            "Mensagem:",
             contact_request.mensagem,
             "",
             "Origem:",
-            "Site institucional",
+            "Formulário do site Granimármores Pitondo",
+            "",
+            "URL:",
+            url,
         ],
     )
     reply_to = [contact_request.email] if contact_request.email else None
+    to, cc = _contact_notification_recipients()
 
     try:
         email = EmailMessage(
             subject=subject,
             body=body,
             from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[settings.CONTACT_RECIPIENT_EMAIL],
+            to=to,
+            cc=cc,
             reply_to=reply_to,
         )
         email.send(fail_silently=False)

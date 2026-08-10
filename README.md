@@ -86,7 +86,9 @@ Variáveis relevantes (ver `.env.example` e `config/settings/base.py`):
 | `ALLOWED_HOSTS` | Hosts permitidos |
 | `DATABASE_URL` | PostgreSQL ou SQLite |
 | `SITE_DOMAIN` | Domínio canônico do sitemap (padrão: `granimarmorespitondo.com.br`) |
-| `CONTACT_RECIPIENT_EMAIL` | Destino das notificações do formulário |
+| `CONTACT_EMAIL_TO` | Destinatário principal das notificações do formulário |
+| `CONTACT_EMAIL_CC` | Cópia das notificações do formulário, separada por vírgulas quando houver mais de um e-mail |
+| `CONTACT_RECIPIENT_EMAIL` | Nome legado para o destinatário principal das notificações do formulário |
 | `EMAIL_*` | SMTP em produção |
 | `DJANGO_ACCOUNT_ALLOW_REGISTRATION` | Padrão `False` (sem signup público de funcionários) |
 

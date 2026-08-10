@@ -26,7 +26,7 @@ def valid_contact_data(**overrides):
         "cidade": "São Paulo",
         "ambiente": "Cozinha",
         "mensagem": "Bancada em granito para cozinha com ilha central.",
-        "privacidade": "on",
+        "privacidade": "1",
         "website": "",
     }
     data.update(overrides)
@@ -36,6 +36,8 @@ def valid_contact_data(**overrides):
 @override_settings(
     EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
     DEFAULT_FROM_EMAIL="Granimármores Pitondo <contato@granimarmorespitondo.com.br>",
+    CONTACT_EMAIL_TO="contato@granimarmorespitondo.com.br",
+    CONTACT_EMAIL_CC=["granimarmorespitondo@gmail.com"],
     CONTACT_RECIPIENT_EMAIL="contato@granimarmorespitondo.com.br",
 )
 class InstitutionalPagesTests(TestCase):
@@ -49,6 +51,11 @@ class InstitutionalPagesTests(TestCase):
         "projetos_comerciais": ("/projetos-comerciais/", template("projetos_comerciais"), "Projetos"),
         "blog": ("/blog/", template("blog"), "Blog sobre mármores"),
         "contato": ("/contato/", template("contact"), "Solicite uma avaliação"),
+        "politica_de_privacidade": (
+            "/politica-de-privacidade/",
+            template("privacy_policy"),
+            "Política de Privacidade",
+        ),
     }
 
     articles = {
@@ -57,10 +64,11 @@ class InstitutionalPagesTests(TestCase):
         "cuidados-conservar-bancadas-pedra": "Cuidados para conservar",
     }
 
-    def post_contact(self, **overrides):
+    def post_contact(self, *, follow=False, **overrides):
         return self.client.post(
             reverse("institutional:contato"),
             data=valid_contact_data(**overrides),
+            follow=follow,
         )
 
     def test_pages_render_expected_template_and_content(self):
@@ -112,12 +120,13 @@ class InstitutionalPagesTests(TestCase):
         for field in ["nome", "telefone", "email", "cidade", "ambiente", "mensagem", "privacidade", "website"]:
             self.assertContains(response, f'name="{field}"')
         self.assertContains(response, "csrfmiddlewaretoken")
+        self.assertContains(response, reverse("institutional:politica_de_privacidade"))
 
-    def test_valid_post_persists_customer_and_sends_notification_after_commit(self):
-        with self.captureOnCommitCallbacks(execute=True):
-            response = self.post_contact()
+    def test_valid_post_persists_customer_sends_notification_and_shows_success(self):
+        response = self.post_contact(follow=True)
 
         self.assertRedirects(response, reverse("institutional:contato"))
+        self.assertContains(response, "Mensagem enviada com sucesso")
         customer = Customer.objects.get()
         self.assertEqual(customer.name, "Maria Silva")
         self.assertEqual(customer.mobile_phone, "(11) 99999-0000")
@@ -128,30 +137,34 @@ class InstitutionalPagesTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         message = mail.outbox[0]
         self.assertEqual(message.to, ["contato@granimarmorespitondo.com.br"])
+        self.assertEqual(message.cc, ["granimarmorespitondo@gmail.com"])
         self.assertEqual(
             message.from_email,
             "Granimármores Pitondo <contato@granimarmorespitondo.com.br>",
         )
         self.assertEqual(message.reply_to, ["maria@example.com"])
-        self.assertIn("Nova solicitação de orçamento pelo site - Maria Silva - Cozinha", message.subject)
-        self.assertIn("Telefone / WhatsApp: (11) 99999-0000", message.body)
-        self.assertIn("Origem:" + "\n" + "Site institucional", message.body)
+        self.assertNotEqual(message.from_email, "maria@example.com")
+        self.assertEqual(message.subject, "Novo contato pelo site | Granimármores Pitondo")
+        self.assertIn("Telefone: (11) 99999-0000", message.body)
+        self.assertIn("Assunto/serviço: Cozinha", message.body)
+        self.assertIn("Mensagem:" + "\n" + "Bancada em granito", message.body)
+        self.assertIn("Origem:" + "\n" + "Formulário do site Granimármores Pitondo", message.body)
+        self.assertIn("URL:" + "\n" + "http://testserver/contato/", message.body)
         self.assertTrue(AuditEvent.objects.filter(action="public_contact_received").exists())
         self.assertTrue(AuditEvent.objects.filter(action="public_contact_notification", status="success").exists())
 
-    def test_smtp_is_not_called_before_commit(self):
+    def test_notification_is_sent_after_customer_persistence(self):
         with patch("src.institutional.presentation.views.send_public_contact_notification") as mocked:
-            with self.captureOnCommitCallbacks(execute=False) as callbacks:
-                response = self.post_contact()
+            mocked.return_value = True
+            response = self.post_contact()
 
         self.assertRedirects(response, reverse("institutional:contato"))
-        self.assertEqual(Customer.objects.count(), 1)
-        self.assertEqual(len(callbacks), 1)
-        mocked.assert_not_called()
+        customer = Customer.objects.get()
+        mocked.assert_called_once()
+        self.assertEqual(mocked.call_args.args[0], customer)
 
     def test_valid_post_without_customer_email_persists_and_sends_without_reply_to(self):
-        with self.captureOnCommitCallbacks(execute=True):
-            response = self.post_contact(email="")
+        response = self.post_contact(email="")
 
         self.assertRedirects(response, reverse("institutional:contato"))
         customer = Customer.objects.get()
@@ -193,10 +206,8 @@ class InstitutionalPagesTests(TestCase):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_two_requests_same_phone_keep_one_customer_and_two_histories(self):
-        with self.captureOnCommitCallbacks(execute=True):
-            self.post_contact(ambiente="Cozinha", mensagem="Mensagem A")
-        with self.captureOnCommitCallbacks(execute=True):
-            response = self.post_contact(ambiente="Banheiro", mensagem="Mensagem B")
+        self.post_contact(ambiente="Cozinha", mensagem="Mensagem A")
+        response = self.post_contact(ambiente="Banheiro", mensagem="Mensagem B")
 
         self.assertRedirects(response, reverse("institutional:contato"))
         self.assertEqual(Customer.objects.count(), 1)
@@ -254,11 +265,11 @@ class InstitutionalPagesTests(TestCase):
                 side_effect=RuntimeError("SMTP indisponível"),
             ),
             patch("src.institutional.application.contact_requests.logger.exception"),
-            self.captureOnCommitCallbacks(execute=True),
         ):
-            response = self.post_contact()
+            response = self.post_contact(follow=True)
 
         self.assertRedirects(response, reverse("institutional:contato"))
+        self.assertContains(response, "Não foi possível enviar sua mensagem no momento")
         customer = Customer.objects.get()
         self.assertIn("Bancada em granito", customer.notes)
         self.assertTrue(
@@ -283,8 +294,7 @@ class InstitutionalPagesTests(TestCase):
         self.assertEqual(len(mail.outbox), 0)
 
     def test_submission_is_visible_to_commercial_customer_flow(self):
-        with self.captureOnCommitCallbacks(execute=True):
-            self.post_contact()
+        self.post_contact()
 
         self.assertTrue(
             Customer.objects.filter(
@@ -310,6 +320,7 @@ class InstitutionalSitemapTests(TestCase):
         "/projetos-comerciais/",
         "/blog/",
         "/contato/",
+        "/politica-de-privacidade/",
         "/orcamento/",
         "/blog/escolher-pedra-bancada-cozinha/",
         "/blog/marmore-ou-granito-diferencas/",
@@ -459,6 +470,7 @@ class InstitutionalSeoTests(TestCase):
             ("materials", {}),
             ("contato", {}),
             ("quotation", {}),
+            ("politica_de_privacidade", {}),
             ("blog", {}),
             ("cozinhas", {}),
             ("blog_article", {"slug": "marmore-ou-granito-diferencas"}),

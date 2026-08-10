@@ -14,6 +14,11 @@ urlpatterns = [
     path("blog/", views.blog, name="blog"),
     path("blog/<slug:slug>/", views.blog_article, name="blog_article"),
     path("contato/", views.contato, name="contato"),
+    path(
+        "politica-de-privacidade/",
+        views.politica_de_privacidade,
+        name="politica_de_privacidade",
+    ),
     path("orcamento/", views.quotation, name="quotation"),
     path("cozinhas/", views.cozinhas, name="cozinhas"),
     path("escadas/", views.escadas, name="escadas"),

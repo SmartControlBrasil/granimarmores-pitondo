@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.db import transaction
 from django.shortcuts import redirect
 from django.shortcuts import render
 
@@ -91,20 +90,29 @@ def contato(request):
                 )
                 messages.error(request, str(exc))
             else:
-                transaction.on_commit(
-                    lambda: send_public_contact_notification(
-                        customer,
-                        contact_request,
-                        request=request,
-                    ),
+                notification_sent = send_public_contact_notification(
+                    customer,
+                    contact_request,
+                    request=request,
                 )
-                messages.success(
-                    request,
-                    "Solicitação recebida. Nossa equipe entrará em contato.",
-                )
+                if notification_sent:
+                    messages.success(
+                        request,
+                        "Mensagem enviada com sucesso. Em breve entraremos em contato.",
+                    )
+                else:
+                    messages.error(
+                        request,
+                        "Não foi possível enviar sua mensagem no momento. "
+                        "Tente novamente ou entre em contato pelo telefone/WhatsApp.",
+                    )
                 return redirect("institutional:contato")
 
     return render(request, page_template("contact"))
+
+
+def politica_de_privacidade(request):
+    return render(request, page_template("privacy_policy"))
 
 
 def quotation(request):

@@ -377,10 +377,21 @@ DEFAULT_FROM_EMAIL = env(
     default="Granimármores Pitondo <contato@granimarmorespitondo.com.br>",
 )
 
-CONTACT_RECIPIENT_EMAIL = env(
-    "CONTACT_RECIPIENT_EMAIL",
-    default="contato@granimarmorespitondo.com.br",
+CONTACT_EMAIL_TO = env(
+    "CONTACT_EMAIL_TO",
+    default=env(
+        "CONTACT_RECIPIENT_EMAIL",
+        default="contato@granimarmorespitondo.com.br",
+    ),
 )
+
+CONTACT_EMAIL_CC = env.list(
+    "CONTACT_EMAIL_CC",
+    default=["granimarmorespitondo@gmail.com"],
+)
+
+# Compatibilidade com a configuração antiga usada pelo formulário.
+CONTACT_RECIPIENT_EMAIL = CONTACT_EMAIL_TO
 
 SERVER_EMAIL = env(
     "SERVER_EMAIL",

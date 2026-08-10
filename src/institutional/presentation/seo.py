@@ -128,6 +128,13 @@ PAGE_SEO = {
             "cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais."
         ),
     ),
+    "politica_de_privacidade": PageSeo(
+        title="Política de Privacidade | Granimármores Pitondo",
+        description=(
+            "Saiba como a Granimármores Pitondo coleta, utiliza, armazena e protege "
+            "dados pessoais em seu site e canais digitais."
+        ),
+    ),
     "quotation": PageSeo(
         title="Solicite um Orçamento | Granimármores Pitondo",
         description=(
@@ -316,6 +323,7 @@ def build_local_business_schema(request):
                 "projects": "Projetos",
                 "materials": "Materiais",
                 "contato": "Contato",
+                "politica_de_privacidade": "Política de Privacidade",
                 "quotation": "Orçamento",
                 "blog": "Blog",
             }

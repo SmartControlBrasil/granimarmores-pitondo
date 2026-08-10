@@ -57,6 +57,8 @@ EMAIL_HOST_PASSWORD=<smtp-password>
 EMAIL_USE_TLS=True
 EMAIL_USE_SSL=False
 DEFAULT_FROM_EMAIL=Granimármores Pitondo <contato@granimarmorespitondo.com.br>
+CONTACT_EMAIL_TO=contato@granimarmorespitondo.com.br
+CONTACT_EMAIL_CC=granimarmorespitondo@gmail.com
 CONTACT_RECIPIENT_EMAIL=contato@granimarmorespitondo.com.br
 SERVER_EMAIL=sistema@granimarmorespitondo.com.br
 
