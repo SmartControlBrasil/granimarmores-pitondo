@@ -320,3 +320,26 @@
 
     </main>
 {% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {% if google_ads_contact_conversion %}
+        <script>
+            (function () {
+                function fireGoogleAdsConversion() {
+                    if (typeof window.gtag === "function") {
+                        window.gtag("event", "conversion", {
+                            send_to: "AW-18369690309/Zv2aC12YqeMcEMX1rLdE"
+                        });
+                    }
+                }
+
+                if (document.readyState === "complete") {
+                    fireGoogleAdsConversion();
+                } else {
+                    window.addEventListener("load", fireGoogleAdsConversion, { once: true });
+                }
+            })();
+        </script>
+    {% endif %}
+{% endblock %}

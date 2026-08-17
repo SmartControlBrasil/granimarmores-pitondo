@@ -123,6 +123,7 @@ class InstitutionalPagesTests(TestCase):
         self.assertContains(response, reverse("institutional:politica_de_privacidade"))
         self.assertNotContains(response, "novalidate")
         self.assertNotContains(response, "validation-contact.js")
+        self.assertNotContains(response, "AW-18369690309/Zv2aC12YqeMcEMX1rLdE")
 
     def test_valid_post_persists_customer_sends_notification_and_shows_success(self):
         response = self.post_contact(follow=True)
@@ -154,6 +155,13 @@ class InstitutionalPagesTests(TestCase):
         self.assertIn("URL:" + "\n" + "http://testserver/contato/", message.body)
         self.assertTrue(AuditEvent.objects.filter(action="public_contact_received").exists())
         self.assertTrue(AuditEvent.objects.filter(action="public_contact_notification", status="success").exists())
+        self.assertContains(response, "AW-18369690309/Zv2aC12YqeMcEMX1rLdE")
+
+    def test_conversion_snippet_is_single_use_after_success_redirect(self):
+        self.post_contact(follow=True)
+
+        refresh_response = self.client.get(reverse("institutional:contato"))
+        self.assertNotContains(refresh_response, "AW-18369690309/Zv2aC12YqeMcEMX1rLdE")
 
     def test_notification_is_sent_after_customer_persistence(self):
         with patch("src.institutional.presentation.views.send_public_contact_notification") as mocked:
@@ -198,6 +206,7 @@ class InstitutionalPagesTests(TestCase):
         self.assertContains(response, "Informe um e-mail válido")
         self.assertFalse(Customer.objects.exists())
         self.assertEqual(len(mail.outbox), 0)
+        self.assertNotContains(response, "AW-18369690309/Zv2aC12YqeMcEMX1rLdE")
 
     def test_honeypot_filled_redirects_without_creating_customer_or_email(self):
         response = self.post_contact(website="https://spam.example")
@@ -272,6 +281,7 @@ class InstitutionalPagesTests(TestCase):
 
         self.assertRedirects(response, reverse("institutional:contato"))
         self.assertContains(response, "Não foi possível enviar sua mensagem no momento")
+        self.assertNotContains(response, "AW-18369690309/Zv2aC12YqeMcEMX1rLdE")
         customer = Customer.objects.get()
         self.assertIn("Bancada em granito", customer.notes)
         self.assertTrue(

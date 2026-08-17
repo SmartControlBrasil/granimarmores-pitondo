@@ -66,6 +66,13 @@ def blog_article(request, slug):
 
 
 def contato(request):
+    conversion_event_pending = False
+    if request.method == "GET":
+        conversion_event_pending = request.session.pop(
+            "google_ads_contact_conversion_pending",
+            False,
+        )
+
     if request.method == "POST":
         website = request.POST.get("website", "").strip()
 
@@ -96,6 +103,7 @@ def contato(request):
                     request=request,
                 )
                 if notification_sent:
+                    request.session["google_ads_contact_conversion_pending"] = True
                     messages.success(
                         request,
                         "Mensagem enviada com sucesso. Em breve entraremos em contato.",
@@ -108,7 +116,11 @@ def contato(request):
                     )
                 return redirect("institutional:contato")
 
-    return render(request, page_template("contact"))
+    return render(
+        request,
+        page_template("contact"),
+        {"google_ads_contact_conversion": conversion_event_pending},
+    )
 
 
 def politica_de_privacidade(request):
