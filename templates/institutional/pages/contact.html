@@ -322,24 +322,52 @@
 {% endblock %}
 
 {% block extra_js %}
+
     {{ block.super }}
+
     {% if google_ads_contact_conversion %}
+
         <script>
             (function () {
+                const conversionSendTo =
+                    "AW-18369690309/Zv2aC12YqeMcEMX1rLdE";
+
+                let attempts = 0;
+                const maxAttempts = 20;
+                const intervalMs = 250;
+
                 function fireGoogleAdsConversion() {
                     if (typeof window.gtag === "function") {
                         window.gtag("event", "conversion", {
-                            send_to: "AW-18369690309/Zv2aC12YqeMcEMX1rLdE"
+                            send_to: conversionSendTo
                         });
+
+                        console.info(
+                            "[Google Ads] Conversão Solicitar Cotação enviada:",
+                            conversionSendTo
+                        );
+
+                        return;
+                    }
+
+                    attempts += 1;
+
+                    if (attempts < maxAttempts) {
+                        window.setTimeout(
+                            fireGoogleAdsConversion,
+                            intervalMs
+                        );
+                    } else {
+                        console.error(
+                            "[Google Ads] gtag não ficou disponível para registrar a conversão."
+                        );
                     }
                 }
 
-                if (document.readyState === "complete") {
-                    fireGoogleAdsConversion();
-                } else {
-                    window.addEventListener("load", fireGoogleAdsConversion, { once: true });
-                }
+                fireGoogleAdsConversion();
             })();
         </script>
+
     {% endif %}
+
 {% endblock %}
