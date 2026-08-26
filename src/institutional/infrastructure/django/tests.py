@@ -1,3 +1,4 @@
+import re
 from unittest.mock import patch
 
 from django.core import mail
@@ -42,7 +43,7 @@ def valid_contact_data(**overrides):
 )
 class InstitutionalPagesTests(TestCase):
     pages = {
-        "home": ("/", template("home"), "Mármores e granitos"),
+        "home": ("/", template("home"), "Marmoraria na Saúde"),
         "sobre": ("/sobre/", template("about"), "Sobre a Granimármores Pitondo"),
         "cozinhas": ("/cozinhas/", template("cozinhas"), "Cozinhas que unem beleza e funcionalidade"),
         "escadas": ("/escadas/", template("escadas"), "Escadas em Mármore e Granito"),
@@ -417,13 +418,70 @@ class InstitutionalSeoTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<link rel="canonical" href="https://granimarmorespitondo.com.br/">')
         self.assertContains(response, 'name="description"')
-        self.assertContains(response, "Soluções sob medida em mármore, granito e superfícies especiais")
+        self.assertContains(response, "Marmoraria na Saúde, Zona Sul de São Paulo")
         self.assertContains(response, 'property="og:title"')
         self.assertContains(response, 'property="og:description"')
         self.assertContains(response, 'property="og:url"')
         self.assertContains(response, 'property="og:image"')
         self.assertContains(response, 'name="twitter:card" content="summary_large_image"')
         self.assertContains(response, '"LocalBusiness"')
+
+    def test_home_local_seo_about_metrics_and_integrations_are_rendered(self):
+        title = "Marmoraria na Saúde e Zona Sul SP | Granimármores Pitondo"
+        description = (
+            "Marmoraria na Saúde, Zona Sul de São Paulo. Bancadas, pias, escadas "
+            "e projetos sob medida em mármore, granito, quartzo e quartzito."
+        )
+
+        response = self.client.get(reverse("institutional:home"))
+        html = response.content.decode()
+        visible_text = re.sub(r"<[^>]+>", " ", html)
+        visible_text = re.sub(r"\s+", " ", visible_text)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(html.count(f"<title>{title}</title>"), 1)
+        self.assertContains(response, f'content="{description}"')
+        self.assertContains(response, '<link rel="canonical" href="https://granimarmorespitondo.com.br/">')
+        self.assertEqual(len(re.findall(r"<h1\b", html)), 1)
+        self.assertIn("Marmoraria na Saúde", visible_text)
+        self.assertIn("Zona Sul", visible_text)
+        self.assertIn("São Paulo", visible_text)
+        self.assertEqual(html.count("widget.js"), 1)
+        self.assertIn("wa.me/5511940241328", html)
+        self.assertIn("cozinha-com-balcao-taj-mahal-mobile.webp", html)
+        self.assertIn("cozinha-com-balcao-taj-mahal.webp", html)
+        self.assertIn('media="(max-width: 767px)"', html)
+        self.assertIn('media="(min-width: 768px)"', html)
+        self.assertIn("banheira-revestida-granito-480.webp 480w", html)
+        self.assertIn('sizes="(max-width: 767px) 100vw, 33vw"', html)
+
+        about_response = self.client.get(reverse("institutional:sobre"))
+        about_html = about_response.content.decode()
+        about_visible_text = re.sub(r"<[^>]+>", " ", about_html)
+        about_visible_text = re.sub(r"\s+", " ", about_visible_text).lower()
+
+        self.assertEqual(about_response.status_code, 200)
+        pillars_match = re.search(r"<!-- Pilares -->(.*?)</div>\s*</section>", about_html, re.S)
+        self.assertIsNotNone(pillars_match)
+        pillars_html = pillars_match.group(1)
+
+        expected_pillars = {
+            "Medição técnica": "Levantamento de medidas, pontos e interferências do ambiente.",
+            "Fabricação sob medida": "Cortes, recortes e acabamentos conforme o projeto aprovado.",
+            "Orientação de materiais": "Escolha da superfície considerando uso, manutenção e estética.",
+            "Instalação especializada": "Montagem, encaixes e ajustes finais conforme o escopo contratado.",
+        }
+        for title, text in expected_pillars.items():
+            with self.subTest(pillar=title):
+                self.assertIn(title, pillars_html)
+                self.assertIn(text, pillars_html)
+
+        self.assertNotIn("65250", pillars_html)
+        self.assertNotIn("23160", pillars_html)
+        self.assertNotIn("150+", pillars_html)
+        self.assertNotIn("30 anos de experiência", about_visible_text)
+        self.assertNotIn("data-to", pillars_html)
+        self.assertNotIn("timer", pillars_html)
 
     def test_internal_page_has_unique_canonical_and_description(self):
         response = self.client.get(reverse("institutional:cozinhas"))

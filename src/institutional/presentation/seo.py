@@ -45,10 +45,10 @@ DEFAULT_PAGE_SEO = PageSeo(
 
 PAGE_SEO = {
     "home": PageSeo(
-        title="Granimármores Pitondo | Mármores, Granitos e Projetos Sob Medida",
+        title="Marmoraria na Saúde e Zona Sul SP | Granimármores Pitondo",
         description=(
-            "Soluções sob medida em mármore, granito e superfícies especiais para "
-            "cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais."
+            "Marmoraria na Saúde, Zona Sul de São Paulo. Bancadas, pias, escadas "
+            "e projetos sob medida em mármore, granito, quartzo e quartzito."
         ),
     ),
     "sobre": PageSeo(
