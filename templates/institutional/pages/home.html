@@ -1,6 +1,36 @@
 {% extends "institutional/base.html" %}
 {% load static %}
 
+{% block extra_css %}
+    <link
+        rel="preload"
+        as="image"
+        href="{% static 'institutional/images/slider/cozinha-com-balcao-taj-mahal-mobile.webp' %}"
+        media="(max-width: 767px)"
+        fetchpriority="high"
+    >
+    <link
+        rel="preload"
+        as="image"
+        href="{% static 'institutional/images/slider/cozinha-com-balcao-taj-mahal.webp' %}"
+        media="(min-width: 768px)"
+        fetchpriority="high"
+    >
+    <style>
+        @media (max-width: 767px) {
+            #section-intro .swiper-slide:first-child .swiper-inner {
+                background-image: url("{% static 'institutional/images/slider/cozinha-com-balcao-taj-mahal-mobile.webp' %}") !important;
+            }
+
+            .home-quotation-section {
+                background-image:
+                    linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
+                    url("{% static 'institutional/images/background/studio-picture-900.webp' %}") !important;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <main>
 
@@ -150,8 +180,14 @@
 
                             <img
                                 src="{% static 'institutional/images/misc/banheira-revestida-granito.webp' %}"
+                                srcset="{% static 'institutional/images/misc/banheira-revestida-granito-480.webp' %} 480w, {% static 'institutional/images/misc/banheira-revestida-granito.webp' %} 800w"
+                                sizes="(max-width: 767px) 100vw, 33vw"
+                                width="800"
+                                height="800"
                                 class="w-100 rounded-1 wow scaleIn"
                                 alt="Detalhe demonstrativo de pedra natural"
+                                loading="lazy"
+                                decoding="async"
                             >
 
                         </div>
@@ -347,8 +383,12 @@
 
                                             <img
                                                 src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                width="512"
+                                                height="512"
                                                 class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
                                                 alt=""
+                                                loading="lazy"
+                                                decoding="async"
                                             >
 
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
@@ -366,8 +406,14 @@
 
                                                 <img
                                                     src="{% static 'institutional/images/services/mesa-cozinha-marmore.webp' %}"
+                                                    srcset="{% static 'institutional/images/services/mesa-cozinha-marmore-480.webp' %} 480w, {% static 'institutional/images/services/mesa-cozinha-marmore.webp' %} 800w"
+                                                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 25vw"
+                                                    width="800"
+                                                    height="1080"
                                                     class="w-100 hover-scale-1-2"
                                                     alt="Inspiração para bancada de cozinha"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 >
 
                                             </div>
@@ -395,8 +441,12 @@
 
                                             <img
                                                 src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                width="512"
+                                                height="512"
                                                 class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
                                                 alt=""
+                                                loading="lazy"
+                                                decoding="async"
                                             >
 
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
@@ -414,8 +464,14 @@
 
                                                 <img
                                                     src="{% static 'institutional/images/services/escada-marmore.webp' %}"
+                                                    srcset="{% static 'institutional/images/services/escada-marmore-480.webp' %} 480w, {% static 'institutional/images/services/escada-marmore.webp' %} 800w"
+                                                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 25vw"
+                                                    width="800"
+                                                    height="1080"
                                                     class="w-100 hover-scale-1-2"
                                                     alt="Inspiração para escada revestida em pedra"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 >
 
                                             </div>
@@ -443,8 +499,12 @@
 
                                             <img
                                                 src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                width="512"
+                                                height="512"
                                                 class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
                                                 alt=""
+                                                loading="lazy"
+                                                decoding="async"
                                             >
 
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
@@ -462,8 +522,14 @@
 
                                                 <img
                                                     src="{% static 'institutional/images/services/area-gourmet-granito.webp' %}"
+                                                    srcset="{% static 'institutional/images/services/area-gourmet-granito-480.webp' %} 480w, {% static 'institutional/images/services/area-gourmet-granito.webp' %} 800w"
+                                                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 25vw"
+                                                    width="800"
+                                                    height="1080"
                                                     class="w-100 hover-scale-1-2"
                                                     alt="Inspiração para área gourmet"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 >
 
                                             </div>
@@ -491,8 +557,12 @@
 
                                             <img
                                                 src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                width="512"
+                                                height="512"
                                                 class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
                                                 alt=""
+                                                loading="lazy"
+                                                decoding="async"
                                             >
 
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
@@ -510,8 +580,14 @@
 
                                                 <img
                                                     src="{% static 'institutional/images/services/banheiro-marmore.webp' %}"
+                                                    srcset="{% static 'institutional/images/services/banheiro-marmore-480.webp' %} 480w, {% static 'institutional/images/services/banheiro-marmore.webp' %} 800w"
+                                                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 25vw"
+                                                    width="800"
+                                                    height="1080"
                                                     class="w-100 hover-scale-1-2"
                                                     alt="Inspiração para banheiro com bancada"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 >
 
                                             </div>
@@ -539,8 +615,12 @@
 
                                             <img
                                                 src="{% static 'institutional/images/misc/up-right-arrow.webp' %}"
+                                                width="512"
+                                                height="512"
                                                 class="abs w-80px p-20 z-2 top-0 end-0 p-4 hover-op-1"
                                                 alt=""
+                                                loading="lazy"
+                                                decoding="async"
                                             >
 
                                             <div class="abs z-4 p-4 pb-0 bottom-0 mb-0">
@@ -558,8 +638,14 @@
 
                                                 <img
                                                     src="{% static 'institutional/images/services/balcao-recepcao-marmore.webp' %}"
+                                                    srcset="{% static 'institutional/images/services/balcao-recepcao-marmore-480.webp' %} 480w, {% static 'institutional/images/services/balcao-recepcao-marmore.webp' %} 800w"
+                                                    sizes="(max-width: 767px) 100vw, (max-width: 1199px) 50vw, 25vw"
+                                                    width="800"
+                                                    height="1080"
                                                     class="w-100 hover-scale-1-2"
                                                     alt="Possibilidade para projeto comercial"
+                                                    loading="lazy"
+                                                    decoding="async"
                                                 >
 
                                             </div>
@@ -720,8 +806,14 @@
 
                                 <img
                                     src="{% static 'institutional/images/blog/mulher-escolhendo-pedra.webp' %}"
+                                    srcset="{% static 'institutional/images/blog/mulher-escolhendo-pedra-480.webp' %} 480w, {% static 'institutional/images/blog/mulher-escolhendo-pedra.webp' %} 800w"
+                                    sizes="(max-width: 767px) 100vw, (max-width: 991px) 50vw, 33vw"
+                                    width="800"
+                                    height="1080"
                                     class="w-100 hover-scale-1-1"
                                     alt="Bancada de cozinha em pedra"
+                                    loading="lazy"
+                                    decoding="async"
                                 >
 
                                 <a
@@ -764,8 +856,14 @@
 
                                 <img
                                     src="{% static 'institutional/images/blog/marmore-ou-granito.webp' %}"
+                                    srcset="{% static 'institutional/images/blog/marmore-ou-granito-480.webp' %} 480w, {% static 'institutional/images/blog/marmore-ou-granito.webp' %} 800w"
+                                    sizes="(max-width: 767px) 100vw, (max-width: 991px) 50vw, 33vw"
+                                    width="800"
+                                    height="1080"
                                     class="w-100 hover-scale-1-1"
                                     alt="Amostras de mármore e granito"
+                                    loading="lazy"
+                                    decoding="async"
                                 >
 
                                 <a
@@ -808,8 +906,14 @@
 
                                 <img
                                     src="{% static 'institutional/images/blog/cuidados-com-pedra.webp' %}"
+                                    srcset="{% static 'institutional/images/blog/cuidados-com-pedra-480.webp' %} 480w, {% static 'institutional/images/blog/cuidados-com-pedra.webp' %} 800w"
+                                    sizes="(max-width: 767px) 100vw, (max-width: 991px) 50vw, 33vw"
+                                    width="800"
+                                    height="1080"
                                     class="w-100 hover-scale-1-1"
                                     alt="Superfície de pedra limpa"
+                                    loading="lazy"
+                                    decoding="async"
                                 >
 
                                 <a
@@ -847,7 +951,7 @@
         </section>
 
         <section
-    class="section-dark text-light jarallax"
+    class="section-dark text-light jarallax home-quotation-section"
     style="
         background-image:
             linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
