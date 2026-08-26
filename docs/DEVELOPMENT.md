@@ -137,8 +137,6 @@ python manage.py collectstatic --noinput
 
 ## Arquivos legados (não remover nesta fase)
 
-- `templates/institutional/pages/home_original_intrio.html`
-- `templates/institutional/pages/home_before_split.html`
 - `hando/manage.py`, `hando/config/`
 - `docs/ARQUITETURA_E_DIRETRIZES.md`, `docs/DECISOES_ARQUITETURAIS.md`
 
