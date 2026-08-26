@@ -23,6 +23,8 @@ INSTITUTIONAL_STATIC_PAGES = (
     {"view_name": "institutional:projetos_comerciais", "priority": 0.8, "changefreq": "monthly"},
     {"view_name": "institutional:blog", "priority": 0.8, "changefreq": "weekly"},
     {"view_name": "institutional:contato", "priority": 0.9, "changefreq": "monthly"},
+    {"view_name": "institutional:marmoraria_saude_sp", "priority": 0.8, "changefreq": "monthly"},
+    {"view_name": "institutional:marmoraria_zona_sul_sp", "priority": 0.8, "changefreq": "monthly"},
     {"view_name": "institutional:politica_de_privacidade", "priority": 0.3, "changefreq": "yearly"},
     {"view_name": "institutional:quotation", "priority": 0.9, "changefreq": "monthly"},
 )

@@ -14,6 +14,8 @@ urlpatterns = [
     path("blog/", views.blog, name="blog"),
     path("blog/<slug:slug>/", views.blog_article, name="blog_article"),
     path("contato/", views.contato, name="contato"),
+    path("marmoraria-saude-sp/", views.marmoraria_saude_sp, name="marmoraria_saude_sp"),
+    path("marmoraria-zona-sul-sp/", views.marmoraria_zona_sul_sp, name="marmoraria_zona_sul_sp"),
     path(
         "politica-de-privacidade/",
         views.politica_de_privacidade,

@@ -10580,3 +10580,16 @@ width: auto;
       display: block;
   }
 }
+/* Local SEO pages */
+.local-hero-title {
+font-size: clamp(48px, 5vw, 76px);
+line-height: 0.98;
+text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+.local-hero-title {
+font-size: clamp(38px, 11vw, 48px);
+line-height: 1.02;
+}
+}

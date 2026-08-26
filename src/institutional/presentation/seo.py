@@ -16,11 +16,15 @@ SITE_PROFILE = {
     "company_name": "Granimármores Pitondo",
     "site_name": "Granimármores Pitondo",
     "phone": "(11) 94024-1328",
+    "email": "contato@granimarmorespitondo.com.br",
     "street_address": "Av. do Cursino, 3342",
     "address_locality": "Jardim da Saúde",
     "address_city": "São Paulo",
     "address_region": "SP",
+    "postal_code": "04132-002",
     "address_country": "BR",
+    "area_served": "São Paulo",
+    "same_as": "https://www.instagram.com/granimarmorespitondo/",
     "default_social_image": DEFAULT_SOCIAL_IMAGE,
     "description": "Marmoraria especializada no corte, acabamento e instalação de pedras naturais e superfícies especiais para tampos, lavatórios, escadas e ambientes gourmet em São Paulo.",
 }
@@ -128,6 +132,20 @@ PAGE_SEO = {
             "cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais."
         ),
     ),
+    "marmoraria_saude_sp": PageSeo(
+        title="Marmoraria na Saúde SP | Granimármores Pitondo",
+        description=(
+            "Marmoraria na Saúde, São Paulo, com medição, fabricação e instalação "
+            "de bancadas, pias, escadas e peças sob medida em pedras e superfícies."
+        ),
+    ),
+    "marmoraria_zona_sul_sp": PageSeo(
+        title="Marmoraria na Zona Sul de SP | Granimármores Pitondo",
+        description=(
+            "Projetos sob medida em mármore, granito, quartzo e quartzito na Zona "
+            "Sul de São Paulo, com medição, fabricação, acabamento e instalação."
+        ),
+    ),
     "politica_de_privacidade": PageSeo(
         title="Política de Privacidade | Granimármores Pitondo",
         description=(
@@ -172,6 +190,28 @@ BLOG_ARTICLE_SEO = {
         og_type="article",
         og_image="institutional/images/blog/cuidados-com-pedra.webp",
     ),
+}
+
+
+LOCAL_PAGE_SCHEMA = {
+    "marmoraria_saude_sp": {
+        "name": "Marmoraria na Saúde, São Paulo",
+        "faqs": [
+            ("Onde fica a Granimármores Pitondo?", "A Granimármores Pitondo fica na Av. do Cursino, 3342, Jardim da Saúde, São Paulo - SP."),
+            ("A empresa realiza medição no local?", "Sim. A medição técnica faz parte do processo para conferir medidas, pontos e interferências do ambiente."),
+            ("Quais ambientes podem receber peças sob medida?", "Cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais podem receber peças sob medida em pedras e superfícies."),
+            ("Como solicitar uma avaliação?", "Envie fotos, medidas ou a planta do ambiente pela página de contato ou orçamento para iniciar a avaliação do projeto."),
+        ],
+    },
+    "marmoraria_zona_sul_sp": {
+        "name": "Marmoraria na Zona Sul de São Paulo",
+        "faqs": [
+            ("A Granimármores Pitondo atende projetos na Zona Sul?", "Sim. A empresa atende projetos residenciais e comerciais na Zona Sul de São Paulo, com base na localização da Saúde."),
+            ("Vocês trabalham com cozinhas e áreas gourmet?", "Sim. Cozinhas e áreas gourmet podem receber bancadas, ilhas, pias e revestimentos sob medida."),
+            ("É possível fabricar peças conforme planta ou projeto?", "Sim. Fotos, medidas, plantas e referências ajudam na compatibilização com marcenaria, cuba, cooktop e demais pontos do ambiente."),
+            ("Quais informações devo enviar para solicitar orçamento?", "Informe o ambiente, medidas aproximadas, fotos ou planta, material desejado e detalhes como cuba, cooktop, recortes e local de instalação."),
+        ],
+    },
 }
 
 
@@ -232,6 +272,7 @@ def build_local_business_schema(request):
         "name": profile["company_name"],
         "url": base_url,
         "telephone": "+55 11 94024-1328",
+        "email": profile["email"],
         "description": profile["description"],
         "logo": {
             "@type": "ImageObject",
@@ -240,11 +281,17 @@ def build_local_business_schema(request):
         "image": absolute_static_url(profile["default_social_image"]),
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": f"{profile['street_address']} - {profile['address_locality']}",
+            "streetAddress": profile["street_address"],
             "addressLocality": profile["address_city"],
             "addressRegion": profile["address_region"],
+            "postalCode": profile["postal_code"],
             "addressCountry": profile["address_country"],
         },
+        "areaServed": {
+            "@type": "City",
+            "name": profile["area_served"],
+        },
+        "sameAs": [profile["same_as"]],
     }
 
     # 2. WebSite
@@ -323,6 +370,8 @@ def build_local_business_schema(request):
                 "projects": "Projetos",
                 "materials": "Materiais",
                 "contato": "Contato",
+                "marmoraria_saude_sp": "Marmoraria na Saúde",
+                "marmoraria_zona_sul_sp": "Marmoraria na Zona Sul de São Paulo",
                 "politica_de_privacidade": "Política de Privacidade",
                 "quotation": "Orçamento",
                 "blog": "Blog",
@@ -338,6 +387,34 @@ def build_local_business_schema(request):
             "@type": "BreadcrumbList",
             "@id": f"{canonical_url}#breadcrumb",
             "itemListElement": breadcrumbs,
+        })
+
+    if match and match.namespace == "institutional" and match.url_name in LOCAL_PAGE_SCHEMA:
+        page = resolve_page_seo(request)
+        local_page = LOCAL_PAGE_SCHEMA[match.url_name]
+        graph.append({
+            "@type": "WebPage",
+            "@id": f"{canonical_url}#webpage",
+            "url": canonical_url,
+            "name": local_page["name"],
+            "description": page.description,
+            "isPartOf": {"@id": website_id},
+            "about": {"@id": business_id},
+        })
+        graph.append({
+            "@type": "FAQPage",
+            "@id": f"{canonical_url}#faq",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": question,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": answer,
+                    },
+                }
+                for question, answer in local_page["faqs"]
+            ],
         })
 
     # 4. BlogPosting
@@ -388,6 +465,7 @@ def build_site_seo_context(request):
         "site_name": SITE_PROFILE["site_name"],
         "base_url": site_base_url(),
         "phone": SITE_PROFILE["phone"],
+        "email": SITE_PROFILE["email"],
         "street_address": SITE_PROFILE["street_address"],
         "address_locality": SITE_PROFILE["address_locality"],
         "address_city": SITE_PROFILE["address_city"],

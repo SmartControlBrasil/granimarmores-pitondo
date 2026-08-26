@@ -65,6 +65,14 @@ def blog_article(request, slug):
     return render(request, template_name)
 
 
+def marmoraria_saude_sp(request):
+    return render(request, page_template("marmoraria_saude_sp"))
+
+
+def marmoraria_zona_sul_sp(request):
+    return render(request, page_template("marmoraria_zona_sul_sp"))
+
+
 def contato(request):
     conversion_event_pending = False
     if request.method == "GET":

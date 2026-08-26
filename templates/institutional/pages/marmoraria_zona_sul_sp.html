@@ -1,0 +1,86 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main>
+        <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a>
+        <div id="de-loader"></div>
+
+        <section class="bg-dark text-light relative jarallax">
+            <img src="{% static 'institutional/images/background/studio-picture.webp' %}" width="1600" height="667" class="jarallax-img" alt="Atendimento para projetos sob medida em São Paulo" decoding="async">
+            <div class="container relative z-2">
+                <div class="row gy-4 gx-5 align-items-center">
+                    <div class="col-md-8">
+                        <div class="spacer-double sm-hide"></div>
+                        <h1 class="local-hero-title mb-3 wow fadeInUp" data-wow-delay=".2s">Marmoraria na Zona Sul de São Paulo</h1>
+                        <nav aria-label="Breadcrumb">
+                            <ul class="crumb wow fadeInUp">
+                                <li><a href="{% url 'institutional:home' %}">Início</a></li>
+                                <li class="active">Marmoraria na Zona Sul de São Paulo</li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-md-4"><p class="mb-0 text-light op-7">Projetos residenciais e comerciais com medição, fabricação, acabamento e instalação.</p></div>
+                </div>
+            </div>
+            <div class="gradient-edge-bottom h-50 op-6"></div>
+            <div class="sw-overlay op-5"></div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="row g-4 gx-5 align-items-center">
+                    <div class="col-lg-6">
+                        <div class="subtitle">Zona Sul de São Paulo</div>
+                        <h2>Peças sob medida para diferentes tipos de ambiente</h2>
+                        <p>A Granimármores Pitondo atende projetos na Zona Sul de São Paulo a partir de sua localização na Saúde. O processo começa pela avaliação do ambiente e pela compatibilização das peças com marcenaria, cuba, cooktop, pontos hidráulicos e demais elementos do projeto.</p>
+                        <p>A fabricação considera medidas, recortes, bordas e acabamentos definidos no escopo. Depois, transporte e instalação são organizados conforme as condições do local e os detalhes combinados para o serviço.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="{% static 'institutional/images/services/area-gourmet-granito.webp' %}" srcset="{% static 'institutional/images/services/area-gourmet-granito-480.webp' %} 480w, {% static 'institutional/images/services/area-gourmet-granito.webp' %} 800w" sizes="(max-width: 767px) 100vw, 50vw" width="800" height="1080" class="w-100 rounded-1 wow scaleIn" alt="Área gourmet com bancada em pedra sob medida" loading="lazy" decoding="async">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-color-op-1">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-4"><h2 class="fs-32">Apartamentos e residências</h2><p>Ambientes residenciais podem receber bancadas, pias, ilhas, lavatórios, escadas e revestimentos fabricados conforme medidas e uso previsto.</p></div>
+                    <div class="col-md-4"><h2 class="fs-32">Ambientes comerciais</h2><p>Balcões, recepções, lavabos e áreas de atendimento são planejados para unir resistência, acabamento e integração com o projeto do espaço.</p></div>
+                    <div class="col-md-4"><h2 class="fs-32">Escolha de materiais</h2><p>Mármore, granito, quartzo e quartzito são avaliados conforme estética, manutenção, exposição ao uso e resultado desejado para cada aplicação.</p></div>
+                </div>
+                <div class="spacer-single"></div>
+                <div class="row g-3">
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:cozinhas' %}">Cozinhas</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:banheiros' %}">Banheiros</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:escadas' %}">Escadas</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:areas_gourmet' %}">Áreas gourmet</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:projetos_comerciais' %}">Projetos comerciais</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:quotation' %}">Orçamento</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-5">
+                        <div class="subtitle">Como solicitar</div>
+                        <h2>Envie as informações do ambiente</h2>
+                        <p>Fotos, medidas aproximadas, planta, material desejado e detalhes de cuba, cooktop ou recortes ajudam a equipe a entender o projeto e orientar os próximos passos do orçamento.</p>
+                        <a href="{% url 'institutional:contato' %}" class="btn-main fx-slide"><span>Solicitar orçamento</span></a>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="row g-4">
+                            <div class="col-md-6"><h3>A Granimármores Pitondo atende projetos na Zona Sul?</h3><p>Sim. A empresa atende projetos residenciais e comerciais na Zona Sul de São Paulo, com base na localização da Saúde.</p></div>
+                            <div class="col-md-6"><h3>Vocês trabalham com cozinhas e áreas gourmet?</h3><p>Sim. Cozinhas e áreas gourmet podem receber bancadas, ilhas, pias e revestimentos sob medida.</p></div>
+                            <div class="col-md-6"><h3>É possível fabricar peças conforme planta ou projeto?</h3><p>Sim. Fotos, medidas, plantas e referências ajudam na compatibilização com marcenaria, cuba e cooktop.</p></div>
+                            <div class="col-md-6"><h3>Quais informações devo enviar para solicitar orçamento?</h3><p>Informe o ambiente, medidas aproximadas, fotos ou planta, material desejado e detalhes do local de instalação.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

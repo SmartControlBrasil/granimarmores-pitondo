@@ -1,0 +1,95 @@
+{% extends "institutional/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main>
+        <a href="#" id="back-to-top" aria-label="Voltar ao topo"></a>
+        <div id="de-loader"></div>
+
+        <section class="bg-dark text-light relative jarallax">
+            <img src="{% static 'institutional/images/background/studio-picture.webp' %}" width="1600" height="667" class="jarallax-img" alt="Showroom e atendimento da Granimármores Pitondo" decoding="async">
+            <div class="container relative z-2">
+                <div class="row gy-4 gx-5 align-items-center">
+                    <div class="col-md-8">
+                        <div class="spacer-double sm-hide"></div>
+                        <h1 class="local-hero-title mb-3 wow fadeInUp" data-wow-delay=".2s">Marmoraria na Saúde, São Paulo</h1>
+                        <nav aria-label="Breadcrumb">
+                            <ul class="crumb wow fadeInUp">
+                                <li><a href="{% url 'institutional:home' %}">Início</a></li>
+                                <li class="active">Marmoraria na Saúde</li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-md-4"><p class="mb-0 text-light op-7">Atendimento técnico para bancadas, pias, escadas e peças sob medida em pedras e superfícies.</p></div>
+                </div>
+            </div>
+            <div class="gradient-edge-bottom h-50 op-6"></div>
+            <div class="sw-overlay op-5"></div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="row g-4 gx-5 align-items-center">
+                    <div class="col-lg-6">
+                        <div class="subtitle">Jardim da Saúde</div>
+                        <h2>Marmoraria localizada na Av. do Cursino</h2>
+                        <p>A Granimármores Pitondo está localizada na Av. do Cursino, 3342, Jardim da Saúde, em São Paulo. A equipe realiza medição técnica, fabricação sob medida e instalação de peças para ambientes residenciais e comerciais.</p>
+                        <p>O atendimento considera o uso do ambiente, a manutenção esperada e o acabamento desejado para orientar a escolha entre mármore, granito, quartzo, quartzito e outras superfícies aplicáveis ao projeto.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="{% static 'institutional/images/misc/banheira-revestida-granito.webp' %}" srcset="{% static 'institutional/images/misc/banheira-revestida-granito-480.webp' %} 480w, {% static 'institutional/images/misc/banheira-revestida-granito.webp' %} 800w" sizes="(max-width: 767px) 100vw, 50vw" width="800" height="800" class="w-100 rounded-1 wow scaleIn" alt="Aplicação sob medida em pedra natural" loading="lazy" decoding="async">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-color-op-1">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-4"><h2 class="fs-32">Cozinhas e banheiros</h2><p>Bancadas, pias, cubas, nichos e acabamentos são planejados conforme medidas, pontos hidráulicos, cuba, cooktop e demais detalhes do ambiente.</p></div>
+                    <div class="col-md-4"><h2 class="fs-32">Escadas e áreas gourmet</h2><p>Degraus, patamares, ilhas, churrasqueiras e bancadas recebem orientação técnica para compatibilizar resistência, manutenção e acabamento.</p></div>
+                    <div class="col-md-4"><h2 class="fs-32">Projetos comerciais</h2><p>Recepções, balcões, lavabos e revestimentos podem ser produzidos sob medida para empresas, clínicas, lojas e outros ambientes comerciais.</p></div>
+                </div>
+                <div class="spacer-single"></div>
+                <div class="row g-3">
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:cozinhas' %}">Cozinhas</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:banheiros' %}">Banheiros</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:escadas' %}">Escadas</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:areas_gourmet' %}">Áreas gourmet</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:projetos_comerciais' %}">Projetos comerciais</a></div>
+                    <div class="col-md-2 col-6"><a href="{% url 'institutional:contato' %}">Contato</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-5">
+                        <div class="subtitle">Avaliação do projeto</div>
+                        <h2>Envie fotos, medidas ou planta</h2>
+                        <p>Para iniciar a avaliação, envie referências do ambiente, medidas aproximadas, fotos ou a planta. Essas informações ajudam a entender recortes, bordas, emendas e pontos de instalação.</p>
+                        <a href="{% url 'institutional:quotation' %}" class="btn-main fx-slide"><span>Solicitar orçamento</span></a>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="row g-4">
+                            <div class="col-md-6"><h3>Onde fica a Granimármores Pitondo?</h3><p>A Granimármores Pitondo fica na Av. do Cursino, 3342, Jardim da Saúde, São Paulo - SP.</p></div>
+                            <div class="col-md-6"><h3>A empresa realiza medição no local?</h3><p>Sim. A medição técnica confere medidas, pontos e interferências do ambiente antes da fabricação.</p></div>
+                            <div class="col-md-6"><h3>Quais ambientes podem receber peças sob medida?</h3><p>Cozinhas, banheiros, escadas, áreas gourmet e projetos comerciais podem receber peças em pedras e superfícies.</p></div>
+                            <div class="col-md-6"><h3>Como solicitar uma avaliação?</h3><p>Use a página de contato ou orçamento e envie fotos, medidas ou a planta do ambiente.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-dark-1 text-light">
+            <div class="container">
+                <div class="row g-4 align-items-center justify-content-between">
+                    <div class="col-lg-7"><h2>Granimármores Pitondo</h2><p class="mb-0">Av. do Cursino, 3342, Jardim da Saúde, São Paulo - SP<br>(11) 94024-1328 - 5058-0889</p></div>
+                    <div class="col-lg-4 text-lg-end"><a href="{% url 'institutional:contato' %}" class="btn-main fx-slide"><span>Falar com a equipe</span></a></div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

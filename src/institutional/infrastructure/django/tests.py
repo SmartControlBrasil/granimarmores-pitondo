@@ -333,6 +333,8 @@ class InstitutionalSitemapTests(TestCase):
         "/projetos-comerciais/",
         "/blog/",
         "/contato/",
+        "/marmoraria-saude-sp/",
+        "/marmoraria-zona-sul-sp/",
         "/politica-de-privacidade/",
         "/orcamento/",
         "/blog/escolher-pedra-bancada-cozinha/",
@@ -385,6 +387,8 @@ class InstitutionalSitemapTests(TestCase):
             reverse("institutional:projetos_comerciais"),
             reverse("institutional:blog"),
             reverse("institutional:contato"),
+            reverse("institutional:marmoraria_saude_sp"),
+            reverse("institutional:marmoraria_zona_sul_sp"),
             reverse(
                 "institutional:blog_article",
                 kwargs={"slug": "escolher-pedra-bancada-cozinha"},
@@ -483,6 +487,33 @@ class InstitutionalSeoTests(TestCase):
         self.assertNotIn("data-to", pillars_html)
         self.assertNotIn("timer", pillars_html)
 
+    def test_existing_public_pages_keep_unique_title_and_description(self):
+        routes = [
+            "home",
+            "sobre",
+            "services",
+            "projects",
+            "materials",
+            "cozinhas",
+            "banheiros",
+            "escadas",
+            "areas_gourmet",
+            "projetos_comerciais",
+            "blog",
+            "contato",
+            "quotation",
+            "politica_de_privacidade",
+        ]
+
+        for route in routes:
+            with self.subTest(route=route):
+                response = self.client.get(reverse(f"institutional:{route}"))
+                html = response.content.decode()
+
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(len(re.findall(r"<title>.*?</title>", html, re.S)), 1)
+                self.assertEqual(html.count('name="description"'), 1)
+
     def test_internal_page_has_unique_canonical_and_description(self):
         response = self.client.get(reverse("institutional:cozinhas"))
         html = response.content.decode()
@@ -524,6 +555,95 @@ class InstitutionalSeoTests(TestCase):
         self.assertNotIn("/admin/", content)
         self.assertNotIn("/accounts/", content)
 
+    def _json_ld_graph(self, html):
+        import json
+
+        start_marker = '<script type="application/ld+json">'
+        end_marker = '</script>'
+        self.assertIn(start_marker, html)
+        start_idx = html.find(start_marker) + len(start_marker)
+        end_idx = html.find(end_marker, start_idx)
+        data = json.loads(html[start_idx:end_idx].strip())
+        return data["@graph"]
+
+    def test_local_pages_render_seo_links_integrations_and_schema(self):
+        pages = {
+            "marmoraria_saude_sp": {
+                "path": "/marmoraria-saude-sp/",
+                "title": "Marmoraria na Saúde SP | Granimármores Pitondo",
+                "description": "Marmoraria na Saúde, São Paulo, com medição, fabricação e instalação de bancadas, pias, escadas e peças sob medida em pedras e superfícies.",
+                "h1": "Marmoraria na Saúde, São Paulo",
+                "breadcrumb": "Marmoraria na Saúde",
+                "must_contain": "Av. do Cursino, 3342, Jardim da Saúde",
+                "cta": reverse("institutional:quotation"),
+                "faq": "Onde fica a Granimármores Pitondo?",
+            },
+            "marmoraria_zona_sul_sp": {
+                "path": "/marmoraria-zona-sul-sp/",
+                "title": "Marmoraria na Zona Sul de SP | Granimármores Pitondo",
+                "description": "Projetos sob medida em mármore, granito, quartzo e quartzito na Zona Sul de São Paulo, com medição, fabricação, acabamento e instalação.",
+                "h1": "Marmoraria na Zona Sul de São Paulo",
+                "breadcrumb": "Marmoraria na Zona Sul de São Paulo",
+                "must_contain": "Zona Sul de São Paulo",
+                "cta": reverse("institutional:contato"),
+                "faq": "A Granimármores Pitondo atende projetos na Zona Sul?",
+            },
+        }
+        rendered = {}
+
+        for route, expected in pages.items():
+            with self.subTest(route=route):
+                response = self.client.get(reverse(f"institutional:{route}"))
+                html = response.content.decode()
+                rendered[route] = html
+
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(html.count(f"<title>{expected['title']}</title>"), 1)
+                self.assertContains(response, f'content="{expected["description"]}"')
+                self.assertContains(response, f'<link rel="canonical" href="https://granimarmorespitondo.com.br{expected["path"]}">')
+                self.assertContains(response, f'property="og:url" content="https://granimarmorespitondo.com.br{expected["path"]}"')
+                self.assertEqual(len(re.findall(r"<h1\b", html)), 1)
+                self.assertIn('class="local-hero-title mb-3 wow fadeInUp"', html)
+                self.assertIn(expected["h1"], html)
+                self.assertIn('aria-label="Breadcrumb"', html)
+                self.assertIn(expected["breadcrumb"], html)
+                self.assertIn(expected["must_contain"], html)
+                self.assertIn(expected["cta"], html)
+                self.assertIn(expected["faq"], html)
+                self.assertNotIn("accordion", html.lower())
+                self.assertNotIn('data-bs-toggle="collapse"', html)
+                for solution in ["cozinhas", "banheiros", "escadas", "areas_gourmet", "projetos_comerciais"]:
+                    self.assertIn(reverse(f"institutional:{solution}"), html)
+                self.assertEqual(html.count("widget.js"), 1)
+                self.assertIn("wa.me/5511940241328", html)
+
+                graph = self._json_ld_graph(html)
+                types = [entity.get("@type") for entity in graph]
+                self.assertIn("WebPage", types)
+                self.assertIn("FAQPage", types)
+                self.assertIn("BreadcrumbList", types)
+                breadcrumb = next(entity for entity in graph if entity.get("@type") == "BreadcrumbList")
+                self.assertEqual(breadcrumb["itemListElement"][-1]["name"], expected["breadcrumb"])
+                self.assertNotIn("AggregateRating", str(graph))
+                self.assertNotIn("openingHours", str(graph))
+                self.assertNotIn("priceRange", str(graph))
+                self.assertNotIn("geo", str(graph))
+
+        self.assertNotEqual(rendered["marmoraria_saude_sp"], rendered["marmoraria_zona_sul_sp"])
+
+        for route in ["home", "sobre", "services", "cozinhas", "banheiros", "escadas", "areas_gourmet", "projetos_comerciais"]:
+            with self.subTest(non_local_route=route):
+                response = self.client.get(reverse(f"institutional:{route}"))
+                self.assertNotIn("local-hero-title", response.content.decode())
+
+    def test_sitemap_contains_local_pages_once(self):
+        response = self.client.get("/sitemap.xml")
+        content = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(content.count("https://granimarmorespitondo.com.br/marmoraria-saude-sp/"), 1)
+        self.assertEqual(content.count("https://granimarmorespitondo.com.br/marmoraria-zona-sul-sp/"), 1)
+
     def test_local_business_logo_file_exists(self):
         import os
         from django.conf import settings
@@ -543,6 +663,8 @@ class InstitutionalSeoTests(TestCase):
             ("politica_de_privacidade", {}),
             ("blog", {}),
             ("cozinhas", {}),
+            ("marmoraria_saude_sp", {}),
+            ("marmoraria_zona_sul_sp", {}),
             ("blog_article", {"slug": "marmore-ou-granito-diferencas"}),
         ]
 
@@ -589,9 +711,16 @@ class InstitutionalSeoTests(TestCase):
                 self.assertEqual(business["@id"], "https://granimarmorespitondo.com.br/#business")
                 self.assertEqual(business["name"], "Granimármores Pitondo")
                 self.assertEqual(business["telephone"], "+55 11 94024-1328")
-                self.assertEqual(business["address"]["streetAddress"], "Av. do Cursino, 3342 - Jardim da Saúde")
+                self.assertEqual(business["email"], "contato@granimarmorespitondo.com.br")
+                self.assertEqual(business["address"]["streetAddress"], "Av. do Cursino, 3342")
                 self.assertEqual(business["address"]["addressLocality"], "São Paulo")
+                self.assertEqual(business["address"]["postalCode"], "04132-002")
+                self.assertEqual(business["areaServed"]["name"], "São Paulo")
+                self.assertEqual(business["sameAs"], ["https://www.instagram.com/granimarmorespitondo/"])
                 self.assertIn("Marmoraria especializada", business["description"])
+                self.assertNotIn("openingHours", business)
+                self.assertNotIn("priceRange", business)
+                self.assertNotIn("geo", business)
                 self.assertTrue(business["url"].startswith("http"))
                 self.assertTrue(business["logo"]["url"].startswith("http"))
 
