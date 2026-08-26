@@ -83,17 +83,6 @@
         type="text/css"
     >
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-76100WC6SB"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-76100WC6SB');
-        gtag('config', 'AW-18369690309');
-    </script>
-
     {% block seo_schema %}
     <script type="application/ld+json">{{ site_seo.local_business_schema|safe }}</script>
     {% endblock %}
@@ -113,13 +102,24 @@
     
     <!-- Javascript Files
     ================================================== -->
-    <script src="{% static 'institutional/js/vendors.js' %}"></script>
-    <script src="{% static 'institutional/js/designesia.js' %}"></script>
-    <script src="{% static 'institutional/js/swiper.js' %}"></script>
-    <script src="{% static 'institutional/js/custom-swiper-1.js' %}"></script>
+    <script defer src="{% static 'institutional/js/vendors.js' %}"></script>
+    <script defer src="{% static 'institutional/js/designesia.js' %}"></script>
+    <script defer src="{% static 'institutional/js/swiper.js' %}"></script>
+    <script defer src="{% static 'institutional/js/custom-swiper-1.js' %}"></script>
     {% endblock %}
 
     {% block extra_js %}{% endblock %}
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-76100WC6SB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-76100WC6SB');
+        gtag('config', 'AW-18369690309');
+    </script>
 
     <!-- Integração Lívia -->
     <script
