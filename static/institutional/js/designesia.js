@@ -1504,7 +1504,6 @@
         //  select2 end
 
          // skrollr init
-         skrollr.init();
          const s = skrollr.init();
          if (s.isMobile()) s.destroy();
 
