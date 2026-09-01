@@ -1926,11 +1926,21 @@
            // Show animated elements
            animateElements();
            $(window).scroll(animateElements);
-        
+
+           // Hide preloader on DOM ready with fallback timeout
+           hidePreloader();
+           setTimeout(hidePreloader, 2000);
      });
 
+    function hidePreloader() {
+        const $loader = $('#de-loader');
+        if ($loader.length && $loader.is(':visible')) {
+            $loader.fadeOut(200);
+        }
+    }
+
     $(window).on('load', function() {
-        jQuery('#de-loader').fadeOut(500);
+        hidePreloader();
         filterGallery();
         window.dispatchEvent(new Event('resize'));        
          filterGallery();
